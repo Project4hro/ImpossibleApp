@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    tools:context="$nl.hr.impossibleapp.Activity_between"
+    android:background="@color/orange" >
+ 
+    <ImageView
+        android:id="@+id/shakeImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="84dp"
+        android:src="@drawable/shake"
+        android:visibility="invisible" />
+    
+    <ImageView
+        android:id="@+id/swipelaImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="84dp"
+        android:src="@drawable/swipela"
+        android:visibility="invisible" />
+    
+    <ImageView
+        android:id="@+id/swipepoImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="84dp"
+        android:src="@drawable/swipepo"
+        android:visibility="invisible" />
+    
+    <ImageView
+        android:id="@+id/taplaImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="84dp"
+        android:src="@drawable/tapla"
+        android:visibility="invisible" />
+    
+    <ImageView
+        android:id="@+id/tappoImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="84dp"
+        android:src="@drawable/tappo"
+        android:visibility="invisible" />
+    
+    <ImageView
+        android:id="@+id/tiltImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="84dp"
+        android:src="@drawable/tilt"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/tiltImgG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="84dp"
+        android:src="@drawable/tiltgyro"
+        android:visibility="invisible" />     
+    
+    <TextView
+        android:id="@+id/timerBoxb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="67dp"
+        android:text=" " />
+	
+</RelativeLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="nl.hr.impossibleapp.Activity_Menu"
+    android:background="@color/orange" >
+    
+    <Button
+        android:id="@+id/menu_start"
+        style="@style/button_style"
+        android:layout_above="@+id/menu_score"
+        android:layout_marginBottom="18dp"
+        android:text="@string/start"
+        android:onClick="Goto_Game"
+        android:fontFamily="" />
+    
+    <Button
+        android:id="@+id/menu_score"
+        style="@style/button_style"
+        android:layout_alignLeft="@+id/menu_start"
+        android:layout_centerVertical="true"
+        android:text="@string/highscore" />
+
+    <Button
+        android:id="@+id/menu_settings"
+        style="@style/button_style"
+        android:layout_alignLeft="@+id/menu_score"
+        android:layout_below="@id/menu_score"
+        android:layout_marginTop="14dp"
+        android:onClick="Goto_Settings"
+        android:text="@string/settings" />
+
+    <ImageView
+        android:id="@+id/tiltImg"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:contentDescription="@string/logo_desc"
+        android:src="@drawable/logo" />
+
+</RelativeLayout>
