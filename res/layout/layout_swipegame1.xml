@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,6 +26,23 @@
 	    android:id="@+id/timerBox"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:text="" />
+	    android:layout_centerHorizontal="true" />
 
-</FrameLayout>
+	<TextView
+	    android:id="@+id/scoreBox"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentRight="true"
+	    android:text="Score: 200" />
+
+	<ImageView
+	    android:id="@+id/hearts"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:src="@drawable/heart3"
+	    android:contentDescription="Hearts" />
+
+</RelativeLayout>

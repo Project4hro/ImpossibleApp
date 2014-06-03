@@ -80,7 +80,7 @@ public class Activity_Between extends Activity
 		Intent mIntent = getIntent();
 		int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
 		System.out.println("Currentgame numer = "+currentGame);
-		final ImageView instructions = (ImageView) findViewById(gameInstructions[currentGame]);
+		final ImageView instructions = (ImageView) findViewById(gameInstructions[2]);
 		instructions.setVisibility(View.VISIBLE);
 		
 	    t.scheduleAtFixedRate(new TimerTask() 
@@ -111,12 +111,13 @@ public class Activity_Between extends Activity
 	{
 		t.cancel();
 		// check currentGame
-		Intent mIntent = getIntent();
-		int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
-		Class classToLoad = list.get(currentGame);
-		Intent game_page = new Intent(this,classToLoad);
-		currentGame ++;
-		game_page.putExtra("intCurrentGame", currentGame);
+		//Intent mIntent = getIntent();
+		//int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
+		//Class classToLoad = list.get(currentGame);
+		//Intent game_page = new Intent(this,classToLoad);
+		Intent game_page = new Intent(this,SwipeGame1.class);
+		//currentGame ++;
+		//game_page.putExtra("intCurrentGame", currentGame);
 		game_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		if(game_page != null)
 		{

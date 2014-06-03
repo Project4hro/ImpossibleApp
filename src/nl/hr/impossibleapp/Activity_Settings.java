@@ -28,6 +28,8 @@ public class Activity_Settings extends Activity{
 		
 		// Applying font
         menu_button.setTypeface(tf);
+        
+        
 	}
 	public void Goto_Menu(View v){
 		//Activity_settings.this.finish();

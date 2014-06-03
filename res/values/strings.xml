@@ -19,5 +19,6 @@
     <string name="repeatSteps">Repeat previous steps</string>
     <string name="rightAnswer">Correct!</string>
     <string name="wrongAnswer">Wrong!</string>
+    <string name="time">Time</string>
 
 </resources>

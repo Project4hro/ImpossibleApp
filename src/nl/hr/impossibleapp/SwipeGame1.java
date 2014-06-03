@@ -8,12 +8,14 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SwipeGame1 extends Activity
@@ -25,10 +27,12 @@ public class SwipeGame1 extends Activity
 	int x = 0;
 	int arraylistKey = 0;
 	int amountAssignments = 4;
-	
+	int lives;
 	TextView assignment;
 	TextView message;
+	ImageView heartsField;
 	
+	MediaPlayer mp;
 	
 	String swipeDirection;
 	ArrayList<Integer> assignments = new ArrayList<Integer>();
@@ -64,12 +68,25 @@ public class SwipeGame1 extends Activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.layout_swipegame1);
+	    if(settings.getDifficulty() == 1){
+	    	amountAssignments = 4;
+	    }else if(settings.getDifficulty() == 2){
+	    	amountAssignments = 6;
+	    }else if(settings.getDifficulty() == 3){
+	    	amountAssignments = 8;
+	    }
+	    assignments.clear();
 	    assignment = (TextView) findViewById(R.id.messageAssignment);
 		message = (TextView) findViewById(R.id.errMessage);
 		timerField = (TextView) findViewById(R.id.timerBox);
-				
+		heartsField = (ImageView) findViewById(R.id.hearts);		
 	    randInt = new Random().nextInt(4) + 1;
-	    
+	    lives = settings.getLives();
+	    if(lives == 2){
+	    	heartsField.setImageResource(R.drawable.heart2);
+	    }else if(lives == 1){
+	    	heartsField.setImageResource(R.drawable.heart1);
+	    }
 	    changeAssignment();
 	    
 	    t = new Timer();
@@ -81,7 +98,7 @@ public class SwipeGame1 extends Activity
 	    		{
 	    			public void run() 
 	    			{
-	    				timerField.setText(String.valueOf(TimeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
 	    				TimeCounter--;
 	    				
 	    				if (TimeCounter < 1)
@@ -96,6 +113,22 @@ public class SwipeGame1 extends Activity
 	    	}
 	     }, 0, 1000); // 1000 means start from 1 sec, and the second 1000 is do the loop each 1 sec.
 	} //OnCreate
+	public void playSound(String sound){
+		if(settings.isSoundEnabled() == true){
+			if(mp != null){
+				mp.release();
+			}
+			mp = null;
+			if(sound == "correct"){
+				mp = MediaPlayer.create(this, R.raw.ding);
+			}else if(sound == "wrong"){
+				mp = MediaPlayer.create(this, R.raw.wrong);
+			}else if(sound == "gameover"){
+				mp = MediaPlayer.create(this, R.raw.fail);
+			}
+			mp.start();
+		}
+	}
 	
 	public void changeAssignment()
 	{
@@ -123,6 +156,7 @@ public class SwipeGame1 extends Activity
 	{
 		t.cancel();
 	}
+	
 	public void won(){
 		if(arraylistKey == assignments.size())
 		{
@@ -130,6 +164,7 @@ public class SwipeGame1 extends Activity
 			t.cancel();
 		}
 	}
+	
 	public boolean onTouchEvent(MotionEvent touchevent)
 	{
 		String wrong = getResources().getString(R.string.wrongAnswer);
@@ -145,12 +180,14 @@ public class SwipeGame1 extends Activity
 			{
 				if(arraylistKey == assignments.size()){
 					t.cancel();
+				    assignments.clear();
 					this.finish();
 					break;
 				}
 				if(message.getText().toString() == "Game over!")
 				{
 					t.cancel();
+				    assignments.clear();
 					this.finish();
 					break;
 				}
@@ -164,8 +201,10 @@ public class SwipeGame1 extends Activity
 				
 				if(randInt == 1)
 				{
-					if(x1 > x2){
+					if((x1 - x2) > 180){
+						System.out.println("links " + (x1 - x2));
 						message.setText(correct);
+						playSound("correct");
 						if(x < amountAssignments){
 							randInt = new Random().nextInt(4) + 1;
 							changeAssignment();
@@ -179,16 +218,20 @@ public class SwipeGame1 extends Activity
 					}else{
 						if(x == amountAssignments){
 							message.setText("Game over!");
+							playSound("gameover");
 							restart();
 						}else{
 							message.setText(wrong);
+							playSound("wrong");
 						}
 						break;
 					}
 				}
 				if(randInt == 2){
-					if(x1 < x2){
+					if((x1 - x2) < -180){
+						System.out.println("rechts " + (x1 - x2));
 						message.setText(correct);
+						playSound("correct");
 						if(x < amountAssignments)
 						{
 							randInt = new Random().nextInt(4) + 1;
@@ -208,9 +251,11 @@ public class SwipeGame1 extends Activity
 						if(x == amountAssignments)
 						{
 							message.setText("Game over!");
+							playSound("gameover");
 							restart();
 						}else{
 							message.setText(wrong);
+							playSound("wrong");
 						}
 						break;
 					}
@@ -218,9 +263,11 @@ public class SwipeGame1 extends Activity
 			
 				if(randInt == 3)
 				{
-					if(y1 > y2)
+					if((y1 - y2) > 150)
 					{
+						System.out.println("boven " + (y1 - y2));
 						message.setText(correct);
+						playSound("correct");
 						if(x < amountAssignments)
 						{
 							randInt = new Random().nextInt(4) + 1;
@@ -240,20 +287,24 @@ public class SwipeGame1 extends Activity
 						if(x == amountAssignments)
 						{
 							message.setText("Game over!");
+							playSound("gameover");
 							restart();
 						}
 						else
 						{
 							message.setText(wrong);
+							playSound("wrong");
 						}
 						break;
 					}			
 				}
 				if(randInt == 4)
 				{
-					if(y1 < y2)
+					if((y1 - y2) < -150)
 					{
+						System.out.println("onder " + (y1 - y2));
 						message.setText(correct);
+						playSound("correct");
 						if(x < amountAssignments)
 						{
 							randInt = new Random().nextInt(4) + 1;
@@ -273,11 +324,13 @@ public class SwipeGame1 extends Activity
 						if(x == amountAssignments)
 						{
 							message.setText("Game over!");
+							playSound("gameover");
 							restart();
 						}
 						else
 						{
 							message.setText(wrong);
+							playSound("wrong");
 						}
 						break;
 					}

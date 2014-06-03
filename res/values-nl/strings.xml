@@ -9,4 +9,15 @@
     <string name="sound">Geluid</string>
     <string name="previouspage">Terug</string>
     
+    <string name="template_label">Template</string>
+    <string name="between_label">Tussen Games</string>
+    
+    <string name="up">boven</string>
+    <string name="down">beneden</string>
+    <string name="left">links</string>
+    <string name="right">rechts</string>
+    <string name="repeatSteps">Herhaal de vorige stappen</string>
+    <string name="rightAnswer">Goed!</string>
+    <string name="wrongAnswer">Fout!</string>
+    <string name="time">Tijd</string>
 </resources>
