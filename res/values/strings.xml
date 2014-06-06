@@ -20,5 +20,7 @@
     <string name="rightAnswer">Correct!</string>
     <string name="wrongAnswer">Wrong!</string>
     <string name="time">Time</string>
+    <string name="title_activity_turn">TurnActivity</string>
+    <string name="score">Score: </string>
 
 </resources>

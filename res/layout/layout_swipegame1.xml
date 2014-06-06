@@ -3,24 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="$nl.hr.impossibleapp.SwipeGame1"
-    android:background="@color/orange" >
-	
-	<TextView
-	    android:id="@+id/messageAssignment"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="250dp"
-	    android:layout_marginTop="100dp"
-	    android:text="" />
-	
-	<TextView
-	    android:id="@+id/errMessage"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="250dp"
-	    android:layout_marginTop="120dp"
-	    android:text="" />
+    android:background="@color/orange"
+    android:gravity="right"
+    tools:context="$nl.hr.impossibleapp.SwipeGame1" >
 
 	<TextView
 	    android:id="@+id/timerBox"
@@ -34,6 +19,8 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
 	    android:layout_alignParentRight="true"
+	    android:layout_marginBottom="5dp"
+	    android:layout_marginRight="5dp"
 	    android:text="Score: 200" />
 
 	<ImageView
@@ -42,7 +29,44 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
 	    android:layout_alignParentLeft="true"
-	    android:src="@drawable/heart3"
-	    android:contentDescription="Hearts" />
+	    android:layout_marginBottom="5dp"
+	    android:layout_marginLeft="5dp"
+	    android:contentDescription="Hearts"
+	    android:src="@drawable/heart3" />
+
+	<TextView
+	    android:id="@+id/messageAssignment1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerVertical="true"
+	    android:layout_marginLeft="20dp"
+	    android:text="" />
+
+	<TextView
+	    android:id="@+id/messageAssignment2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_centerVertical="true"
+	    android:layout_marginRight="20dp"
+	    android:text="" />
+
+	<TextView
+	    android:id="@+id/errMessage2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerVertical="true"
+	    android:layout_centerHorizontal="true"
+	    android:text="" />
+
+	<TextView
+	    android:id="@+id/errMessage1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/errMessage2"
+	    android:layout_alignBottom="@+id/errMessage2"
+	    android:layout_marginRight="52dp"
+	    android:layout_toLeftOf="@+id/timerBox"
+	    android:text="" />
 
 </RelativeLayout>

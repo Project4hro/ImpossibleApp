@@ -51,19 +51,30 @@ public class Accelerometer2 extends Activity implements SensorEventListener
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
-        
+        ImageView heartsField = (ImageView) findViewById(R.id.hearts);
+        int lives = settings.getLives();
+        if(lives == 2){
+        	heartsField.setImageResource(R.drawable.heart2);
+        }else if(lives == 1){
+        	heartsField.setImageResource(R.drawable.heart1);
+        }else{
+        	heartsField.setImageResource(R.drawable.heart3);
+        }
         // Font path
 	    String fontPath = "fonts/mvboli.ttf";
 	    // Loading Font Face
 		tf = Typeface.createFromAsset(getAssets(), fontPath);
 		tvTimerInt = (TextView)findViewById(R.id.timerInt);
 		
+		TextView scoreText = (TextView) findViewById(R.id.scoreBox);
+	    scoreText.setText("Score: " + settings.getScore());
+	    
 		t = new Timer();
 	    t.scheduleAtFixedRate(new TimerTask() 
 	    {
 	        @Override
 	        public void run() {
-	            // TODO Auto-generated method stub
+	            
 	       	runOnUiThread(new Runnable() 
 	            {
 	                public void run() 
@@ -71,8 +82,14 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	                    tvTimerInt.setText(String.valueOf(TimeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
 	                    TimeCounter--;
 	                    
+	                    if(TimeCounter  == 4){
+	                    	Sound.countDown(getBaseContext());
+	                    }
 	                    if (TimeCounter < 1)
 	                    {
+	                    	Sound.gameOver(getBaseContext());
+	                    	settings.setLives(settings.getLives() - 1);
+	                    	System.out.println("[Accelerometer2] Minus life: out of time, " + settings.getLives());
 	                    	TimeCounter = 10;
 	                    	betweenScreen();
 	                    	t.cancel();
@@ -105,11 +122,13 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	{
 		t.cancel();
 		// check currentGame
-		Intent mIntent = getIntent();
-		int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
+		//Intent mIntent = getIntent();
+		//int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
 		Intent between_page = new Intent(this, Activity_Between.class);
-		between_page.putExtra("intCurrentGame", currentGame);
+		//between_page.putExtra("intCurrentGame", currentGame);
 		//between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		int score = settings.getScore() + TimeCounter;
+        settings.setScore(score);
 		if(between_page != null)
 		{
 			if (active)
@@ -137,19 +156,19 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	{
 		TextView tvShakes = (TextView)findViewById(R.id.countShakesInt);
 		tvShakes.setTypeface(tf);
-		ImageView ivCocktailShaker = (ImageView)findViewById(R.id.cocktailShaker);
-		LinearLayout.LayoutParams lpCocktailShaker = (LinearLayout.LayoutParams) ivCocktailShaker.getLayoutParams();
-		ImageView ivHandTop = (ImageView)findViewById(R.id.handTop);
-		LinearLayout.LayoutParams lpHandTop = (LinearLayout.LayoutParams) ivHandTop.getLayoutParams();
-		ImageView ivHandBottem = (ImageView)findViewById(R.id.handBottem);
-		LinearLayout.LayoutParams lpHandBottem = (LinearLayout.LayoutParams) ivHandBottem.getLayoutParams();
+		//ImageView ivCocktailShaker = (ImageView)findViewById(R.id.cocktailShaker);
+		//LinearLayout.LayoutParams lpCocktailShaker = (LinearLayout.LayoutParams) ivCocktailShaker.getLayoutParams();
+		//ImageView ivHandTop = (ImageView)findViewById(R.id.handTop);
+		//LinearLayout.LayoutParams lpHandTop = (LinearLayout.LayoutParams) ivHandTop.getLayoutParams();
+		//ImageView ivHandBottem = (ImageView)findViewById(R.id.handBottem);
+		//LinearLayout.LayoutParams lpHandBottem = (LinearLayout.LayoutParams) ivHandBottem.getLayoutParams();
 		float x = event.values[0];
 		float y = event.values[1];
 		float z = event.values[2];
 		
-		lpCocktailShaker.setMargins(350, 20, 0, 0);
+		/*lpCocktailShaker.setMargins(350, 20, 0, 0);
 		lpHandTop.setMargins(400, 20, 0, 0);
-		lpHandBottem.setMargins(350, 20, 0, 0);
+		lpHandBottem.setMargins(350, 20, 0, 0);*/
 		
 		if (!mInitialized) 
 		{
@@ -174,6 +193,7 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 			if(deltaX > 0 || deltaX <0 || deltaY > 0 || deltaY < 0)
 			{
 				countShakes++;
+				System.out.println(countShakes);
 			}
 			
 			if(countShakes > 50)

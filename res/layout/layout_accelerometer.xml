@@ -1,77 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.hr.impossibleapp.Accelerometer2"
-    android:background="@color/orange">
-    
- 	<TableLayout
-		android:paddingTop="10dip"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:stretchColumns="*">
+    android:background="@color/orange"
+    android:orientation="vertical"
+    tools:context="nl.hr.impossibleapp.Accelerometer2" >
 
-		<TableRow>
-		    <TextView
-			    android:id="@+id/countShakesText"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:gravity="center"
-			    android:text="Count Shakes:" />
-		    
-		    <TextView
-		        android:id="@+id/countShakesInt"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:gravity="center"/>
-		    
-		    <TextView
-			    android:id="@+id/timerText"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:gravity="center"
-			    android:text="Timer:" />
-		    
-		    <TextView
-			    android:id="@+id/timerInt"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:gravity="center" />
-		        
-		</TableRow>
-	</TableLayout>
-	<ImageView
-		android:id="@+id/handTop"
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dip"
+        android:stretchColumns="*" >
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/countShakesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Count Shakes:" />
+
+            <TextView
+                android:id="@+id/countShakesInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/timerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Timer:" />
+
+            <TextView
+                android:id="@+id/timerInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </TableRow>
+    </TableLayout>
+
+    <ImageView
+        android:id="@+id/handTop"
         android:layout_width="100dp"
         android:layout_height="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="100dp"        
+        android:layout_marginLeft="213dp"
         android:contentDescription="@string/logo_desc"
-        android:src="@drawable/handtop"/>
-	
-	<ImageView
-		android:id="@+id/cocktailShaker"
+        android:src="@drawable/handtop" />
+
+    <ImageView
+        android:id="@+id/cocktailShaker"
         android:layout_width="50dp"
         android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="110dp"
+        android:layout_marginLeft="233dp"
+        android:layout_marginTop="13dp"
         android:contentDescription="@string/logo_desc"
-        android:src="@drawable/cocktailshaker"/>
+        android:src="@drawable/cocktailshaker" />
 
-	<ImageView
-		android:id="@+id/handBottem"
+    <ImageView
+        android:id="@+id/handBottem"
         android:layout_width="100dp"
         android:layout_height="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="-10dp"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="13dp"
         android:contentDescription="@string/logo_desc"
-        android:src="@drawable/handbottem"/>
+        android:src="@drawable/handbottem" />
+
+    <ImageView
+        android:id="@+id/hearts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="65dp"
+        android:contentDescription="Hearts"
+        android:src="@drawable/heart3" />
+
+    <TextView
+        android:id="@+id/scoreBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="-25dp"
+        android:text="TextView" />
+	
 </LinearLayout>

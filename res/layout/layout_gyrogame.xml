@@ -19,6 +19,25 @@
         android:layout_height="wrap_content"
         android:text="TextView" />
 
+    <ImageView
+        android:id="@+id/hearts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:contentDescription="Hearts"
+        android:src="@drawable/heart3" />
+
+    <TextView
+        android:id="@+id/scoreBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:text="Score: 200" />
+
 </FrameLayout>
 
 

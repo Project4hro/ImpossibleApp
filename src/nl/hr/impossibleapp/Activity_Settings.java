@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 public class Activity_Settings extends Activity{
 	@Override
@@ -29,8 +31,23 @@ public class Activity_Settings extends Activity{
 		// Applying font
         menu_button.setTypeface(tf);
         
-        
-	}
+        Switch toggle = (Switch) findViewById(R.id.settings_switch1);
+        toggle.setChecked(settings.isSoundEnabled());
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                	settings.setSoundEnabled(true);
+                	System.out.println("aan");
+                } else {
+                    // The toggle is disabled
+                	settings.setSoundEnabled(false);
+                	System.out.println("uit");
+                }
+            }
+        });
+    }
+	
 	public void Goto_Menu(View v){
 		//Activity_settings.this.finish();
 		Intent menu_page = new Intent(this, Activity_Menu.class);

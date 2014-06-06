@@ -4,31 +4,28 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.Activity_Between;
-import nl.hr.impossibleapp.Activity_Menu;
 import nl.hr.impossibleapp.R;
-import nl.hr.impossibleapp.R.id;
-import nl.hr.impossibleapp.R.layout;
+import nl.hr.impossibleapp.Sound;
+import nl.hr.impossibleapp.settings;
 import android.os.Handler;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.hardware.SensorEventListener;
 
@@ -109,7 +106,16 @@ public class GyroscopeGame extends Activity
 		// Textfield from xml
 		timerField = (TextView) findViewById(R.id.timerBox);
 		timerField.setTypeface(tf);
-				
+		ImageView heartsField = (ImageView) findViewById(R.id.hearts);
+		int lives = settings.getLives();
+	    if(lives == 2){
+	    	heartsField.setImageResource(R.drawable.heart2);
+	    }else if(lives == 1){
+	    	heartsField.setImageResource(R.drawable.heart1);
+	    }
+	    TextView scoreText = (TextView) findViewById(R.id.scoreBox);
+	    scoreText.setText("Score: " + settings.getScore());
+	    
 		// get dimension values of the screen
 		Display display = getWindowManager().getDefaultDisplay();  
 		screenWidth = display.getWidth(); 
@@ -163,18 +169,6 @@ public class GyroscopeGame extends Activity
 		    ((SensorManager)getSystemService(Context.SENSOR_SERVICE))
 		    .getSensorList(Sensor.TYPE_ACCELEROMETER).get(0),   
 		     SensorManager.SENSOR_DELAY_NORMAL);
-
-		//touch event that checks on user touch
-		/*mainView.setOnTouchListener(new android.view.View.OnTouchListener() 
-	    {
-	        public boolean onTouch(android.view.View v, android.view.MotionEvent e)
-	        {
-	            //move ball when user touches
-	            ballPos.x = e.getX();
-	            ballPos.y = e.getY();
-	            //timer event will draw the ball in new location
-	            return true;
-	        }}); */
 	} //OnCreate
 	
 	@Override
@@ -184,7 +178,6 @@ public class GyroscopeGame extends Activity
 	    {
 	        @Override
 	        public void run() {
-	            // TODO Auto-generated method stub
 	            runOnUiThread(new Runnable() 
 	            {
 	                public void run() 
@@ -224,11 +217,14 @@ public class GyroscopeGame extends Activity
 	    	            	}
 	    	            	countdown = 1;
 	    	            }
-	                    
+	                    if(TimeCounter == 4){
+	                    	Sound.countDown(getBaseContext());
+	                    }
 	                    if (TimeCounter < 1)
 	                    {
 	            	    	System.out.println("timelowerthen1");
 	                    	TimeCounter = 12;
+	                    	settings.setLives(settings.getLives() - 1);
 	                    	betweenScreen();
 	                    	t.cancel();
 	                    }
@@ -257,18 +253,22 @@ public class GyroscopeGame extends Activity
 	    
 	    if (ballPos.x > (screenWidth/2 - 10) && ballPos.x < (screenWidth/2 + 10) && ballPos.y < 60 && up)
 	    {
+	    	updateScore();
 	    	betweenScreen();
 	    }
 	    if (ballPos.x > (screenWidth/2 - 10) && ballPos.x < (screenWidth/2 + 10) && ballPos.y > 420 &&  down)
 	    {
+	    	updateScore();
 	    	betweenScreen();
 	    }
 	    if (ballPos.x < 60 && ballPos.y < (screenHeight/2 + 5) && ballPos.y > (screenHeight/2 -5) && left)
 	    {
+	    	updateScore();
 	    	betweenScreen();
 	    }
 	    if (ballPos.x > 790 && ballPos.y < (screenHeight/2 + 5) && ballPos.y > (screenHeight/2 -5) && right)
 	    {
+	    	updateScore();
 	    	betweenScreen();
 	    }
 	    
@@ -289,10 +289,10 @@ public class GyroscopeGame extends Activity
 	{
 		t.cancel();
 		// check currentGame
-		Intent mIntent = getIntent();
-		int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
+		//Intent mIntent = getIntent();
+		//int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
 		Intent between_page = new Intent(this, Activity_Between.class);
-		between_page.putExtra("intCurrentGame", currentGame);
+		//between_page.putExtra("intCurrentGame", currentGame);
 		//between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		if(between_page != null)
 		{
@@ -302,6 +302,10 @@ public class GyroscopeGame extends Activity
 			}	
 		}
 		finish();
+	}
+	public void updateScore(){
+		int score = settings.getScore() + TimeCounter;
+        settings.setScore(score);
 	}
 	//Eventlistener that checks if menu button is pressed
 	@Override
