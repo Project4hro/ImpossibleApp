@@ -1,4 +1,4 @@
-package nl.hr.impossibleapp;
+package nl.hr.impossibleapp.data;
 
 import java.util.LinkedList;
 import java.util.List;

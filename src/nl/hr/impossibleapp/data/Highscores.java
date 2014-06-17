@@ -1,4 +1,4 @@
-package nl.hr.impossibleapp;
+package nl.hr.impossibleapp.data;
 
 public class Highscores{
 	private int id;

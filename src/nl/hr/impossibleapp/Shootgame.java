@@ -4,6 +4,10 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityMenu;
+import nl.hr.impossibleapp.data.Settings;
+import nl.hr.impossibleapp.data.Sound;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -26,7 +30,7 @@ public class Shootgame extends Activity{
     
     private TextView timerField;
     private Timer t;
-    private int TimeCounter = 20;
+    private int timeCounter = 20;
 
 	private boolean win[] = {false,false,false};
 	private ImageView logos[] = {null,null,null,null};
@@ -67,20 +71,20 @@ public class Shootgame extends Activity{
 	    		{
 	    			public void run() 
 	    			{
-	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	    				TimeCounter--;
+	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	    				timeCounter--;
 	    				move();
 	    				UpdateScreen();
 	    				
-	    				if(TimeCounter  == 4){
+	    				if(timeCounter  == 4){
 	                    	Sound.countDown(getBaseContext());
 	                    }
 	    				
-	    				if (TimeCounter < 0)
+	    				if (timeCounter < 0)
 	    				{
 	    					System.out.println("[Shootgame] out of time");
 	    					Sound.gameOver(getBaseContext());
-	    					TimeCounter = 20;
+	    					timeCounter = 20;
 	                    	Settings.setLives(Settings.getLives() - 1);
 	    					betweenScreen();
 	    					t.cancel();
@@ -108,13 +112,12 @@ public class Shootgame extends Activity{
 	    return false;
 	}
     
-    public ImageView getgunsight(){
-		ImageView gunsightImage = (ImageView) findViewById(R.id.gunsight);
-		return gunsightImage;
+    private ImageView getgunsight(){
+    	return (ImageView) findViewById(R.id.gunsight);
 		
 	}
     
-	public void shoot(int X, int Y){
+    private void shoot(int X, int Y){
 		for (int logonumber = 0;logonumber < 3;logonumber++){
 			logos[logonumber] = getlogo(logonumber);
 				int Logoleft = (int) (logos[logonumber].getX()-5);
@@ -131,7 +134,7 @@ public class Shootgame extends Activity{
 		} 
 	}
 	
-    public void UpdateScreen(){
+    private void UpdateScreen(){
 	    int lives = Settings.getLives();
 		ImageView heartsField = (ImageView) findViewById(R.id.hearts);
 	    if(lives == 2){
@@ -147,7 +150,7 @@ public class Shootgame extends Activity{
 	    
 	}
     
-    public void move(){
+    private void move(){
 		for (int logonumber = 0;logonumber < 3;logonumber++){
 			logos[logonumber] = getlogo(logonumber);
 			Display display = getWindowManager().getDefaultDisplay();
@@ -164,7 +167,7 @@ public class Shootgame extends Activity{
 		}
 	}
     
-    public ImageView getlogo(int logonumber){
+    private ImageView getlogo(int logonumber){
 		ImageView logo = null;
 		switch(logonumber){
 			case 0:
@@ -180,9 +183,9 @@ public class Shootgame extends Activity{
 		return logo;
 	}
     
-    public void checkwin(){
+    private void checkwin(){
 		if (win[0] == true && win[1] == true && win[2] == true && end){
-			int score = Settings.getScore() + TimeCounter;
+			int score = Settings.getScore() + timeCounter;
 	        Settings.setScore(score);
 	        betweenScreen();
 	        t.cancel();
@@ -192,10 +195,10 @@ public class Shootgame extends Activity{
 		}
 	}
     
-    public void betweenScreen()
+    private void betweenScreen()
 	{
 		t.cancel();
-		Intent between_page = new Intent(this, Activity_Between.class);
+		Intent between_page = new Intent(this, ActivityBetween.class);
 		Sound.stopCountDown(getBaseContext());
 		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		if(between_page != null)
@@ -222,7 +225,7 @@ public class Shootgame extends Activity{
   	    // If exit    
   	    if (item.getTitle() == "Exit") //user clicked Exit
   			t.cancel();
-  		    Intent menu_page = new Intent(this, Activity_Menu.class);
+  		    Intent menu_page = new Intent(this, ActivityMenu.class);
   			if(menu_page != null){
   				Settings.resetAll();
   				startActivity(menu_page);

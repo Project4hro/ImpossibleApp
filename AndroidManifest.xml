@@ -7,14 +7,15 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
-
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
-            android:name="nl.hr.impossibleapp.Activity_Menu"
+            android:name="nl.hr.impossibleapp.activities.ActivityMenu"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
@@ -24,23 +25,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="nl.hr.impossibleapp.Activity_Settings"
+            android:name="nl.hr.impossibleapp.activities.ActivitySettings"
             android:label="@string/settings"
             android:screenOrientation="sensorLandscape" >
         </activity>
-        <activity
-            android:name="nl.hr.impossibleapp.Activity_Template"
-            android:label="@string/template_label"
-            android:screenOrientation="sensorLandscape" >
-        </activity>  
          <activity
-            android:name="nl.hr.impossibleapp.Activity_Between"
+            android:name="nl.hr.impossibleapp.activities.ActivityBetween"
             android:label="@string/between_label"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>  
           <activity
-            android:name="nl.hr.impossibleapp.Gyrogame.GyroscopeGame"
+            android:name=".gyrogame.GyroscopeGame"
             android:label="@string/between_label"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
@@ -89,15 +85,15 @@
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
-            android:name="nl.hr.impossibleapp.Activity_EndScreen"
+            android:name="nl.hr.impossibleapp.activities.ActivityEndScreen"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
-            android:name="nl.hr.impossibleapp.Activity_Highscores"
+            android:name="nl.hr.impossibleapp.activities.ActivityHighscores"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
     </application>
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
 </manifest>

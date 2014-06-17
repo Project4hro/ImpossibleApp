@@ -1,5 +1,6 @@
-package nl.hr.impossibleapp;
+package nl.hr.impossibleapp.data;
 
+import nl.hr.impossibleapp.R;
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;

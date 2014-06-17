@@ -1,4 +1,4 @@
-package nl.hr.impossibleapp;
+package nl.hr.impossibleapp.data;
 
 import java.util.ArrayList;
 
@@ -72,7 +72,7 @@ public class Settings {
 			gamesDone.clear();
 		}
 		
-		System.out.println("Reset");
+		//System.out.println("Reset");
 	}
 
 	public static String getLanguage() {

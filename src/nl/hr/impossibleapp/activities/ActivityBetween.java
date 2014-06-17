@@ -1,11 +1,20 @@
-package nl.hr.impossibleapp;
+package nl.hr.impossibleapp.activities;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import nl.hr.impossibleapp.Gyrogame.GyroscopeGame;
+import nl.hr.impossibleapp.Accelerometer;
+import nl.hr.impossibleapp.Accelerometer2;
+import nl.hr.impossibleapp.Hangman;
+import nl.hr.impossibleapp.R;
+import nl.hr.impossibleapp.Shootgame;
+import nl.hr.impossibleapp.SwipeGame1;
+import nl.hr.impossibleapp.TargetGame;
+import nl.hr.impossibleapp.TurnGame;
+import nl.hr.impossibleapp.data.Settings;
+import nl.hr.impossibleapp.gyrogame.GyroscopeGame;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -17,9 +26,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Activity_Between extends Activity{
-	private static final String TAG = Activity_Between.class.toString();
-	
+public class ActivityBetween extends Activity{
+	private static final String TAG = ActivityBetween.class.toString();
 	// Font
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
@@ -29,14 +37,12 @@ public class Activity_Between extends Activity{
 	private ArrayList<Class<?>> gamesList = new ArrayList<Class<?>>();
 	private ArrayList<Integer> instructionsList = new ArrayList<Integer>();
 	private int nextGame = 0;
-	
-	//Timer
+
 	private Timer t = new Timer();
 	private int TimeCounter = 3;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		// Full Screen
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -46,18 +52,15 @@ public class Activity_Between extends Activity{
 	    
 	    addGames();
 	    Score();
-	    // if gameslist not empty, start timer
+
 	    if(!gamesList.isEmpty()){
 		    nextGame = new Random().nextInt(gamesList.size());
 		    
-		    // Set instructionview
 		    ImageView instructions = (ImageView) findViewById(gameInstructions[instructionsList.get(nextGame)]);
 			instructions.setVisibility(View.VISIBLE);
 			
-			// Textfield from xml
 			final TextView timerField = (TextView) findViewById(R.id.timerBoxb);
 			timerField.setTypeface(tf);
-			
 			
 			t.scheduleAtFixedRate(new TimerTask() 
 		    {
@@ -81,13 +84,12 @@ public class Activity_Between extends Activity{
 		            });
 		
 		        }
-		    }, 0, 1000); // 1000 means start from 1 sec, and the second 1000 is do the loop each 1 sec.
+		    }, 0, 1000);
 			
 			if(Settings.getLives() < 1){
-		    	Log.d(TAG, "Game end, out of lives!");
-		    	Intent endScreen = new Intent(this,Activity_EndScreen.class);
+		    	Log.i(TAG, "Game end, out of lives!");
+		    	Intent endScreen = new Intent(this,ActivityEndScreen.class);
 		    	if(endScreen != null){
-			    	//settings.resetAll();
 		    		t.cancel();
 		    		startActivity(endScreen);
 		    		this.finish();
@@ -96,7 +98,7 @@ public class Activity_Between extends Activity{
 	    }
 	}
 
-	public void addGames(){	
+	private void addGames(){	
 		// ADD NEW GAMES HERE COMMENT THE GAMES YOU DONT WANT TO LOAD
 	    // Add games: first gamevariable then instructions int (see gameInstructions)
 	    checkDone(GyroscopeGame.class, 0); //goed++
@@ -118,9 +120,8 @@ public class Activity_Between extends Activity{
 	    	}else{
 	    		t.cancel();
 	    		System.out.println("Einde spel");
-	    		Intent endScreen = new Intent(this,Activity_EndScreen.class);
+	    		Intent endScreen = new Intent(this,ActivityEndScreen.class);
 	    		if(endScreen != null){
-	    			//settings.resetAll();
 	    			startActivity(endScreen);
 	    			this.finish();
 	    		}
@@ -128,7 +129,7 @@ public class Activity_Between extends Activity{
 	    }
 	}
 	// Check if game is already played this difficulty
-	public void checkDone(Class<?> game, int instruction){
+	private void checkDone(Class<?> game, int instruction){
 		ArrayList<Class<?>> gamesDone = Settings.getGamesDone();
 		if(!gamesDone.contains(game)){
 			gamesList.add(game);
@@ -137,7 +138,7 @@ public class Activity_Between extends Activity{
 	}
 	
 	// Initiate next game
-	public void nextGame(){
+	private void nextGame(){
 		Settings.addGameGamesDone(gamesList.get(nextGame));
 		Intent game_page = new Intent(this,gamesList.get(nextGame));
 		if(game_page != null){
@@ -146,8 +147,7 @@ public class Activity_Between extends Activity{
 		}
 	}
 	
-	public void Score(){
-		// show score
+	private void Score(){
 		int Score = Settings.getScore();
 		TextView ScoreText = (TextView) findViewById(R.id.ScoreBetween);
 		ScoreText.setTypeface(tf);

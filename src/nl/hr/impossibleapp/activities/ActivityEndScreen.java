@@ -1,7 +1,11 @@
-package nl.hr.impossibleapp;
+package nl.hr.impossibleapp.activities;
 
 import java.util.List;
 
+import nl.hr.impossibleapp.R;
+import nl.hr.impossibleapp.data.Highscores;
+import nl.hr.impossibleapp.data.MySQLiteHelper;
+import nl.hr.impossibleapp.data.Settings;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -11,7 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class Activity_EndScreen extends Activity{
+public class ActivityEndScreen extends Activity{
 	// Font
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
@@ -41,7 +45,7 @@ public class Activity_EndScreen extends Activity{
 	}
 	
 	public void Goto_Menu(View v){
-		Intent menu = new Intent(this, Activity_Menu.class);
+		Intent menu = new Intent(this, ActivityMenu.class);
 		menu.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		if(menu != null){
 			startActivity(menu);

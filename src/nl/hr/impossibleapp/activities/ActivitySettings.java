@@ -1,7 +1,8 @@
-package nl.hr.impossibleapp;
+package nl.hr.impossibleapp.activities;
 
+import nl.hr.impossibleapp.R;
+import nl.hr.impossibleapp.data.Settings;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -11,24 +12,19 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
-public class Activity_Settings extends Activity{
+public class ActivitySettings extends Activity{
+	private static final String fontPath = "fonts/mvboli.ttf"; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Full Screen
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    	// Font path
-	    String fontPath = "fonts/mvboli.ttf";
 	    setContentView(R.layout.layout_settings);
-	    
-	    // text button
-        Button menu_button = (Button) findViewById(R.id.settings_backButton);
-        
-		// Loading Font Face
+
 		Typeface tf = Typeface.createFromAsset(getAssets(), fontPath);
-		
-		// Applying font
+	    
+        Button menu_button = (Button) findViewById(R.id.settings_backButton);
         menu_button.setTypeface(tf);
         
         Switch toggle = (Switch) findViewById(R.id.settings_switch1);
@@ -49,10 +45,6 @@ public class Activity_Settings extends Activity{
     }
 	
 	public void Goto_Menu(View v){
-		Intent menu_page = new Intent(this, Activity_Menu.class);
-		if(menu_page != null){
-			startActivity(menu_page);
-			this.finish();
-		}
+		this.finish();
 	}
 }

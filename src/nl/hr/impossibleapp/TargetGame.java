@@ -17,10 +17,11 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import nl.hr.impossibleapp.Activity_Between;
 import nl.hr.impossibleapp.R;
-import nl.hr.impossibleapp.Sound;
-import nl.hr.impossibleapp.Settings;
+import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityMenu;
+import nl.hr.impossibleapp.data.Settings;
+import nl.hr.impossibleapp.data.Sound;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.res.Configuration;
@@ -43,7 +44,7 @@ public class TargetGame extends Activity
 	//Textview for timer
     private TextView timerField;
 	private Timer t = new Timer();
-	private int TimeCounter = 15;
+	private int timeCounter = 15;
 	
 	private boolean beforeFirstHit = true;
     @Override
@@ -115,7 +116,7 @@ public class TargetGame extends Activity
 				{
 					Sound.stopCountDown(getBaseContext());
 			    	Sound.wonMinigame(getBaseContext());
-		    		int score = Settings.getScore() + TimeCounter;
+		    		int score = Settings.getScore() + timeCounter;
 		            Settings.setScore(score);
 		        	betweenScreen();
 		        	t.cancel();
@@ -157,18 +158,18 @@ public class TargetGame extends Activity
 	            {
 	                public void run() 
 	                {
-	                	timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	                	timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
 	                    
-	                    TimeCounter--;
+	                    timeCounter--;
 	                    countdown --;
 	    	            if (countdown== 0)
 	    	            {
 	    	            	moveImg();
 	    	            }
-	                    if(TimeCounter == 4){
+	                    if(timeCounter == 4){
 	                    	Sound.countDown(getBaseContext());
 	                    }
-	                    if (TimeCounter < 0)
+	                    if (timeCounter < 0)
 	                    {
 	                    	Sound.gameOver(getBaseContext());
 	                    	Settings.setLives(Settings.getLives() - 1);
@@ -181,11 +182,11 @@ public class TargetGame extends Activity
 	    }, 0, 1000); // 1000 means start from 1 sec, and the second 1000 is do the loop each 1 sec.
 	    super.onResume();
 	} // onResume
-	public void betweenScreen()
+	private void betweenScreen()
 	{
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, Activity_Between.class);
+		Intent between_page = new Intent(this, ActivityBetween.class);
 		if(between_page != null)
 		{
 			if (active)
@@ -195,10 +196,7 @@ public class TargetGame extends Activity
 		}
 		this.finish();
 	}
-	public void updateScore(){
-		int score = Settings.getScore() + TimeCounter;
-        Settings.setScore(score);
-	}
+
 	//Eventlistener that checks if menu button is pressed
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -214,7 +212,7 @@ public class TargetGame extends Activity
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
 			t.cancel();
-		    Intent menu_page = new Intent(this, Activity_Menu.class);
+		    Intent menu_page = new Intent(this, ActivityMenu.class);
 			if(menu_page != null){
   				Settings.resetAll();
 				startActivity(menu_page);

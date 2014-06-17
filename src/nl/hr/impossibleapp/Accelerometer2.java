@@ -4,6 +4,10 @@ package nl.hr.impossibleapp;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityMenu;
+import nl.hr.impossibleapp.data.Settings;
+import nl.hr.impossibleapp.data.Sound;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,12 +43,10 @@ public class Accelerometer2 extends Activity implements SensorEventListener
     private TextView timerBox;
 
     private Timer t;
-    private int TimeCounter = 10;
+    private int timeCounter = 10;
     
-	 
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) 
+    protected void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -82,18 +84,18 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	            {
 	                public void run() 
 	                {
-	                	timerBox.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	                    TimeCounter--;
+	                	timerBox.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	                    timeCounter--;
 	                    
-	                    if(TimeCounter  == 4){
+	                    if(timeCounter  == 4){
 	                    	Sound.countDown(getBaseContext());
 	                    }
-	                    if (TimeCounter < 0)
+	                    if (timeCounter < 0)
 	                    {
 	                    	Sound.gameOver(getBaseContext());
 	                    	Settings.setLives(Settings.getLives() - 1);
 	                    	System.out.println("[Accelerometer2] Minus life: out of time, " + Settings.getLives());
-	                    	TimeCounter = 10;
+	                    	timeCounter = 10;
 	                    	betweenScreen();
 	                    	t.cancel();
 	                    }
@@ -125,9 +127,9 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	{
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, Activity_Between.class);
+		Intent between_page = new Intent(this, ActivityBetween.class);
 		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		int score = Settings.getScore() + TimeCounter;
+		int score = Settings.getScore() + timeCounter;
         Settings.setScore(score);
 		if(between_page != null)
 		{
@@ -209,7 +211,7 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
 			t.cancel();
-		    Intent menu_page = new Intent(this, Activity_Menu.class);
+		    Intent menu_page = new Intent(this, ActivityMenu.class);
 			if(menu_page != null){
   				Settings.resetAll();
 				startActivity(menu_page);

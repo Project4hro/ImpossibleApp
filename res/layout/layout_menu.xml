@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/orange"
-    tools:context="nl.hr.impossibleapp.Activity_Menu" >
+    tools:context="nl.hr.impossibleapp.activities.ActivityMenu" >
 
     <ImageView
         android:id="@+id/tiltImg"
@@ -35,15 +35,6 @@
         android:layout_marginTop="10dp"
         android:onClick="Goto_Settings"
         android:text="@string/settings" />
-
-    <Button
-        android:id="@+id/menu_exit"
-        style="@style/button_style"
-        android:layout_below="@+id/menu_settings"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:onClick="Exit_Game"
-        android:text="@string/exit" />
 
     <Button
         android:id="@+id/menu_start"

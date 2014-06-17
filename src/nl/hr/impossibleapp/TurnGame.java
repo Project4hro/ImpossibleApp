@@ -3,6 +3,10 @@ package nl.hr.impossibleapp;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityMenu;
+import nl.hr.impossibleapp.data.Settings;
+import nl.hr.impossibleapp.data.Sound;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -27,8 +31,8 @@ public class TurnGame extends Activity{
     private float currentRotation[] = {0,0,0,0,0,0,0,0,0,0,0,0};
 	private ImageView img;
 	private int win = 3;
-    Timer t;
-    int TimeCounter = 20;
+    Timer t = new Timer();
+    int timeCounter = 20;
     TextView timerField;
     
 	// Check if activity is running
@@ -59,20 +63,19 @@ public class TurnGame extends Activity{
 	    
 	    UpdateScreen();
 	    
-	    t = new Timer();
 	    t.scheduleAtFixedRate(new TimerTask(){
 	    	@Override
 	    	public void run() {
 	    		runOnUiThread(new Runnable(){
 	    			public void run(){
-	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	    				TimeCounter--;
+	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	    				timeCounter--;
 	    				
-	    				if(TimeCounter  == 4){
+	    				if(timeCounter  == 4){
 	                    	Sound.countDown(getBaseContext());
 	                    }
 	    				
-	    				if (TimeCounter < 0){
+	    				if (timeCounter < 0){
 	    					Sound.gameOver(getBaseContext());
 	                    	Settings.setLives(Settings.getLives() - 1);
 	                    	System.out.println("[TurnGame] Minus life: out of time, " + Settings.getLives());
@@ -135,7 +138,7 @@ public class TurnGame extends Activity{
 		}
 	}
 	
-	public void Make_Turn(int id){
+	private void Make_Turn(int id){
 		RotateAnimation anim = new RotateAnimation(currentRotation[id], currentRotation[id] + 90,
 	            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,0.5f);
 	    currentRotation[id] = (currentRotation[id] + 90) % 360;
@@ -177,7 +180,7 @@ public class TurnGame extends Activity{
 		}
 	}
 	
-	public void UpdateScreen(){
+	private void UpdateScreen(){
 		int lives = Settings.getLives();
 		ImageView heartsField = (ImageView) findViewById(R.id.hearts);
 	    if(lives == 2){
@@ -192,11 +195,11 @@ public class TurnGame extends Activity{
 	    scoreText.setText("Score: " + Settings.getScore());
 	}
 	
-	public void betweenScreen(){
+	private void betweenScreen(){
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, Activity_Between.class);
-		int score = Settings.getScore() + TimeCounter;
+		Intent between_page = new Intent(this, ActivityBetween.class);
+		int score = Settings.getScore() + timeCounter;
         Settings.setScore(score);
 		if(between_page != null){
 			if (active)
@@ -221,7 +224,7 @@ public class TurnGame extends Activity{
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
 			t.cancel();
-		    Intent menu_page = new Intent(this, Activity_Menu.class);
+		    Intent menu_page = new Intent(this, ActivityMenu.class);
 			if(menu_page != null){
   				Settings.resetAll();
 				startActivity(menu_page);

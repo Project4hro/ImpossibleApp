@@ -1,4 +1,4 @@
-package nl.hr.impossibleapp.Gyrogame;
+package nl.hr.impossibleapp.gyrogame;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,10 +12,10 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import nl.hr.impossibleapp.Activity_Between;
 import nl.hr.impossibleapp.R;
-import nl.hr.impossibleapp.Sound;
-import nl.hr.impossibleapp.Settings;
+import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.data.Settings;
+import nl.hr.impossibleapp.data.Sound;
 import android.os.Handler;
 import android.view.Display;
 import android.view.Menu;
@@ -312,7 +312,7 @@ public class GyroscopeGame extends Activity
 	{
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, Activity_Between.class);
+		Intent between_page = new Intent(this, ActivityBetween.class);
 		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		
 		if(between_page != null)

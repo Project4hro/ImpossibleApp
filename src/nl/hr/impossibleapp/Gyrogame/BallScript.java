@@ -1,4 +1,4 @@
-package nl.hr.impossibleapp.Gyrogame;
+package nl.hr.impossibleapp.gyrogame;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -7,6 +7,10 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityMenu;
+import nl.hr.impossibleapp.data.Settings;
+import nl.hr.impossibleapp.data.Sound;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -47,7 +51,7 @@ public class Hangman extends Activity{
 	
 	//private timerField;
     private Timer t;
-    private int TimeCounter = 20;
+    private int timeCounter = 20;
 	
 	@Override
     public void onStart() 
@@ -64,7 +68,7 @@ public class Hangman extends Activity{
     }
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState){
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_hangman);
 		tf = Typeface.createFromAsset(getAssets(), fontPath);
@@ -137,20 +141,20 @@ public class Hangman extends Activity{
 	    			{
 	    				TextView timerField = (TextView) findViewById(R.id.timerBox);
 	    				timerField.setTypeface(tf);
-	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	    				TimeCounter--;
+	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	    				timeCounter--;
 	    				
-	    				if(TimeCounter  == 4){
+	    				if(timeCounter  == 4){
 	                    	Sound.countDown(getBaseContext());
 	                    }
 	    				
-	    				if (TimeCounter < 0)
+	    				if (timeCounter < 0)
 	    				{
 	    					Sound.gameOver(getBaseContext());
-	    					TimeCounter = 20;
+	    					timeCounter = 20;
 	                    	Settings.setLives(Settings.getLives() - 1);
 	                    	System.out.println("[Hangman] Minus life: out of time, " + Settings.getLives());
-	                    	Log.d(TAG, "Time " + TimeCounter);
+	                    	Log.d(TAG, "Time " + timeCounter);
 	    					betweenScreen();
 	    					t.cancel();
                      	}
@@ -184,7 +188,7 @@ public class Hangman extends Activity{
 	}
 	
 	// check letter against word
-	public void checkLetter(char letter){
+	private void checkLetter(char letter){
 		String[] separated = words[currentWordIndex].split("");
 		String stringLetter = Character.toString(letter).toUpperCase(Locale.ENGLISH);
 		
@@ -225,7 +229,7 @@ public class Hangman extends Activity{
 		checkWin();
 	}
 	// Check if player has won
-	public void checkWin(){
+	private void checkWin(){
 		if(guessedWrong >= 9){
 			Log.d(TAG, "lost");
 			System.out.println("lost");
@@ -246,11 +250,11 @@ public class Hangman extends Activity{
 			betweenScreen();
 		}
 	}
-	// Go to Activity_Between
-	public void betweenScreen(){
+
+	private void betweenScreen(){
 		t.cancel();
-		Settings.setScore(Settings.getScore() + TimeCounter);
-		Intent between_page = new Intent(this, Activity_Between.class);
+		Settings.setScore(Settings.getScore() + timeCounter);
+		Intent between_page = new Intent(this, ActivityBetween.class);
 		Sound.stopCountDown(getBaseContext());
 		
 		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -277,7 +281,7 @@ public class Hangman extends Activity{
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
 			t.cancel();
-		    Intent menu_page = new Intent(this, Activity_Menu.class);
+		    Intent menu_page = new Intent(this, ActivityMenu.class);
 			if(menu_page != null){
   				Settings.resetAll();
 				startActivity(menu_page);

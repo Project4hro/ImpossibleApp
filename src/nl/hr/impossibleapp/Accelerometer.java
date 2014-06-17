@@ -5,6 +5,10 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityMenu;
+import nl.hr.impossibleapp.data.Settings;
+import nl.hr.impossibleapp.data.Sound;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +36,7 @@ public class Accelerometer extends Activity implements SensorEventListener
 	
 	private float mLastX, mLastY, mLastZ;
 	private int countShakes = 0;
-	private int TimeCounter = 10;
+	private int timeCounter = 10;
 	private boolean mInitialized;
 	private boolean allowToShake = false;
 	private SensorManager mSensorManager;
@@ -40,15 +44,11 @@ public class Accelerometer extends Activity implements SensorEventListener
     private final float NOISE = (float) 2.0;
     
     private TextView tvTimerInt;
-  //Textview for timer
-    private Timer t;
+  
+    private Timer t = new Timer();
     
-    
-    
-	 
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) 
+    protected void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -87,7 +87,6 @@ public class Accelerometer extends Activity implements SensorEventListener
 	    Sound.Ready(getBaseContext());
 	    readyGo.setText("Ready?");
 	    
-		t = new Timer();
 	    t.scheduleAtFixedRate(new TimerTask() 
 	    {
 	        @Override
@@ -97,28 +96,28 @@ public class Accelerometer extends Activity implements SensorEventListener
 	            {
 	                public void run() 
 	                {
-	                    tvTimerInt.setText(String.valueOf(TimeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	                    TimeCounter--;
+	                    tvTimerInt.setText(String.valueOf(timeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	                    timeCounter--;
 	                    
 	                    
 	                    
-	                    if(goInt == TimeCounter)
+	                    if(goInt == timeCounter)
 	                    {
 	                    	allowToShake = true;
 	                    	Sound.Go(getBaseContext());
 	                    	readyGo.setText("GO!");
 	                    }
 	                    
-	                    if(TimeCounter  == 2){
+	                    if(timeCounter  == 2){
 	                    	Sound.shortCountDown(getBaseContext());
 	                    	
 	                    }
-	                    if (TimeCounter < 0)
+	                    if (timeCounter < 0)
 	                    {
 	                    	Sound.gameOver(getBaseContext());
 	                    	Settings.setLives(Settings.getLives() - 1);
 	                    	System.out.println("[Accelerometer] Minus life: out of time, " + Settings.getLives());
-	                    	TimeCounter = 10;
+	                    	timeCounter = 10;
 	                    	betweenScreen();
 	                    	t.cancel();
 	                    }
@@ -146,13 +145,13 @@ public class Accelerometer extends Activity implements SensorEventListener
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
-    public void betweenScreen()
+    private void betweenScreen()
 	{
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
 		// check currentGame
-		Intent between_page = new Intent(this, Activity_Between.class);
-		int score = Settings.getScore() + TimeCounter;
+		Intent between_page = new Intent(this, ActivityBetween.class);
+		int score = Settings.getScore() + timeCounter;
         Settings.setScore(score);
 		if(between_page != null)
 		{
@@ -223,7 +222,7 @@ public class Accelerometer extends Activity implements SensorEventListener
 					Sound.gameOver(getBaseContext());
                 	Settings.setLives(Settings.getLives() - 1);
                 	System.out.println("[Accelerometer] Game over, " + Settings.getLives());
-                	TimeCounter = 10;
+                	timeCounter = 10;
                 	betweenScreen();
                 	t.cancel();
 				}
@@ -246,10 +245,9 @@ public class Accelerometer extends Activity implements SensorEventListener
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
 			t.cancel();
-		    Intent menu_page = new Intent(this, Activity_Menu.class);
+		    Intent menu_page = new Intent(this, ActivityMenu.class);
 			if(menu_page != null){
   				Settings.resetAll();
-				startActivity(menu_page);
 				this.finish();
 			}
 	    return super.onOptionsItemSelected(item);    
