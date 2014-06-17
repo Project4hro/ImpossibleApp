@@ -13,7 +13,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="84dp"
         android:src="@drawable/shake"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:contentDescription="@string/descriptionShake" />
     
     <ImageView
         android:id="@+id/swipelaImg"
@@ -23,7 +24,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="84dp"
         android:src="@drawable/swipela"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:contentDescription="@string/descriptionSwipeLandscape" />
     
     <ImageView
         android:id="@+id/swipepoImg"
@@ -33,7 +35,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="84dp"
         android:src="@drawable/swipepo"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:contentDescription="@string/descriptionSwipePortrait" />
     
     <ImageView
         android:id="@+id/taplaImg"
@@ -43,7 +46,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="84dp"
         android:src="@drawable/tapla"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:contentDescription="@string/descriptionTapLandscape" />
     
     <ImageView
         android:id="@+id/tappoImg"
@@ -53,7 +57,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="84dp"
         android:src="@drawable/tappo"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:contentDescription="@string/descriptionTapPortrait" />
     
     <ImageView
         android:id="@+id/tiltImg"
@@ -63,7 +68,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="84dp"
         android:src="@drawable/tilt"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:contentDescription="@string/descriptionTilt" />
 
     <ImageView
         android:id="@+id/tiltImgG"
@@ -73,23 +79,28 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="84dp"
         android:src="@drawable/tiltgyro"
-        android:visibility="invisible" />     
+        android:visibility="invisible"
+        android:contentDescription="@string/descriptionTiltGyro" />     
     
     <TextView
         android:id="@+id/timerBoxb"
+       	style="@style/text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="67dp"
-        android:text=" " />
+        android:text="@string/placeholderTimer1" />
     
     <TextView
         android:id="@+id/ScoreBetween"
+       	style="@style/text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/score" />
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="@string/placeholderScore" />
 	
 </RelativeLayout>

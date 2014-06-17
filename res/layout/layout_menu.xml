@@ -4,33 +4,8 @@
     android:id="@+id/rl_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.hr.impossibleapp.Activity_Menu"
-    android:background="@color/orange" >
-    
-    <Button
-        android:id="@+id/menu_start"
-        style="@style/button_style"
-        android:layout_above="@+id/menu_score"
-        android:layout_marginBottom="18dp"
-        android:text="@string/start"
-        android:onClick="Goto_Game"
-        android:fontFamily="" />
-    
-    <Button
-        android:id="@+id/menu_score"
-        style="@style/button_style"
-        android:layout_alignLeft="@+id/menu_start"
-        android:layout_centerVertical="true"
-        android:text="@string/highscore" />
-
-    <Button
-        android:id="@+id/menu_settings"
-        style="@style/button_style"
-        android:layout_alignLeft="@+id/menu_score"
-        android:layout_below="@id/menu_score"
-        android:layout_marginTop="14dp"
-        android:onClick="Goto_Settings"
-        android:text="@string/settings" />
+    android:background="@color/orange"
+    tools:context="nl.hr.impossibleapp.Activity_Menu" >
 
     <ImageView
         android:id="@+id/tiltImg"
@@ -42,5 +17,41 @@
         android:layout_marginLeft="15dp"
         android:contentDescription="@string/logo_desc"
         android:src="@drawable/logo" />
+
+    <Button
+        android:id="@+id/menu_score"
+        style="@style/button_style"
+        android:layout_below="@+id/menu_start"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:onClick="Goto_Highscores"
+        android:text="@string/highscore" />
+
+    <Button
+        android:id="@+id/menu_settings"
+        style="@style/button_style"
+        android:layout_below="@+id/menu_score"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:onClick="Goto_Settings"
+        android:text="@string/settings" />
+
+    <Button
+        android:id="@+id/menu_exit"
+        style="@style/button_style"
+        android:layout_below="@+id/menu_settings"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:onClick="Exit_Game"
+        android:text="@string/exit" />
+
+    <Button
+        android:id="@+id/menu_start"
+        style="@style/button_style"
+        android:layout_alignLeft="@+id/menu_score"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:onClick="Goto_Game"
+        android:text="@string/start" />
 
 </RelativeLayout>

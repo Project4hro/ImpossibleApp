@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<string name="language">EN</string>
     <string name="app_name">Impossible App</string>
     <string name="start">Start</string>
     <string name="settings">Settings</string>
@@ -8,7 +8,8 @@
     <string name="logo_desc">Logo</string>
     <string name="sound">Sound</string>
     <string name="previouspage">Back</string>
-    
+    <string name="menu">Menu</string>
+    <string name="exit">Exit</string>
     <string name="template_label">Template</string>
     <string name="between_label">Between Games</string>
     
@@ -22,5 +23,42 @@
     <string name="time">Time</string>
     <string name="title_activity_turn">TurnActivity</string>
     <string name="score">Score: </string>
-
+    <string name="dot">.</string>
+    <string name="choose_letter">Choose letter</string>
+    <string name="hide_keyboard">Hide keyboard</string>
+    <string name="hangman">Hangmanview</string>
+    <string name="action_settings">Settings</string>
+	<string name="shakes">Count shakes</string>
+	
+    <!-- placeholders -->
+	    <string name="placeholderTimer">Time: 12s</string>
+	    <string name="placeholderTimer1">3</string>
+	    <string name="placeholderScore">Score: 100</string>
+	    <string name="placeholderCountShakes">Count shakes: 0</string>
+	    <string name="placeholderReadyGo">Ready?</string>
+	    <string name="placeholderHits">Raak er: 5</string>
+    <!-- end placeholder -->
+    
+    <!-- contentDescriptions -->
+	    <string name="descriptionHearts">heartsField</string>
+	    <string name="descriptionHangman">hangman</string>
+	    <string name="descriptionSwipeLandscape">SwipeImgLandscape</string>
+	    <string name="descriptionSwipePortrait">SwipeImgPortrait</string>
+	    <string name="descriptionTapLandscape">TapImgLandscape</string>
+	    <string name="descriptionTapPortrait">TapImgPortrait</string>
+	    <string name="descriptionGyro">GyroImg</string>
+	    <string name="descriptionShake">ShakeImg</string>
+	    <string name="descriptionTilt">TiltImg</string>
+	    <string name="descriptionTiltGyro">TiltImgGyro</string>
+	    <string name="descriptionShaker">ShakerImg</string>
+	    <string name="descriptionHandTop">HandTopImg</string>
+	    <string name="descriptionHandBottom">HandBottomImg</string>
+	    <string name="descriptionTarget">TargetImg</string>
+	    <string name="descriptionLogo">LogoImg</string>
+	    <string name="descriptionGunSight">GunsightImg</string>
+	    <string name="descriptionPipeStraight">StraightPipeImg</string>
+	    <string name="descriptionPipeCurve">CurvePipeImg</string>
+	    <string name="descriptionPipeStart">StartPipeImg</string>
+	    <string name="descriptionPipeEnd">EndPipeImg</string>
+    <!-- end contentDescriptions -->
 </resources>

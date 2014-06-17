@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/orange"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="nl.hr.impossibleapp.Accelerometer2" >
+
+    <ImageView
+        android:id="@+id/hearts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/heart3"
+        android:contentDescription="@string/descriptionHearts" />
+
+    <TextView
+        android:id="@+id/scoreBox"
+        style="@style/text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/placeholderScore" />
+
+    <TextView
+        android:id="@+id/timerBox"
+        style="@style/text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/placeholderTimer" />
+
+    <ImageView
+        android:id="@+id/shaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/cocktailshaker"
+        android:contentDescription="@string/descriptionShaker" />
+
+    <ImageView
+        android:id="@+id/hand_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hand_top"
+        android:layout_below="@+id/shaker"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/handbottom"
+        android:contentDescription="@string/descriptionHandBottom" />
+
+    <ImageView
+        android:id="@+id/hand_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/shaker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/handtop"
+        android:contentDescription="@string/descriptionHandTop" />
+
+    <TextView
+        android:id="@+id/countShakes"
+        style="@style/text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:text="@string/placeholderCountShakes" />
+	
+</RelativeLayout>
+

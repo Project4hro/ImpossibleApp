@@ -15,7 +15,7 @@ import java.util.TimerTask;
 import nl.hr.impossibleapp.Activity_Between;
 import nl.hr.impossibleapp.R;
 import nl.hr.impossibleapp.Sound;
-import nl.hr.impossibleapp.settings;
+import nl.hr.impossibleapp.Settings;
 import android.os.Handler;
 import android.view.Display;
 import android.view.Menu;
@@ -31,6 +31,11 @@ import android.hardware.SensorEventListener;
 
 public class GyroscopeGame extends Activity 
 {
+	// Font
+    private static final String fontPath = "fonts/mvboli.ttf";
+    private Typeface tf;
+    
+    private boolean addedOnce = false;
 	// Collision detection values
 	private boolean up = true;
 	private boolean down = false;
@@ -99,22 +104,23 @@ public class GyroscopeGame extends Activity
 	    final FrameLayout mainView = 
 	    (android.widget.FrameLayout)findViewById(R.id.gyrogame_view);
 	    
-	    // Font path
-	    String fontPath = "fonts/mvboli.ttf";
+	    
 	    // Loading Font Face
-		Typeface tf = Typeface.createFromAsset(getAssets(), fontPath);
+		tf = Typeface.createFromAsset(getAssets(), fontPath);
+		
 		// Textfield from xml
 		timerField = (TextView) findViewById(R.id.timerBox);
 		timerField.setTypeface(tf);
 		ImageView heartsField = (ImageView) findViewById(R.id.hearts);
-		int lives = settings.getLives();
+		int lives = Settings.getLives();
 	    if(lives == 2){
 	    	heartsField.setImageResource(R.drawable.heart2);
 	    }else if(lives == 1){
 	    	heartsField.setImageResource(R.drawable.heart1);
 	    }
 	    TextView scoreText = (TextView) findViewById(R.id.scoreBox);
-	    scoreText.setText("Score: " + settings.getScore());
+	    scoreText.setTypeface(tf);
+	    scoreText.setText("Score: " + Settings.getScore());
 	    
 		// get dimension values of the screen
 		Display display = getWindowManager().getDefaultDisplay();  
@@ -182,7 +188,7 @@ public class GyroscopeGame extends Activity
 	            {
 	                public void run() 
 	                {
-	                    timerField.setText(String.valueOf(TimeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	                    timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
 	                    TimeCounter--;
 	                    countdown --;
 	    	            if (countdown== 0)
@@ -220,11 +226,12 @@ public class GyroscopeGame extends Activity
 	                    if(TimeCounter == 4){
 	                    	Sound.countDown(getBaseContext());
 	                    }
-	                    if (TimeCounter < 1)
+	                    if (TimeCounter < 0)
 	                    {
+	                    	Sound.gameOver(getBaseContext());
 	            	    	System.out.println("timelowerthen1");
 	                    	TimeCounter = 12;
-	                    	settings.setLives(settings.getLives() - 1);
+	                    	Settings.setLives(Settings.getLives() - 1);
 	                    	betweenScreen();
 	                    	t.cancel();
 	                    }
@@ -253,23 +260,39 @@ public class GyroscopeGame extends Activity
 	    
 	    if (ballPos.x > (screenWidth/2 - 10) && ballPos.x < (screenWidth/2 + 10) && ballPos.y < 60 && up)
 	    {
-	    	updateScore();
-	    	betweenScreen();
+	    	if(!addedOnce){
+		    	updateScore();
+		    	Sound.wonMinigame(getBaseContext());
+		    	betweenScreen();
+		    	addedOnce = true;
+	    	}
 	    }
 	    if (ballPos.x > (screenWidth/2 - 10) && ballPos.x < (screenWidth/2 + 10) && ballPos.y > 420 &&  down)
 	    {
-	    	updateScore();
-	    	betweenScreen();
+	    	if(!addedOnce){
+		    	updateScore();
+		    	Sound.wonMinigame(getBaseContext());
+		    	betweenScreen();
+		    	addedOnce = true;
+	    	}
 	    }
 	    if (ballPos.x < 60 && ballPos.y < (screenHeight/2 + 5) && ballPos.y > (screenHeight/2 -5) && left)
 	    {
-	    	updateScore();
-	    	betweenScreen();
+	    	if(!addedOnce){
+		    	updateScore();
+		    	Sound.wonMinigame(getBaseContext());
+		    	betweenScreen();
+		    	addedOnce = true;
+	    	}
 	    }
 	    if (ballPos.x > 790 && ballPos.y < (screenHeight/2 + 5) && ballPos.y > (screenHeight/2 -5) && right)
 	    {
-	    	updateScore();
-	    	betweenScreen();
+	    	if(!addedOnce){
+		    	updateScore();
+		    	Sound.wonMinigame(getBaseContext());
+		    	betweenScreen();
+		    	addedOnce = true;
+	    	}
 	    }
 	    
 	    //update ball location on screen
@@ -288,24 +311,22 @@ public class GyroscopeGame extends Activity
 	public void betweenScreen()
 	{
 		t.cancel();
-		// check currentGame
-		//Intent mIntent = getIntent();
-		//int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
+		Sound.stopCountDown(getBaseContext());
 		Intent between_page = new Intent(this, Activity_Between.class);
-		//between_page.putExtra("intCurrentGame", currentGame);
-		//between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		
 		if(between_page != null)
 		{
 			if (active)
 			{
 				startActivity(between_page);
+				this.finish();
 			}	
 		}
-		finish();
 	}
 	public void updateScore(){
-		int score = settings.getScore() + TimeCounter;
-        settings.setScore(score);
+		int score = Settings.getScore() + TimeCounter;
+        Settings.setScore(score);
 	}
 	//Eventlistener that checks if menu button is pressed
 	@Override

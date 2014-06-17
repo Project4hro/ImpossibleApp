@@ -28,7 +28,7 @@ public class Activity_Menu extends Activity
         Button start_button = (Button) findViewById(R.id.menu_start);
         Button highscores_button = (Button) findViewById(R.id.menu_score);
         Button settings_button = (Button) findViewById(R.id.menu_settings);
-        
+        Button exit_button = (Button) findViewById(R.id.menu_exit);
 		// Loading Font Face
 		Typeface tf = Typeface.createFromAsset(getAssets(), fontPath);
 		
@@ -36,6 +36,8 @@ public class Activity_Menu extends Activity
         start_button.setTypeface(tf);
         highscores_button.setTypeface(tf);
         settings_button.setTypeface(tf);
+        exit_button.setTypeface(tf);
+        
 	}
 	
 	public void Goto_Settings(View v)
@@ -45,6 +47,16 @@ public class Activity_Menu extends Activity
 		if(settings_page != null){
 			startActivity(settings_page);
 		}
+		this.finish();
+	}
+	public void Goto_Highscores(View v)
+	{
+		Intent highscores_page = new Intent(this, Activity_Highscores.class);
+		highscores_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if(highscores_page != null){
+			startActivity(highscores_page);
+		}
+		this.finish();
 	}
 	public void Goto_Game(View v)
 	{
@@ -54,6 +66,10 @@ public class Activity_Menu extends Activity
 		if(game_page != null){
 			startActivity(game_page);
 		}
+		this.finish();
+	}
+	public void Exit_Game(View v){
+		this.finish();
 	}
 	@Override
 	public void onBackPressed() {finish();}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+    <string name="language">NL</string>
     <string name="app_name">Onmogelijke App</string>
     <string name="start">Start</string>
     <string name="settings">Instellingen</string>
@@ -20,4 +20,10 @@
     <string name="rightAnswer">Goed!</string>
     <string name="wrongAnswer">Fout!</string>
     <string name="time">Tijd</string>
+    <string name="title_activity_turn">TurnActivity</string>
+    <string name="score">Score: </string>
+    <string name="dot">.</string>
+    <string name="choose_letter">Kies letter</string>
+    <string name="hide_keyboard">Verberg toetsenbord</string>
+    <string name="hangman">Hangmanview</string>
 </resources>

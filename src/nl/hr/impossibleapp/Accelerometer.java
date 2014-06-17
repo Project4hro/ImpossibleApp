@@ -1,6 +1,7 @@
 package nl.hr.impossibleapp;
 
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,7 +22,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Accelerometer2 extends Activity implements SensorEventListener 
+public class Accelerometer extends Activity implements SensorEventListener 
 {
 	// Font
     private static final String fontPath = "fonts/mvboli.ttf";
@@ -31,15 +32,18 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	
 	private float mLastX, mLastY, mLastZ;
 	private int countShakes = 0;
+	private int TimeCounter = 10;
 	private boolean mInitialized;
+	private boolean allowToShake = false;
 	private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private final float NOISE = (float) 2.0;
-
-    private TextView timerBox;
-
+    
+    private TextView tvTimerInt;
+  //Textview for timer
     private Timer t;
-    private int TimeCounter = 10;
+    
+    
     
 	 
     /** Called when the activity is first created. */
@@ -49,9 +53,9 @@ public class Accelerometer2 extends Activity implements SensorEventListener
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.layout_accelerometer2);
-        tf = Typeface.createFromAsset(getAssets(), fontPath);
-        
+    	setContentView(R.layout.layout_accelerometer);
+	    tf = Typeface.createFromAsset(getAssets(), fontPath);
+	    
         mInitialized = false;
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -65,12 +69,23 @@ public class Accelerometer2 extends Activity implements SensorEventListener
         }else{
         	heartsField.setImageResource(R.drawable.heart3);
         }
+        
+        final TextView readyGo = (TextView) findViewById(R.id.readyGo);
+
+		readyGo.setTypeface(tf);
 		
-		timerBox = (TextView)findViewById(R.id.timerBox);
-		timerBox.setTypeface(tf);
+		tvTimerInt = (TextView)findViewById(R.id.timerBox);
+		tvTimerInt.setTypeface(tf);
 		TextView scoreText = (TextView) findViewById(R.id.scoreBox);
 		scoreText.setTypeface(tf);
 	    scoreText.setText("Score: " + Settings.getScore());
+	    
+	    Random randomGenerator = new Random();
+	    final int goInt = randomGenerator.nextInt(5) + 3;
+	    
+	    //Text and Sound for "Ready"
+	    Sound.Ready(getBaseContext());
+	    readyGo.setText("Ready?");
 	    
 		t = new Timer();
 	    t.scheduleAtFixedRate(new TimerTask() 
@@ -82,17 +97,27 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	            {
 	                public void run() 
 	                {
-	                	timerBox.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	                    tvTimerInt.setText(String.valueOf(TimeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
 	                    TimeCounter--;
 	                    
-	                    if(TimeCounter  == 4){
-	                    	Sound.countDown(getBaseContext());
+	                    
+	                    
+	                    if(goInt == TimeCounter)
+	                    {
+	                    	allowToShake = true;
+	                    	Sound.Go(getBaseContext());
+	                    	readyGo.setText("GO!");
+	                    }
+	                    
+	                    if(TimeCounter  == 2){
+	                    	Sound.shortCountDown(getBaseContext());
+	                    	
 	                    }
 	                    if (TimeCounter < 0)
 	                    {
 	                    	Sound.gameOver(getBaseContext());
 	                    	Settings.setLives(Settings.getLives() - 1);
-	                    	System.out.println("[Accelerometer2] Minus life: out of time, " + Settings.getLives());
+	                    	System.out.println("[Accelerometer] Minus life: out of time, " + Settings.getLives());
 	                    	TimeCounter = 10;
 	                    	betweenScreen();
 	                    	t.cancel();
@@ -125,8 +150,8 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	{
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
+		// check currentGame
 		Intent between_page = new Intent(this, Activity_Between.class);
-		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		int score = Settings.getScore() + TimeCounter;
         Settings.setScore(score);
 		if(between_page != null)
@@ -136,7 +161,7 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 				startActivity(between_page);
 			}	
 		}
-		finish();
+		this.finish();
 	}
 
     protected void onPause() 
@@ -154,13 +179,10 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 	@Override
 	public void onSensorChanged(SensorEvent event) 
 	{
-		TextView tvShakes = (TextView)findViewById(R.id.countShakes);
-		tvShakes.setTypeface(tf);
-
 		float x = event.values[0];
 		float y = event.values[1];
 		float z = event.values[2];
-		
+
 		if (!mInitialized) 
 		{
 			mLastX = x;
@@ -179,17 +201,32 @@ public class Accelerometer2 extends Activity implements SensorEventListener
 			mLastX = x;
 			mLastY = y;
 			mLastZ = z;
-			tvShakes.setText(getResources().getString(R.string.shakes) + ": " + Integer.toString(countShakes));
+
 			
 			if(deltaX > 0 || deltaX <0 || deltaY > 0 || deltaY < 0)
 			{
 				countShakes++;
+				System.out.println(countShakes);
 			}
-			
-			if(countShakes > 50)
+			if(allowToShake)
+			{	
+				if(countShakes > 20)
+				{
+					Sound.wonMinigame(getBaseContext());
+					betweenScreen();
+				}
+			}
+			else
 			{
-				Sound.wonMinigame(getBaseContext());
-				betweenScreen();
+				if(countShakes > 10)
+				{
+					Sound.gameOver(getBaseContext());
+                	Settings.setLives(Settings.getLives() - 1);
+                	System.out.println("[Accelerometer] Game over, " + Settings.getLives());
+                	TimeCounter = 10;
+                	betweenScreen();
+                	t.cancel();
+				}
 			}
 		}
 	}

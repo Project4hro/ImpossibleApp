@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,9 +19,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SwipeGame1 extends Activity
-{
+public class SwipeGame1 extends Activity{
+	
 	private static final String TAG = SwipeGame1.class.toString(); 
+	
+	// Font
+    private static final String fontPath = "fonts/mvboli.ttf";
+    private Typeface tf;
+    
 	private int randInt;
 	private float x1, x2;
 	private float y1, y2;
@@ -29,7 +35,6 @@ public class SwipeGame1 extends Activity
 	private int arraylistKey = 0;
 	private int amountAssignments = 4;
 	
-	private boolean gamefinished = false;
 	private TextView assignment;
 	private TextView assignment1;
 	private TextView assignment2;
@@ -48,32 +53,31 @@ public class SwipeGame1 extends Activity
     private static boolean active = false; 
 	
 	@Override
-    public void onStart() 
-    {
+    public void onStart(){
        super.onStart();
        active = true;
     } 
 
     @Override
-    public void onStop() 
-    {
+    public void onStop(){
         super.onStop();
         active = false;
     }
     
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		// Full Screen
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.layout_swipegame1);
-	    if(settings.getDifficulty() == 1){
+	    tf = Typeface.createFromAsset(getAssets(), fontPath);
+	    
+	    if(Settings.getDifficulty() == 1){
 	    	amountAssignments = 4;
-	    }else if(settings.getDifficulty() == 2){
+	    }else if(Settings.getDifficulty() == 2){
 	    	amountAssignments = 6;
-	    }else if(settings.getDifficulty() == 3){
+	    }else if(Settings.getDifficulty() == 3){
 	    	amountAssignments = 8;
 	    }
 	    assignments.clear();
@@ -84,10 +88,15 @@ public class SwipeGame1 extends Activity
 		message2 = (TextView) findViewById(R.id.errMessage2);
 		message = message1;
 		timerField = (TextView) findViewById(R.id.timerBox);
+		assignment1.setTypeface(tf);
+		assignment2.setTypeface(tf);
+		message1.setTypeface(tf);
+		message2.setTypeface(tf);
+		timerField.setTypeface(tf);
 		// set hearts view
 		ImageView heartsField = (ImageView) findViewById(R.id.hearts);		
 	    randInt = new Random().nextInt(4) + 1;
-	    int lives = settings.getLives();
+	    int lives = Settings.getLives();
 	    if(lives == 2){
 	    	heartsField.setImageResource(R.drawable.heart2);
 	    }else if(lives == 1){
@@ -95,20 +104,19 @@ public class SwipeGame1 extends Activity
 	    }else{
 	    	heartsField.setImageResource(R.drawable.heart3);
 	    }
+	    
 	    // set scoreview
 	    TextView scoreText = (TextView) findViewById(R.id.scoreBox);
-	    scoreText.setText("Score: " + settings.getScore());
+	    scoreText.setTypeface(tf);
+	    scoreText.setText("Score: " + Settings.getScore());
 	    changeAssignment();
-	    
+	    // Start timer
 	    t = new Timer();
-	    t.scheduleAtFixedRate(new TimerTask() 
-	    {
+	    t.scheduleAtFixedRate(new TimerTask(){
 	    	@Override
 	    	public void run() {
-	    		runOnUiThread(new Runnable() 
-	    		{
-	    			public void run() 
-	    			{
+	    		runOnUiThread(new Runnable(){
+	    			public void run(){
 	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
 	    				TimeCounter--;
 	    				
@@ -116,12 +124,11 @@ public class SwipeGame1 extends Activity
 	                    	Sound.countDown(getBaseContext());
 	                    }
 	    				
-	    				if (TimeCounter < 1)
-	    				{
+	    				if (TimeCounter < 0){
 	    					Sound.gameOver(getBaseContext());
 	    					TimeCounter = 20;
-	                    	settings.setLives(settings.getLives() - 1);
-	                    	System.out.println("[SwipeGame1] Minus life: out of time, " + settings.getLives());
+	                    	Settings.setLives(Settings.getLives() - 1);
+	                    	System.out.println("[SwipeGame1] Minus life: out of time, " + Settings.getLives());
 	                    	Log.d(TAG, "Time " + TimeCounter);
 	    					betweenScreen();
 	    					t.cancel();
@@ -134,8 +141,7 @@ public class SwipeGame1 extends Activity
 	} //OnCreate
 	
 	// change swipe direction based on random int
-	public void changeAssignment()
-	{
+	public void changeAssignment(){
 		if(assignment1.getText().toString() == ""){
 			assignment = assignment1;
 			assignment2.setText("");
@@ -143,8 +149,7 @@ public class SwipeGame1 extends Activity
 			assignment = assignment2;
 			assignment1.setText("");
 		}
-		if(x < (amountAssignments - 1))
-		{
+		if(x < (amountAssignments - 1)){
 			if(randInt == 1){
 		    	swipeDirection = "Swipe "+getResources().getString(R.string.left);
 		    }else if(randInt == 2){
@@ -165,8 +170,7 @@ public class SwipeGame1 extends Activity
 	
 	public void won(boolean won){
 		if(won){
-			if(arraylistKey == assignments.size())
-			{
+			if(arraylistKey == assignments.size()){
 				t.cancel();
 				if(assignment1.getText().toString() == ""){
 					assignment = assignment1;
@@ -175,17 +179,18 @@ public class SwipeGame1 extends Activity
 					assignment = assignment2;
 					assignment1.setText("");
 				}
+				Sound.wonMinigame(getBaseContext());
 				assignment.setText("Gewonnen!");
-				int score = settings.getScore() + TimeCounter;
-		        settings.setScore(score);
-				gamefinished = true;
+				int score = Settings.getScore() + TimeCounter;
+		        Settings.setScore(score);
+				betweenScreen();
 			}
 		}else{
 			t.cancel();
 			assignments.clear();
-		    settings.setLives(settings.getLives() - 1);
-        	System.out.println("Minus life: lost game, " + settings.getLives());
-		    gamefinished = true;
+		    Settings.setLives(Settings.getLives() - 1);
+        	System.out.println("Minus life: lost game, " + Settings.getLives());
+			betweenScreen();
 		}
 	}
 	
@@ -195,36 +200,18 @@ public class SwipeGame1 extends Activity
 		String correct = getResources().getString(R.string.rightAnswer);
 		switch(touchevent.getAction()){
 			case MotionEvent.ACTION_DOWN:
-			{
+				
 				x1 = touchevent.getX();
 				y1 = touchevent.getY();
 				break;
-			}
+			
 			case MotionEvent.ACTION_UP:
-			{
-				if(gamefinished){
-					betweenScreen();
-					break;
-				}
-				/*// check if all assignments are done
-				if(arraylistKey == assignments.size()){
-					t.cancel();
-				    assignments.clear();
-				    betweenScreen();
-					break;
-				}
-				// check if lost game
-				if(message.getText().toString() == "Game over!")
-				{
-				    betweenScreen();
-					break;
-				}*/
+				
 				x2 = touchevent.getX();
 				y2 = touchevent.getY();
 				
 				//check if amountAssignments is met, if yes repeat steps
-				if(x == amountAssignments)
-				{
+				if(x == amountAssignments){
 					randInt = assignments.get(arraylistKey);
 				}
 
@@ -236,8 +223,7 @@ public class SwipeGame1 extends Activity
 					message1.setText("");
 				}
 				// check if step is corret
-				if(randInt == 1)
-				{
+				if(randInt == 1){
 					if((x1 - x2) > 180){
 						System.out.println("links " + (x1 - x2));
 						message.setText(correct);
@@ -269,24 +255,18 @@ public class SwipeGame1 extends Activity
 						System.out.println("rechts " + (x1 - x2));
 						message.setText(correct);
 						Sound.correct(getBaseContext());
-						if(x < amountAssignments)
-						{
+						if(x < amountAssignments){
 							randInt = new Random().nextInt(4) + 1;
 							changeAssignment();
 							x++;
-						}
-						else
-						{
+						}else{
 							message.setText(correct);
 							arraylistKey++;
 							won(true);
 						}
 						break;
-					}
-					else
-					{
-						if(x == amountAssignments)
-						{
+					}else{
+						if(x == amountAssignments){
 							message.setText("Game over!");
 							Sound.gameOver(getBaseContext());
 							won(false);
@@ -298,47 +278,36 @@ public class SwipeGame1 extends Activity
 					}
 				}
 			
-				if(randInt == 3)
-				{
-					if((y1 - y2) > 150)
-					{
+				if(randInt == 3){
+					if((y1 - y2) > 150){
 						System.out.println("boven " + (y1 - y2));
 						message.setText(correct);
 						Sound.correct(getBaseContext());
-						if(x < amountAssignments)
-						{
+						if(x < amountAssignments){
 							randInt = new Random().nextInt(4) + 1;
 							changeAssignment();
 							x++;
-						}
-						else
-						{
+						}else{
 							message.setText(correct);
 							arraylistKey++;
 							won(true);
 						}
 						break;
-					}
-					else
-					{
+					}else{
 						if(x == amountAssignments)
 						{
 							message.setText("Game over!");
 							Sound.gameOver(getBaseContext());
 							won(false);
-						}
-						else
-						{
+						}else{
 							message.setText(wrong);
 							Sound.wrong(getBaseContext());
 						}
 						break;
 					}			
 				}
-				if(randInt == 4)
-				{
-					if((y1 - y2) < -150)
-					{
+				if(randInt == 4){
+					if((y1 - y2) < -150){
 						System.out.println("onder " + (y1 - y2));
 						message.setText(correct);
 						Sound.correct(getBaseContext());
@@ -347,25 +316,18 @@ public class SwipeGame1 extends Activity
 							randInt = new Random().nextInt(4) + 1;
 							changeAssignment();
 							x++;
-						}
-						else
-						{
+						}else{
 							message.setText(correct);
 							arraylistKey++;
 							won(true);
 						}
 						break;
-					}
-					else
-					{
-						if(x == amountAssignments)
-						{
+					}else{
+						if(x == amountAssignments){
 							message.setText("Game over!");
 							Sound.gameOver(getBaseContext());
 							won(false);
-						}
-						else
-						{
+						}else{
 							message.setText(wrong);
 							Sound.wrong(getBaseContext());
 						}
@@ -374,29 +336,23 @@ public class SwipeGame1 extends Activity
 				}
 				break;
 			}
-		}
+		
 		return false;
 	} //onTouchEvent
 	
 	public void betweenScreen()
 	{
 		t.cancel();
-		TimeCounter = 20;
-		// check currentGame
-		//Intent mIntent = getIntent();
-		//int currentGame = mIntent.getIntExtra("intCurrentGame", 0);
+		Sound.stopCountDown(getBaseContext());
 		Intent between_page = new Intent(this, Activity_Between.class);
-		//between_page.putExtra("intCurrentGame", currentGame);
 		
 		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(between_page != null)
-		{
-			if (active)
-			{
+		if(between_page != null){
+			if (active){
 				startActivity(between_page);
+				this.finish();
 			}	
 		}
-		this.finish();
 	}
 	//Eventlistener that checks if menu button is pressed
 	@Override
@@ -412,8 +368,12 @@ public class SwipeGame1 extends Activity
 	{
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
-			t.cancel();
-	    	this.finish(); //will call onPause
+			t.cancel();Intent menu_page = new Intent(this, Activity_Menu.class);
+			if(menu_page != null){
+  				Settings.resetAll();
+				startActivity(menu_page);
+				this.finish();
+			}
 	    return super.onOptionsItemSelected(item);    
 	}
 	//listener for config change, so it stays in landscape mode
