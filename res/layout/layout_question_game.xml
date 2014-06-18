@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/orange"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="nl.hr.impossibleapp.QuestionGame" >
+
+    <ImageView
+        android:id="@+id/hearts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/heart3"
+        android:contentDescription="@string/descriptionHearts" />
+
+    <TextView
+        android:id="@+id/scoreBox"
+        style="@style/text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/placeholderScore" />
+
+    <TextView
+        android:id="@+id/timerBox"
+        style="@style/text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/placeholderTimer" />
+
+    <TextView
+        android:id="@+id/textQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timerBox"
+        android:layout_centerHorizontal="true"
+        android:text="Here comes the question that the player must awnser right." />
+
+    <Button
+        android:id="@+id/questionAnswer2"
+        style="@style/button_style"
+        android:layout_above="@+id/questionAnswer3"
+        android:layout_alignLeft="@+id/questionAnswer1"
+        android:onClick="Answer2"
+        android:text="Answer2" />
+
+    <Button
+        android:id="@+id/questionAnswer1"
+        style="@style/button_style"
+        android:layout_above="@+id/questionAnswer2"
+        android:layout_centerHorizontal="true"
+        android:onClick="Answer1"
+        android:text="Answer1" />
+
+    <Button
+        android:id="@+id/questionAnswer3"
+        style="@style/button_style"
+        android:layout_above="@+id/hearts"
+        android:layout_alignLeft="@+id/questionAnswer2"
+        android:onClick="Answer3"
+        android:text="Answer3" />
+
+</RelativeLayout>
+

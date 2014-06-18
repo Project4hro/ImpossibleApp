@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.activities.ActivityBetween;
-import nl.hr.impossibleapp.activities.ActivityMenu;
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
 import android.app.Activity;
@@ -244,12 +243,9 @@ public class Accelerometer extends Activity implements SensorEventListener
 	{
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
+	    	Settings.resetAll();
 			t.cancel();
-		    Intent menu_page = new Intent(this, ActivityMenu.class);
-			if(menu_page != null){
-  				Settings.resetAll();
-				this.finish();
-			}
+		    this.finish();
 	    return super.onOptionsItemSelected(item);    
 	}
 	//listener for config change, so it stays in landscape mode

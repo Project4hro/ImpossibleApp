@@ -33,6 +33,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:text="@string/menu"
-        android:onClick="Goto_Menu" />
+        android:onClick="GotoMenu" />
 
 </RelativeLayout>

@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import nl.hr.impossibleapp.Accelerometer;
 import nl.hr.impossibleapp.Accelerometer2;
 import nl.hr.impossibleapp.Hangman;
+import nl.hr.impossibleapp.QuestionGamePicture;
 import nl.hr.impossibleapp.R;
 import nl.hr.impossibleapp.Shootgame;
 import nl.hr.impossibleapp.SwipeGame1;
@@ -109,17 +110,20 @@ public class ActivityBetween extends Activity{
 	    checkDone(Accelerometer.class, 1); //goed++
 	    checkDone(TargetGame.class, 3); //goed++
 	    checkDone(Shootgame.class, 3); //goed++
+	    checkDone(QuestionGamePicture.class, 3);
+	    
 	    
 	    if(gamesList.isEmpty()){
 	    	Settings.clearGamesDone();
 	    	int difficulty = Settings.getDifficulty();
 	    	if(difficulty < 3){
-	    		Log.d(TAG, "Next difficulty");
+	    		Log.i(TAG, "Next difficulty");
 	    		Settings.setDifficulty(difficulty + 1);
 	    		addGames();
+	    		Log.i(TAG, gamesList.toString());
 	    	}else{
 	    		t.cancel();
-	    		System.out.println("Einde spel");
+	    		Log.i(TAG, "Einde spel");
 	    		Intent endScreen = new Intent(this,ActivityEndScreen.class);
 	    		if(endScreen != null){
 	    			startActivity(endScreen);
@@ -142,7 +146,10 @@ public class ActivityBetween extends Activity{
 		Settings.addGameGamesDone(gamesList.get(nextGame));
 		Intent game_page = new Intent(this,gamesList.get(nextGame));
 		if(game_page != null){
+			Log.i(TAG, "Found new minigame");
+			Log.i(TAG, game_page.toString());
 			startActivity(game_page);
+			Log.i(TAG, "started");
 			this.finish();
 		}
 	}

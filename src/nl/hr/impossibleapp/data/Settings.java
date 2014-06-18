@@ -2,7 +2,10 @@ package nl.hr.impossibleapp.data;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class Settings {
+	private static final String TAG = Settings.class.toString();
 	private static boolean soundEnabled = true;
 	private static int lives = 3;
 	private static int difficulty = 1;
@@ -71,8 +74,7 @@ public class Settings {
 		if(!gamesDone.isEmpty()){
 			gamesDone.clear();
 		}
-		
-		//System.out.println("Reset");
+		Log.i(TAG, "Reset");
 	}
 
 	public static String getLanguage() {

@@ -99,7 +99,8 @@ public class ActivityHighscores extends Activity{
 	    }
 	}
 	
-	public void Goto_Menu(View v){
+	public void GotoMenu(View v){
+		Log.i(TAG, "Menu");
 		this.finish();
 	}
 }

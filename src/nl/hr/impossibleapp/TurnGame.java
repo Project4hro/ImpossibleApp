@@ -4,7 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.activities.ActivityBetween;
-import nl.hr.impossibleapp.activities.ActivityMenu;
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
 import android.app.Activity;
@@ -224,12 +223,8 @@ public class TurnGame extends Activity{
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
 			t.cancel();
-		    Intent menu_page = new Intent(this, ActivityMenu.class);
-			if(menu_page != null){
-  				Settings.resetAll();
-				startActivity(menu_page);
-				this.finish();
-			}
+		    Settings.resetAll();
+			this.finish();
 	    return super.onOptionsItemSelected(item);    
 	}
 	//listener for config change, so it stays in landscape mode

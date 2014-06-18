@@ -7,15 +7,16 @@ import nl.hr.impossibleapp.data.Highscores;
 import nl.hr.impossibleapp.data.MySQLiteHelper;
 import nl.hr.impossibleapp.data.Settings;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 public class ActivityEndScreen extends Activity{
+	private static final String TAG = ActivityEndScreen.class.toString();
 	// Font
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
@@ -38,18 +39,13 @@ public class ActivityEndScreen extends Activity{
 	    db.addHighscore(new Highscores(Settings.getName(), Settings.getScore()));
 	    List<Highscores> list = db.getAllHighscores();
 	    
-	    System.out.println("Highscore - name: " + list.get(0).getName());
-	    System.out.println("Highscore - score: " + list.get(0).getScore());
+	    Log.i(TAG, "Highscore - name: " + list.get(0).getName());
+	    Log.i(TAG, "Highscore - score: " + list.get(0).getScore());
 	    
 	    Settings.resetAll();
 	}
 	
 	public void Goto_Menu(View v){
-		Intent menu = new Intent(this, ActivityMenu.class);
-		menu.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(menu != null){
-			startActivity(menu);
-			this.finish();
-		}
+		this.finish();
 	}
 }

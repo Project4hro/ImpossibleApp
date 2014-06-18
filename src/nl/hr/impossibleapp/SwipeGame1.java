@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.activities.ActivityBetween;
-import nl.hr.impossibleapp.activities.ActivityMenu;
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
 import android.app.Activity;
@@ -165,7 +164,7 @@ public class SwipeGame1 extends Activity{
 			t.cancel();
 			assignments.clear();
 		    Settings.setLives(Settings.getLives() - 1);
-        	System.out.println("Minus life: lost game, " + Settings.getLives());
+		    Log.i(TAG, "Minus life: lost game, " + Settings.getLives());
 			betweenScreen();
 		}
 	}
@@ -186,8 +185,7 @@ public class SwipeGame1 extends Activity{
 	    					Sound.gameOver(getBaseContext());
 	    					timeCounter = 20;
 	                    	Settings.setLives(Settings.getLives() - 1);
-	                    	System.out.println("[SwipeGame1] Minus life: out of time, " + Settings.getLives());
-	                    	Log.d(TAG, "Time " + timeCounter);
+	                    	Log.i(TAG, "Minus life: out of time, " + Settings.getLives());
 	    					betweenScreen();
 	    					t.cancel();
                      	}
@@ -228,7 +226,6 @@ public class SwipeGame1 extends Activity{
 				// check if step is corret
 				if(randInt == 1){
 					if((x1 - x2) > 180){
-						System.out.println("links " + (x1 - x2));
 						message.setText(correct);
 						Sound.correct(getBaseContext());
 						if(x < amountAssignments){
@@ -255,7 +252,6 @@ public class SwipeGame1 extends Activity{
 				}
 				if(randInt == 2){
 					if((x1 - x2) < -180){
-						System.out.println("rechts " + (x1 - x2));
 						message.setText(correct);
 						Sound.correct(getBaseContext());
 						if(x < amountAssignments){
@@ -283,7 +279,6 @@ public class SwipeGame1 extends Activity{
 			
 				if(randInt == 3){
 					if((y1 - y2) > 150){
-						System.out.println("boven " + (y1 - y2));
 						message.setText(correct);
 						Sound.correct(getBaseContext());
 						if(x < amountAssignments){
@@ -311,7 +306,6 @@ public class SwipeGame1 extends Activity{
 				}
 				if(randInt == 4){
 					if((y1 - y2) < -150){
-						System.out.println("onder " + (y1 - y2));
 						message.setText(correct);
 						Sound.correct(getBaseContext());
 						if(x < amountAssignments)
@@ -352,8 +346,8 @@ public class SwipeGame1 extends Activity{
 		if(between_page != null){
 			if (active){
 				startActivity(between_page);
-				this.finish();
 			}	
+			this.finish();
 		}
 	}
 	//Eventlistener that checks if menu button is pressed
@@ -370,12 +364,9 @@ public class SwipeGame1 extends Activity{
 	{
 	    // If exit    
 	    if (item.getTitle() == "Exit") //user clicked Exit
-			t.cancel();Intent menu_page = new Intent(this, ActivityMenu.class);
-			if(menu_page != null){
-  				Settings.resetAll();
-				startActivity(menu_page);
-				this.finish();
-			}
+			t.cancel();
+	    	Settings.resetAll();
+			this.finish();
 	    return super.onOptionsItemSelected(item);    
 	}
 	//listener for config change, so it stays in landscape mode

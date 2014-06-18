@@ -94,6 +94,16 @@
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.QuestionGame"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.QuestionGamePicture"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
     </application>
     
 </manifest>
