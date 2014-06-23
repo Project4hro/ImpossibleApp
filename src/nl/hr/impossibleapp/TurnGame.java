@@ -22,8 +22,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class TurnGame extends Activity{
-	// Font
+public class TurnGame extends Activity {
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
     
@@ -31,11 +30,10 @@ public class TurnGame extends Activity{
 	private ImageView img;
 	private int win = 3;
     Timer t = new Timer();
-    int timeCounter = 20;
+    int timeCounter = 12;
     TextView timerField;
     
-	// Check if activity is running
-    private static boolean active = false; 
+    private boolean active = false; 
 	
 	@Override
     public void onStart(){
@@ -52,13 +50,19 @@ public class TurnGame extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		// Full Screen
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.layout_turngame);
 	    tf = Typeface.createFromAsset(getAssets(), fontPath);
 	    timerField = (TextView) findViewById(R.id.timerBox);
 	    timerField.setTypeface(tf);
+	    int difficulty = Settings.getDifficulty();
+	    if(difficulty == 3){
+	    	timeCounter = 6;
+	    }else if(difficulty == 2){
+	    	timeCounter = 9;
+	    }
 	    
 	    UpdateScreen();
 	    
@@ -68,25 +72,27 @@ public class TurnGame extends Activity{
 	    		runOnUiThread(new Runnable(){
 	    			public void run(){
 	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	    				timeCounter--;
-	    				
-	    				if(timeCounter  == 4){
-	                    	Sound.countDown(getBaseContext());
-	                    }
-	    				
-	    				if (timeCounter < 0){
-	    					Sound.gameOver(getBaseContext());
-	                    	Settings.setLives(Settings.getLives() - 1);
-	                    	System.out.println("[TurnGame] Minus life: out of time, " + Settings.getLives());
-	    					betweenScreen();
-	    					t.cancel();
-                     	}
+	    				if(active){
+	    					timeCounter--;
+	    					
+	    					if(timeCounter  == 4){
+		                    	Sound.countDown(getBaseContext());
+		                    }
+		    				
+		    				if (timeCounter < 0){
+		    					Sound.gameOver(getBaseContext());
+		                    	Settings.setLives(Settings.getLives() - 1);
+		                    	System.out.println("[TurnGame] Minus life: out of time, " + Settings.getLives());
+		    					betweenScreen();
+		    					t.cancel();
+	                     	}
+	    				}
                  	}
 	    		});
 
 	    	}
-	     }, 0, 1000); // 1000 means start from 1 sec, and the second 1000 is do the loop each 1 sec.
-	} //OnCreate
+	     }, 0, 1000);
+	}
 	
 	public void Turn_Img2(View v) {
 		img = (ImageView) findViewById(R.id.imageView2);
@@ -198,8 +204,7 @@ public class TurnGame extends Activity{
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
 		Intent between_page = new Intent(this, ActivityBetween.class);
-		int score = Settings.getScore() + timeCounter;
-        Settings.setScore(score);
+        Settings.addScore(timeCounter);
 		if(between_page != null){
 			if (active)
 			{
@@ -208,26 +213,24 @@ public class TurnGame extends Activity{
 			}
 		}
 	}
-	//Eventlistener that checks if menu button is pressed
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
-		// adds exit button
 	    menu.add("Exit"); 
 	    return super.onCreateOptionsMenu(menu);
 	}
-	//Eventlistener that checks if user presses exit
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-	    // If exit    
-	    if (item.getTitle() == "Exit") //user clicked Exit
+	{ 
+	    if (item.getTitle() == "Exit")
 			t.cancel();
 		    Settings.resetAll();
 			this.finish();
 	    return super.onOptionsItemSelected(item);    
 	}
-	//listener for config change, so it stays in landscape mode
+	
 	@Override 
 	public void onConfigurationChanged(Configuration newConfig)
 	{

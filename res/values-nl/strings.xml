@@ -1,29 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="language">NL</string>
+	<string name="language">NL</string>
     <string name="app_name">Onmogelijke App</string>
-    <string name="start">Start</string>
-    <string name="settings">Instellingen</string>
-    <string name="highscore">Highscore</string>
-    <string name="logo_desc">Logo</string>
-    <string name="sound">Geluid</string>
-    <string name="previouspage">Terug</string>
-    
-    <string name="template_label">Template</string>
-    <string name="between_label">Tussen Games</string>
-    
-    <string name="up">boven</string>
-    <string name="down">beneden</string>
-    <string name="left">links</string>
-    <string name="right">rechts</string>
-    <string name="repeatSteps">Herhaal de vorige stappen</string>
-    <string name="rightAnswer">Goed!</string>
-    <string name="wrongAnswer">Fout!</string>
+        
     <string name="time">Tijd</string>
-    <string name="title_activity_turn">TurnActivity</string>
-    <string name="score">Score: </string>
-    <string name="dot">.</string>
-    <string name="choose_letter">Kies letter</string>
-    <string name="hide_keyboard">Verberg toetsenbord</string>
-    <string name="hangman">Hangmanview</string>
+    <!-- Menu and other pages -->
+		<string name="start">Start</string>
+	    <string name="settings">Instellingen</string>
+	    <string name="highscore">Highscore</string>
+	    <string name="menu">Menu</string>
+	    <string name="sound">Geluid</string>
+    	<string name="previouspage">Terug</string>
+		<string name="loading">Laden&#8230;</string>
+		<string name="worldwide">Wereldwijd</string>
+		<!-- set name -->
+			<string name="name">Naam</string>
+		    <string name="username">Gebruikersnaam</string>
+		    <string name="insertUsername">Gebruikersnaam invoeren</string>
+		<!-- end set name -->
+	<!-- end Menu and other pages -->
+	<!-- Minigames -->
+		<!-- Quiz -->
+			<string name="questionOne">Het antwoord op vraag 2 is:</string>
+			<string name="questionTwo">De eerste vraag met als antwoord B is:</string>
+			<string name="questionThree">Het enige antwoord dat je nog niet hebt gekozen is::</string>
+			<string name="questionTwoAnwerOne">Vraag 3</string>
+			<string name="questionTwoAnwerTwo">Vraag 1</string>
+			<string name="questionTwoAnwerThree">Vraag 2</string>
+		<!-- end Quiz -->
+		<!-- Swipegame1 -->
+			<string name="up">boven</string>
+		    <string name="down">onder</string>
+		    <string name="left">links</string>
+		    <string name="right">rechts</string>
+		    <string name="repeatSteps">Herhaal de vorige stappen</string>
+		    <string name="rightAnswer">Goed!</string>
+		    <string name="wrongAnswer">Fout!</string>
+		<!-- end Swipegame1 -->
+		<!-- Hangman -->
+			<string name="dot">.</string>
+	    	<string name="choose_letter">Kies letter</string>
+	    <!-- end Hangman -->
+	    <string name="shakes">Aantal shakes</string>
+		<string name="A">B</string>
+		<string name="B">C</string>
+		<string name="C">A</string>
+		<string name="Adot">A.</string>
+		<string name="Bdot">B.</string>
+		<string name="Cdot">C.</string>
+	<!-- end Minigames -->
+	
+    <!-- placeholders -->
+	    <string name="placeholderTimer">Tijd: 12s</string>
+	    <string name="placeholderTimer1">3</string>
+	    <string name="placeholderScore">Score: 100</string>
+	    <string name="placeholderCountShakes">Aantal shakes: 0</string>
+	    <string name="placeholderReadyGo">Klaar?</string>
+	    <string name="placeholderHits">Raak er: 5</string>
+	    <string name="placeholderAnswer1">Anwer 1</string>
+	    <string name="placeholderAnswer2">Anwer 2</string>
+	    <string name="placeholderAnswer3">Anwer 3</string>
+	    <string name="placeholderQuestion">Here comes the question</string>
+    <!-- end placeholder -->
+    
+    <!-- contentDescriptions -->
+	    <string name="descriptionHearts">heartsField</string>
+	    <string name="descriptionHangman">hangman</string>
+	    <string name="descriptionSwipeLandscape">SwipeImgLandscape</string>
+	    <string name="descriptionSwipePortrait">SwipeImgPortrait</string>
+	    <string name="descriptionTapLandscape">TapImgLandscape</string>
+	    <string name="descriptionTapPortrait">TapImgPortrait</string>
+	    <string name="descriptionShake">ShakeImg</string>
+	    <string name="descriptionTilt">TiltImg</string>
+	    <string name="descriptionTiltGyro">TiltImgGyro</string>
+	    <string name="descriptionShaker">ShakerImg</string>
+	    <string name="descriptionHandTop">HandTopImg</string>
+	    <string name="descriptionHandBottom">HandBottomImg</string>
+	    <string name="descriptionTarget">TargetImg</string>
+	    <string name="descriptionLogo">LogoImg</string>
+	    <string name="descriptionGunSight">GunsightImg</string>
+	    <string name="descriptionPipeStraight">StraightPipeImg</string>
+	    <string name="descriptionPipeCurve">CurvePipeImg</string>
+	    <string name="descriptionPipeStart">StartPipeImg</string>
+	    <string name="descriptionPipeEnd">EndPipeImg</string>
+	    <string name="descriptionLogoMenu">Logo</string>
+	    <string name="descriptionBus">BusImg</string>
+    <!-- end contentDescriptions -->
+    
+    <!-- activity names -->
+    	<string name="activityAccelerometer">Accelerometer</string>
+    	<string name="activityAccelerometer2">Accelerometer2</string>
+    	<string name="activityGyrogame">Gyrogame</string>
+    	<string name="activityHangman">Hangman</string>
+    	<string name="activityMemoryGame">MemoryGame</string>
+    	<string name="activityQuestionGame">QuestionGame</string>
+    	<string name="activityQuestionGamePicture">QuestionGamePicture</string>
+    	<string name="activityQuiz">Quiz</string>
+    	<string name="activityShootgame">Shootgame</string>
+    	<string name="activitySwipeGame1">SwipeGame1</string>
+    	<string name="activityTargetGame">TargetGame</string>
+    	<string name="activityTurnGame">TurnGame</string>
+    	
+    	<string name="activityBetween">ActivityBetween</string>
+    	<string name="activityEndScreen">ActivityEndScreen</string>
+    	<string name="activityHighscores">ActivityHighscores</string>
+    	<string name="activitySettings">ActivitySettings</string>
+    <!-- end activity names -->
 </resources>

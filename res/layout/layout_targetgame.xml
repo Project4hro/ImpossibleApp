@@ -4,7 +4,6 @@
     android:id="@+id/targetgame_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/orange"
     android:gravity="center"
     tools:context="$nl.hr.impossibleapp.TargetGame" >
 
@@ -37,7 +36,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
         android:background="@color/orange"
-        android:onClick="targetHit"
         android:src="@drawable/gametarget"
         android:contentDescription="@string/descriptionTarget" />
 

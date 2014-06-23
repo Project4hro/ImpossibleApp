@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
-    tools:context="$nl.hr.impossibleapp.Activity_EndScreen"
-    android:background="@color/orange" >
+    tools:context="$nl.hr.impossibleapp.Activity_EndScreen" >
 
     <Button
         android:id="@+id/button1"

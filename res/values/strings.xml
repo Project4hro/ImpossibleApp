@@ -2,33 +2,53 @@
 <resources>
 	<string name="language">EN</string>
     <string name="app_name">Impossible App</string>
-    <string name="start">Start</string>
-    <string name="settings">Settings</string>
-    <string name="highscore">Highscore</string>
-    <string name="logo_desc">Logo</string>
-    <string name="sound">Sound</string>
-    <string name="previouspage">Back</string>
-    <string name="menu">Menu</string>
-    <string name="exit">Exit</string>
-    <string name="template_label">Template</string>
-    <string name="between_label">Between Games</string>
-    
-    <string name="up">up</string>
-    <string name="down">down</string>
-    <string name="left">left</string>
-    <string name="right">right</string>
-    <string name="repeatSteps">Repeat previous steps</string>
-    <string name="rightAnswer">Correct!</string>
-    <string name="wrongAnswer">Wrong!</string>
+        
     <string name="time">Time</string>
-    <string name="title_activity_turn">TurnActivity</string>
-    <string name="score">Score: </string>
-    <string name="dot">.</string>
-    <string name="choose_letter">Choose letter</string>
-    <string name="hide_keyboard">Hide keyboard</string>
-    <string name="hangman">Hangmanview</string>
-    <string name="action_settings">Settings</string>
-	<string name="shakes">Count shakes</string>
+    <!-- Menu and other pages -->
+		<string name="start">Start</string>
+	    <string name="settings">Settings</string>
+	    <string name="highscore">Highscore</string>
+	    <string name="menu">Menu</string>
+	    <string name="sound">Sound</string>
+    	<string name="previouspage">Back</string>
+		<string name="loading">Loading&#8230;</string>
+		<string name="worldwide">Worldwide</string>
+		<!-- set name -->
+			<string name="name">Name</string>
+		    <string name="username">Username</string>
+		    <string name="insertUsername">Insert username</string>
+		<!-- end set name -->
+	<!-- end Menu and other pages -->
+	<!-- Minigames -->
+		<!-- Quiz -->
+			<string name="questionOne">The answer to Question 2 is:</string>
+			<string name="questionTwo">The first question with correct answer B is:</string>
+			<string name="questionThree">The only answer you have not chosen yet is:</string>
+			<string name="questionTwoAnwerOne">Question 3</string>
+			<string name="questionTwoAnwerTwo">Question 1</string>
+			<string name="questionTwoAnwerThree">Question 2</string>
+		<!-- end Quiz -->
+		<!-- Swipegame1 -->
+			<string name="up">up</string>
+		    <string name="down">down</string>
+		    <string name="left">left</string>
+		    <string name="right">right</string>
+		    <string name="repeatSteps">Repeat previous steps</string>
+		    <string name="rightAnswer">Correct!</string>
+		    <string name="wrongAnswer">Wrong!</string>
+		<!-- end Swipegame1 -->
+		<!-- Hangman -->
+			<string name="dot">.</string>
+	    	<string name="choose_letter">Choose letter</string>
+	    <!-- end Hangman -->
+	    <string name="shakes">Count shakes</string>
+		<string name="A">B</string>
+		<string name="B">C</string>
+		<string name="C">A</string>
+		<string name="Adot">A.</string>
+		<string name="Bdot">B.</string>
+		<string name="Cdot">C.</string>
+	<!-- end Minigames -->
 	
     <!-- placeholders -->
 	    <string name="placeholderTimer">Time: 12s</string>
@@ -36,7 +56,11 @@
 	    <string name="placeholderScore">Score: 100</string>
 	    <string name="placeholderCountShakes">Count shakes: 0</string>
 	    <string name="placeholderReadyGo">Ready?</string>
-	    <string name="placeholderHits">Raak er: 5</string>
+	    <string name="placeholderHits">Hit: 5</string>
+	    <string name="placeholderAnswer1">Anwer 1</string>
+	    <string name="placeholderAnswer2">Anwer 2</string>
+	    <string name="placeholderAnswer3">Anwer 3</string>
+	    <string name="placeholderQuestion">Here comes the question</string>
     <!-- end placeholder -->
     
     <!-- contentDescriptions -->
@@ -46,7 +70,6 @@
 	    <string name="descriptionSwipePortrait">SwipeImgPortrait</string>
 	    <string name="descriptionTapLandscape">TapImgLandscape</string>
 	    <string name="descriptionTapPortrait">TapImgPortrait</string>
-	    <string name="descriptionGyro">GyroImg</string>
 	    <string name="descriptionShake">ShakeImg</string>
 	    <string name="descriptionTilt">TiltImg</string>
 	    <string name="descriptionTiltGyro">TiltImgGyro</string>
@@ -60,5 +83,27 @@
 	    <string name="descriptionPipeCurve">CurvePipeImg</string>
 	    <string name="descriptionPipeStart">StartPipeImg</string>
 	    <string name="descriptionPipeEnd">EndPipeImg</string>
+	    <string name="descriptionLogoMenu">Logo</string>
+	    <string name="descriptionBus">BusImg</string>
     <!-- end contentDescriptions -->
+    
+    <!-- activity names -->
+    	<string name="activityAccelerometer">Accelerometer</string>
+    	<string name="activityAccelerometer2">Accelerometer2</string>
+    	<string name="activityGyrogame">Gyrogame</string>
+    	<string name="activityHangman">Hangman</string>
+    	<string name="activityMemoryGame">MemoryGame</string>
+    	<string name="activityQuestionGame">QuestionGame</string>
+    	<string name="activityQuestionGamePicture">QuestionGamePicture</string>
+    	<string name="activityQuiz">Quiz</string>
+    	<string name="activityShootgame">Shootgame</string>
+    	<string name="activitySwipeGame1">SwipeGame1</string>
+    	<string name="activityTargetGame">TargetGame</string>
+    	<string name="activityTurnGame">TurnGame</string>
+    	
+    	<string name="activityBetween">ActivityBetween</string>
+    	<string name="activityEndScreen">ActivityEndScreen</string>
+    	<string name="activityHighscores">ActivityHighscores</string>
+    	<string name="activitySettings">ActivitySettings</string>
+    <!-- end activity names -->
 </resources>

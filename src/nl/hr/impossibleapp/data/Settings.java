@@ -12,7 +12,7 @@ public class Settings {
 	private static int ScoreTotal = 0;
 	private static ArrayList<Class<?>> gamesDone = new ArrayList<Class<?>>();
 	private static String language = "NL";
-	private static String name = "Arko";
+	private static String name = null;
 	
 	public static String getName() {
 		return name;
@@ -64,6 +64,19 @@ public class Settings {
 
 	public static void setScore(int score) {
 		Settings.ScoreTotal = score;
+	}
+	
+	public static void addScore(int score){
+		Log.i("Settings", ""+score);
+		if(score > 0){
+			if(difficulty == 1){
+				Settings.ScoreTotal = ScoreTotal + score;
+			}else if(difficulty == 2){
+				Settings.ScoreTotal = ScoreTotal + (int)(score * 1.5);
+			}else if(difficulty == 3){
+				Settings.ScoreTotal = ScoreTotal + (score * 2);
+			}
+		}
 	}
 	
 	public static void resetAll(){

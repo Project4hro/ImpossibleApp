@@ -17,6 +17,7 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@color/orange</item>
     </style>
 	<style name="button_style">
         <item name="android:layout_width">200dp</item>

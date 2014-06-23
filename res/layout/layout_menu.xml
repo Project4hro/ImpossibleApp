@@ -4,7 +4,6 @@
     android:id="@+id/rl_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
     tools:context="nl.hr.impossibleapp.activities.ActivityMenu" >
 
     <ImageView
@@ -15,33 +14,32 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
-        android:contentDescription="@string/logo_desc"
+        android:contentDescription="@string/descriptionLogoMenu"
         android:src="@drawable/logo" />
 
     <Button
         android:id="@+id/menu_score"
         style="@style/button_style"
-        android:layout_below="@+id/menu_start"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_centerVertical="true"
         android:onClick="Goto_Highscores"
         android:text="@string/highscore" />
 
     <Button
         android:id="@+id/menu_settings"
         style="@style/button_style"
+        android:layout_alignLeft="@+id/menu_score"
         android:layout_below="@+id/menu_score"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:onClick="Goto_Settings"
         android:text="@string/settings" />
 
     <Button
         android:id="@+id/menu_start"
         style="@style/button_style"
+        android:layout_above="@+id/menu_score"
         android:layout_alignLeft="@+id/menu_score"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:onClick="Goto_Game"
         android:text="@string/start" />
 

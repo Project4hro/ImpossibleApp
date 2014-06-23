@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="nl.hr.impossibleapp"
     android:versionCode="1"
-    android:versionName="1.5" >
+    android:versionName="1.9" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-    <application
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -26,83 +28,100 @@
         </activity>
         <activity
             android:name="nl.hr.impossibleapp.activities.ActivitySettings"
-            android:label="@string/settings"
-            android:screenOrientation="sensorLandscape" >
+            android:label="@string/activitySettings"
+            android:screenOrientation="landscape" >
         </activity>
          <activity
             android:name="nl.hr.impossibleapp.activities.ActivityBetween"
-            android:label="@string/between_label"
-            android:screenOrientation="landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>  
-          <activity
-            android:name=".gyrogame.GyroscopeGame"
-            android:label="@string/between_label"
-            android:screenOrientation="landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
-        <activity
-            android:name="nl.hr.impossibleapp.SwipeGame1"
-            android:label="@string/app_name"
-            android:screenOrientation= "landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
-        <activity android:name="nl.hr.impossibleapp.Accelerometer2"
-            android:label="@string/app_name"
-            android:screenOrientation= "landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
-        <activity
-            android:name="nl.hr.impossibleapp.Hangman"
-            android:label="@string/title_activity_turn"
-            android:screenOrientation= "landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize" >
-        </activity>
-        <activity
-            android:name="nl.hr.impossibleapp.Accelerometer"
-            android:label="@string/title_activity_turn"
-            android:screenOrientation= "landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize" >
-        </activity>
-        <activity
-            android:name="nl.hr.impossibleapp.TargetGame"
-            android:screenOrientation="landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
-        <activity
-            android:name="nl.hr.impossibleapp.ShootActivity"
-            android:screenOrientation="landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
-        <activity
-            android:name="nl.hr.impossibleapp.Shootgame"
-            android:screenOrientation="landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
-        <activity
-            android:name="nl.hr.impossibleapp.TurnGame"
+            android:label="@string/activityBetween"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
             android:name="nl.hr.impossibleapp.activities.ActivityEndScreen"
+            android:label="@string/activityEndScreen"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
             android:name="nl.hr.impossibleapp.activities.ActivityHighscores"
+            android:label="@string/activityHighscores"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>  
+        <activity
+            android:name=".gyrogame.GyroscopeGame"
+            android:label="@string/activityGyrogame"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.SwipeGame1"
+            android:label="@string/activitySwipeGame1"
+            android:screenOrientation= "landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity android:name="nl.hr.impossibleapp.Accelerometer2"
+            android:label="@string/activityAccelerometer2"
+            android:screenOrientation= "landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.Hangman"
+            android:label="@string/activityHangman"
+            android:screenOrientation= "landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize" >
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.Accelerometer"
+            android:label="@string/activityAccelerometer"
+            android:screenOrientation= "landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize" >
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.TargetGame"
+            android:label="@string/activityTargetGame"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.Shootgame"
+            android:label="@string/activityShootgame"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.TurnGame"
+            android:label="@string/activityTurnGame"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.MemoryGame"
+            android:label="@string/activityMemoryGame"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
             android:name="nl.hr.impossibleapp.QuestionGame"
+            android:label="@string/activityQuestionGame"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
             android:name="nl.hr.impossibleapp.QuestionGamePicture"
+            android:label="@string/activityQuestionGamePicture"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.Quiz"
+            android:label="@string/activityQuiz"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity
+            android:name="nl.hr.impossibleapp.data.Sound" >
         </activity>
     </application>
     

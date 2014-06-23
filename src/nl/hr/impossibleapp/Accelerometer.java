@@ -18,6 +18,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -25,13 +26,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Accelerometer extends Activity implements SensorEventListener 
-{
-	// Font
+public class Accelerometer extends Activity implements SensorEventListener{
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
     
-	static boolean active = false;
+	private boolean active = false;
 	
 	private float mLastX, mLastY, mLastZ;
 	private int countShakes = 0;
@@ -43,12 +42,13 @@ public class Accelerometer extends Activity implements SensorEventListener
     private final float NOISE = (float) 2.0;
     
     private TextView tvTimerInt;
-  
     private Timer t = new Timer();
     
+    private TextView readyGo;
+    private boolean endedGame = false;
+    
     @Override
-    protected void onCreate(Bundle savedInstanceState) 
-    {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -69,8 +69,7 @@ public class Accelerometer extends Activity implements SensorEventListener
         	heartsField.setImageResource(R.drawable.heart3);
         }
         
-        final TextView readyGo = (TextView) findViewById(R.id.readyGo);
-
+        readyGo = (TextView) findViewById(R.id.readyGo);
 		readyGo.setTypeface(tf);
 		
 		tvTimerInt = (TextView)findViewById(R.id.timerBox);
@@ -79,117 +78,98 @@ public class Accelerometer extends Activity implements SensorEventListener
 		scoreText.setTypeface(tf);
 	    scoreText.setText("Score: " + Settings.getScore());
 	    
-	    Random randomGenerator = new Random();
-	    final int goInt = randomGenerator.nextInt(5) + 3;
-	    
-	    //Text and Sound for "Ready"
 	    Sound.Ready(getBaseContext());
 	    readyGo.setText("Ready?");
 	    
-	    t.scheduleAtFixedRate(new TimerTask() 
-	    {
+	    startTimer();
+    }
+    
+    private void startTimer(){
+    	final int goInt = new Random().nextInt(5) + 3;
+    	
+    	t.scheduleAtFixedRate(new TimerTask(){
 	        @Override
 	        public void run() {
 	            
-	       	runOnUiThread(new Runnable() 
-	            {
-	                public void run() 
-	                {
-	                    tvTimerInt.setText(String.valueOf(timeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	                    timeCounter--;
-	                    
-	                    
-	                    
-	                    if(goInt == timeCounter)
-	                    {
-	                    	allowToShake = true;
-	                    	Sound.Go(getBaseContext());
-	                    	readyGo.setText("GO!");
-	                    }
-	                    
-	                    if(timeCounter  == 2){
-	                    	Sound.shortCountDown(getBaseContext());
+	       	runOnUiThread(new Runnable(){
+	                public void run(){
+	                    tvTimerInt.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s");
+	                    if(active){
+	                    	timeCounter--;
 	                    	
-	                    }
-	                    if (timeCounter < 0)
-	                    {
-	                    	Sound.gameOver(getBaseContext());
-	                    	Settings.setLives(Settings.getLives() - 1);
-	                    	System.out.println("[Accelerometer] Minus life: out of time, " + Settings.getLives());
-	                    	timeCounter = 10;
-	                    	betweenScreen();
-	                    	t.cancel();
+	                    	if(goInt == timeCounter){
+		                    	allowToShake = true;
+		                    	Sound.Go(getBaseContext());
+		                    	readyGo.setText("GO!");
+		                    }
+		                    
+		                    if(timeCounter  == 2){
+		                    	Sound.shortCountDown(getBaseContext());
+		                    	
+		                    }
+		                    if (timeCounter < 0){
+		                    	Sound.gameOver(getBaseContext());
+		                    	Settings.setLives(Settings.getLives() - 1);
+		                    	System.out.println("[Accelerometer] Minus life: out of time, " + Settings.getLives());
+		                    	betweenScreen();
+		                    	t.cancel();
+		                    }
 	                    }
 	                 }
 	            });
 	        }
-	    }, 0, 1000); // 1000 means start from 1 sec, and the second 1000 is do the loop each 1 sec.
+	    }, 0, 1000);
     }
-    
-    protected void onStart()
-    {
+    protected void onStart(){
     	super.onStart();
         active = true;
     }
     
-    public void onStop() 
-    {
+    public void onStop(){
         super.onStop();
         active = false;
     }
     
-    protected void onResume() 
-    {
+    protected void onResume(){
         super.onResume();
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
-    private void betweenScreen()
-	{
+    private void betweenScreen(){
+    	Log.i("accelerometer", "klaar");
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		// check currentGame
 		Intent between_page = new Intent(this, ActivityBetween.class);
-		int score = Settings.getScore() + timeCounter;
-        Settings.setScore(score);
-		if(between_page != null)
-		{
-			if (active)
-			{
+        Settings.addScore(timeCounter);
+		if(between_page != null){
+			if (active && endedGame){
 				startActivity(between_page);
+				this.finish();
+				endedGame = false;
 			}	
 		}
-		this.finish();
 	}
 
-    protected void onPause() 
-    {
+    protected void onPause(){
         super.onPause();
         mSensorManager.unregisterListener(this);
     }
 
 	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) 
-	{
-		// can be safely ignored for this demo
-	}
+	public void onAccuracyChanged(Sensor sensor, int accuracy){}
 
 	@Override
-	public void onSensorChanged(SensorEvent event) 
-	{
+	public void onSensorChanged(SensorEvent event){
 		float x = event.values[0];
 		float y = event.values[1];
 		float z = event.values[2];
 
-		if (!mInitialized) 
-		{
+		if (!mInitialized){
 			mLastX = x;
 			mLastY = y;
 			mLastZ = z;
 			mInitialized = true;
-		} 
-		else 
-		{
+		}else{
 			float deltaX = Math.abs(mLastX - x);
 			float deltaY = Math.abs(mLastY - y);
 			float deltaZ = Math.abs(mLastZ - z);
@@ -201,27 +181,22 @@ public class Accelerometer extends Activity implements SensorEventListener
 			mLastZ = z;
 
 			
-			if(deltaX > 0 || deltaX <0 || deltaY > 0 || deltaY < 0)
-			{
+			if(deltaX > 0 || deltaX <0 || deltaY > 0 || deltaY < 0){
 				countShakes++;
 				System.out.println(countShakes);
 			}
-			if(allowToShake)
-			{	
-				if(countShakes > 20)
-				{
+			if(allowToShake){	
+				if(countShakes > 20){
 					Sound.wonMinigame(getBaseContext());
+                	endedGame = true;
 					betweenScreen();
 				}
-			}
-			else
-			{
-				if(countShakes > 10)
-				{
+			}else{
+				if(countShakes > 10){
 					Sound.gameOver(getBaseContext());
                 	Settings.setLives(Settings.getLives() - 1);
                 	System.out.println("[Accelerometer] Game over, " + Settings.getLives());
-                	timeCounter = 10;
+                	endedGame = true;
                 	betweenScreen();
                 	t.cancel();
 				}
@@ -229,29 +204,23 @@ public class Accelerometer extends Activity implements SensorEventListener
 		}
 	}
 
-	//Eventlistener that checks if menu button is pressed
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
-		// adds exit button
+	public boolean onCreateOptionsMenu(Menu menu){
 	    menu.add("Exit"); 
 	    return super.onCreateOptionsMenu(menu);
 	}
-	//Eventlistener that checks if user presses exit
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-	    // If exit    
-	    if (item.getTitle() == "Exit") //user clicked Exit
-	    	Settings.resetAll();
+	public boolean onOptionsItemSelected(MenuItem item){
+	    if (item.getTitle() == "Exit")
 			t.cancel();
+    		Settings.resetAll();
 		    this.finish();
 	    return super.onOptionsItemSelected(item);    
 	}
-	//listener for config change, so it stays in landscape mode
+
 	@Override 
-	public void onConfigurationChanged(Configuration newConfig)
-	{
+	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
 	}
 	@Override

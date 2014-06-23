@@ -1,8 +1,13 @@
 package nl.hr.impossibleapp.activities;
 
 import nl.hr.impossibleapp.R;
+import nl.hr.impossibleapp.data.Settings;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +15,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class ActivityMenu extends Activity
 {
 	private static final String fontPath = "fonts/mvboli.ttf";
 	private static final String TAG = ActivityMenu.class.toString();
+	private SharedPreferences prefs;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -40,7 +47,14 @@ public class ActivityMenu extends Activity
         }
         
 		Log.i(TAG, "inLayout - finished"); // werkt
-        Log.d(TAG, "Geladen"); // werkt niet
+
+        prefs = this.getSharedPreferences("nl.hr.impossibleapp", Context.MODE_PRIVATE);
+        Settings.setSoundEnabled(prefs.getBoolean("Sound", true));
+        Settings.setName(prefs.getString("Username", null));
+        if(Settings.getName() == null){
+        	showPopup();
+        }
+        
 	}
 	
 	public void Goto_Settings(View v){
@@ -65,5 +79,31 @@ public class ActivityMenu extends Activity
 		if(game_page != null){
 			startActivity(game_page);
 		}
+	}
+	private void showPopup(){
+		final EditText playerName = new EditText(this);
+    	playerName.setHint(getResources().getString(R.string.username));
+    	new AlertDialog.Builder(this)
+    	.setTitle(getResources().getString(R.string.insertUsername))
+    	.setMessage(getResources().getString(R.string.insertUsername))
+    	.setView(playerName)
+    	.setPositiveButton("Save",new DialogInterface.OnClickListener() {
+    		public void onClick(DialogInterface dialog, int whichButton) {
+    			String name = playerName.getText().toString();
+	   
+	    		if(name == null || name.length() == 0 || name.isEmpty()){
+	    			showPopup();
+	    			Log.i(TAG, "Name" + name + "End");
+	    		}else{
+	    			saveName(name);
+	    		}
+	    		
+    		}
+		}).show();
+	}
+	private void saveName(String name){
+		Log.i(TAG, name);
+		Settings.setName(name);
+		prefs.edit().putString("Username", name).commit();
 	}
 }

@@ -8,7 +8,9 @@ import java.util.TimerTask;
 import nl.hr.impossibleapp.Accelerometer;
 import nl.hr.impossibleapp.Accelerometer2;
 import nl.hr.impossibleapp.Hangman;
+import nl.hr.impossibleapp.MemoryGame;
 import nl.hr.impossibleapp.QuestionGamePicture;
+import nl.hr.impossibleapp.Quiz;
 import nl.hr.impossibleapp.R;
 import nl.hr.impossibleapp.Shootgame;
 import nl.hr.impossibleapp.SwipeGame1;
@@ -18,9 +20,12 @@ import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.gyrogame.GyroscopeGame;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -40,19 +45,36 @@ public class ActivityBetween extends Activity{
 	private int nextGame = 0;
 
 	private Timer t = new Timer();
-	private int TimeCounter = 3;
+	private int timeCounter = 3;
+	private TextView timerField;
 	
+	private boolean active = false;
+	
+	@Override
+    public void onStart(){
+       super.onStart();
+       active = true;
+    } 
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        active = false;
+    }
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		// Full Screen
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	    setContentView(R.layout.layout_between);
 	    tf = Typeface.createFromAsset(getAssets(), fontPath);
-	    
+	    if(Settings.getName() == null){
+	    	
+	    }
 	    addGames();
-	    Score();
+	    setHeartsScore();
 
 	    if(!gamesList.isEmpty()){
 		    nextGame = new Random().nextInt(gamesList.size());
@@ -60,32 +82,10 @@ public class ActivityBetween extends Activity{
 		    ImageView instructions = (ImageView) findViewById(gameInstructions[instructionsList.get(nextGame)]);
 			instructions.setVisibility(View.VISIBLE);
 			
-			final TextView timerField = (TextView) findViewById(R.id.timerBoxb);
+			timerField = (TextView) findViewById(R.id.timerBoxb);
 			timerField.setTypeface(tf);
 			
-			t.scheduleAtFixedRate(new TimerTask() 
-		    {
-		        @Override
-		        public void run() {
-		            runOnUiThread(new Runnable() 
-		            {
-		                public void run() 
-		                {
-		                    timerField.setText(String.valueOf(TimeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-		                    TimeCounter--;
-		                    if (TimeCounter < 0)
-		                    {
-		                    	TimeCounter = 3;
-		                    	if(!gamesList.isEmpty()){
-		                    		nextGame();
-		                    	}
-		                    	t.cancel();
-		                    }
-		                }
-		            });
-		
-		        }
-		    }, 0, 1000);
+			startTimer();
 			
 			if(Settings.getLives() < 1){
 		    	Log.i(TAG, "Game end, out of lives!");
@@ -98,20 +98,44 @@ public class ActivityBetween extends Activity{
 		    }
 	    }
 	}
-
+	private void startTimer(){
+		t.scheduleAtFixedRate(new TimerTask(){
+	        @Override
+	        public void run() {
+	            runOnUiThread(new Runnable(){
+	                public void run(){
+	                    timerField.setText(String.valueOf(timeCounter)); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	                    if(active){
+		                    timeCounter--;
+		                    if (timeCounter < 0){
+		                    	timeCounter = 3;
+		                    	if(!gamesList.isEmpty()){
+		                    		nextGame();
+		                    	}
+		                    	t.cancel();
+		                    }
+	                    }
+	                }
+	            });
+	
+	        }
+	    }, 0, 1000);
+	}
+	
 	private void addGames(){	
 		// ADD NEW GAMES HERE COMMENT THE GAMES YOU DONT WANT TO LOAD
 	    // Add games: first gamevariable then instructions int (see gameInstructions)
-	    checkDone(GyroscopeGame.class, 0); //goed++
-	    checkDone(Accelerometer2.class, 1); //goed++
-	    checkDone(SwipeGame1.class, 2); //goed++
-	    checkDone(TurnGame.class, 3); //goed++
-	    checkDone(Hangman.class, 3); //goed++
-	    checkDone(Accelerometer.class, 1); //goed++
-	    checkDone(TargetGame.class, 3); //goed++
-	    checkDone(Shootgame.class, 3); //goed++
+	    checkDone(Accelerometer.class, 1);
+	    checkDone(Accelerometer2.class, 1);
+	    checkDone(GyroscopeGame.class, 0);
+	    checkDone(Hangman.class, 3);
+		checkDone(MemoryGame.class, 3);
 	    checkDone(QuestionGamePicture.class, 3);
-	    
+		checkDone(Quiz.class, 3);
+	    checkDone(Shootgame.class, 3);
+	    checkDone(SwipeGame1.class, 2);
+	    checkDone(TargetGame.class, 3);
+	    checkDone(TurnGame.class, 3);
 	    
 	    if(gamesList.isEmpty()){
 	    	Settings.clearGamesDone();
@@ -154,10 +178,43 @@ public class ActivityBetween extends Activity{
 		}
 	}
 	
-	private void Score(){
-		int Score = Settings.getScore();
+	private void setHeartsScore(){
 		TextView ScoreText = (TextView) findViewById(R.id.ScoreBetween);
 		ScoreText.setTypeface(tf);
-		ScoreText.setText("Score:"+Score);
+		ScoreText.setText("Score:"+Settings.getScore());
+		ImageView heartsField = (ImageView) findViewById(R.id.hearts);
+		int lives = Settings.getLives();
+	    if(lives == 2){
+	    	heartsField.setImageResource(R.drawable.heart2);
+	    }else if(lives == 1){
+	    	heartsField.setImageResource(R.drawable.heart1);
+	    }else{
+	    	heartsField.setImageResource(R.drawable.heart3);
+	    }
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+	    menu.add("Exit"); 
+	    return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+	    if (item.getTitle() == "Exit")
+			t.cancel();
+		    Settings.resetAll();
+			this.finish();
+	    return super.onOptionsItemSelected(item);    
+	}
+	
+	@Override 
+	public void onConfigurationChanged(Configuration newConfig){
+		super.onConfigurationChanged(newConfig);
+	}
+	@Override
+	public void onBackPressed(){
+		Settings.resetAll();
+		this.finish();
 	}
 }

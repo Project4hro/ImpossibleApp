@@ -5,15 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 
-public class Sound extends Activity
-{
+public class Sound extends Activity{
 	static MediaPlayer mp;
 	static MediaPlayer end;
-	int timerInt;
 	
 	public static MediaPlayer removeSound(){
-		if(mp != null)
-		{
+		if(mp != null){
 			mp.release();
 		}
 		return mp = null;
@@ -105,4 +102,21 @@ public class Sound extends Activity
 		return mp;
 	}
 	
+	public static MediaPlayer endGameOutOfLives(Context context){
+		removeSound();
+		mp = MediaPlayer.create(context, R.raw.lostgame);
+		if(Settings.isSoundEnabled()){
+			mp.start();
+		}
+		return mp;
+	}
+	
+	public static MediaPlayer wonAll(Context context){
+		removeSound();
+		mp = MediaPlayer.create(context, R.raw.wonall);
+		if(Settings.isSoundEnabled()){
+			mp.start();
+		}
+		return mp;
+	}
 }

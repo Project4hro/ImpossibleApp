@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="nl.hr.impossibleapp.QuestionGame" >
@@ -46,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/timerBox"
         android:layout_centerHorizontal="true"
-        android:text="Here comes the question that the player must awnser right." />
+        android:text="@string/placeholderQuestion" />
 
     <Button
         android:id="@+id/questionAnswer2"
@@ -54,7 +53,7 @@
         android:layout_above="@+id/questionAnswer3"
         android:layout_alignLeft="@+id/questionAnswer1"
         android:onClick="Answer2"
-        android:text="Answer2" />
+        android:text="@string/placeholderAnswer2" />
 
     <Button
         android:id="@+id/questionAnswer1"
@@ -62,7 +61,7 @@
         android:layout_above="@+id/questionAnswer2"
         android:layout_centerHorizontal="true"
         android:onClick="Answer1"
-        android:text="Answer1" />
+        android:text="@string/placeholderAnswer1" />
 
     <Button
         android:id="@+id/questionAnswer3"
@@ -70,7 +69,7 @@
         android:layout_above="@+id/hearts"
         android:layout_alignLeft="@+id/questionAnswer2"
         android:onClick="Answer3"
-        android:text="Answer3" />
+        android:text="@string/placeholderAnswer3" />
 
 </RelativeLayout>
 

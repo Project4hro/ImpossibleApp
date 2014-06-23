@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/quiz">
+	
+    
+    <TextView
+	    android:id="@+id/timerBox"
+	    style="@style/text_style"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="5dp"
+	    android:text="@string/placeholderTimer" />
+
+	<TextView
+	    android:id="@+id/scoreBox"
+	    style="@style/text_style"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentRight="true"
+	    android:layout_marginBottom="5dp"
+	    android:layout_marginRight="5dp"
+	    android:text="@string/placeholderScore" />
+
+	<ImageView
+	    android:id="@+id/hearts"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_marginBottom="5dp"
+	    android:layout_marginLeft="5dp"
+	    android:contentDescription="@string/descriptionHearts"
+	    android:src="@drawable/heart3" />
+
+	<TextView
+	    android:id="@+id/question"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/timerBox"
+	    android:layout_centerHorizontal="true"
+	    android:text="@string/questionOne"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<Button
+	    android:id="@+id/buttonA"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignRight="@+id/timerBox"
+	    android:layout_below="@+id/question"
+	    android:onClick="ClickA"
+	    android:text="@string/A" />
+
+	<Button
+	    android:id="@+id/buttonB"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/buttonA"
+	    android:layout_below="@+id/buttonA"
+	    android:onClick="ClickB"
+	    android:text="@string/B" />
+
+	<Button
+	    android:id="@+id/buttonC"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/buttonB"
+	    android:layout_below="@+id/buttonB"
+	    android:onClick="ClickC"
+	    android:text="@string/C" />
+
+	<TextView
+	    android:id="@+id/textView1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/buttonA"
+	    android:layout_alignBottom="@+id/buttonA"
+	    android:layout_toLeftOf="@+id/buttonA"
+	    android:text="@string/Adot" />
+
+	<TextView
+	    android:id="@+id/textView2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/buttonB"
+	    android:layout_alignBottom="@+id/buttonB"
+	    android:layout_toLeftOf="@+id/buttonB"
+	    android:text="@string/Bdot" />
+
+	<TextView
+	    android:id="@+id/textView3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/buttonC"
+	    android:layout_alignBottom="@+id/buttonC"
+	    android:layout_toLeftOf="@+id/buttonC"
+	    android:text="@string/Cdot" />
+
+</RelativeLayout>

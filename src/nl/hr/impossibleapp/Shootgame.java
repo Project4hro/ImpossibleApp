@@ -13,6 +13,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,18 +24,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Shootgame extends Activity{
-	// Font
+	private static final String TAG = Shootgame.class.toString();
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
     
     private TextView timerField;
-    private Timer t;
+    private Timer t = new Timer();
     private int timeCounter = 20;
 
 	private boolean win[] = {false,false,false};
 	private ImageView logos[] = {null,null,null,null};
 	
-    private static boolean active = false;
+    private boolean active = false;
     private boolean end = true;
     
     @Override
@@ -52,7 +53,7 @@ public class Shootgame extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		// Full Screen
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.layout_shootgame1);
@@ -60,41 +61,47 @@ public class Shootgame extends Activity{
 	    
 	    timerField = (TextView) findViewById(R.id.timerBox);
 	    timerField.setTypeface(tf);
+	    int difficulty = Settings.getDifficulty();
+	    if(difficulty == 3){
+	    	timeCounter = 10;
+	    }else if(difficulty == 2){
+	    	timeCounter = 15;
+	    }
 	    
-	    t = new Timer();
-	    t.scheduleAtFixedRate(new TimerTask() 
+	    startTimer();
+    }
+    
+    private void startTimer(){
+    	t.scheduleAtFixedRate(new TimerTask() 
 	    {
 	    	@Override
 	    	public void run() {
-	    		runOnUiThread(new Runnable() 
-	    		{
-	    			public void run() 
-	    			{
+	    		runOnUiThread(new Runnable(){
+	    			public void run(){
 	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	    				timeCounter--;
-	    				move();
-	    				UpdateScreen();
-	    				
-	    				if(timeCounter  == 4){
-	                    	Sound.countDown(getBaseContext());
-	                    }
-	    				
-	    				if (timeCounter < 0)
-	    				{
-	    					System.out.println("[Shootgame] out of time");
-	    					Sound.gameOver(getBaseContext());
-	    					timeCounter = 20;
-	                    	Settings.setLives(Settings.getLives() - 1);
-	    					betweenScreen();
-	    					t.cancel();
-                     	}
+	    				if(active){
+		    				timeCounter--;
+		    				move();
+		    				UpdateScreen();
+		    				
+		    				if(timeCounter  == 4){
+		                    	Sound.countDown(getBaseContext());
+		                    }
+		    				
+		    				if (timeCounter < 0){
+		    					Log.i(TAG, "Out of time");
+		    					Sound.gameOver(getBaseContext());
+		                    	Settings.setLives(Settings.getLives() - 1);
+		    					betweenScreen();
+		    					t.cancel();
+	                     	}
+	    				}
                  	}
 	    		});
 
 	    	}
-	     }, 0, 1000); // 1000 means start from 1 sec, and the second 1000 is do the loop each 1 sec.
+	     }, 0, 1000);
     }
-    
     @Override
 	public boolean onTouchEvent(MotionEvent event) {
 	    int x = (int)event.getX() -40;
@@ -129,7 +136,6 @@ public class Shootgame extends Activity{
 					Sound.correct(getBaseContext());
 					checkwin();
 				}
-				
 		} 
 	}
 	
@@ -159,10 +165,8 @@ public class Shootgame extends Activity{
 			int height = size.y;
 			float newX = new Random().nextInt(width-60)+30;
 			float newY = new Random().nextInt(height-60)+30;
-			System.out.println(logos[logonumber]);
 			logos[logonumber].setX(newX);
 			logos[logonumber].setY(newY);
-			
 		}
 	}
     
@@ -184,54 +188,44 @@ public class Shootgame extends Activity{
     
     private void checkwin(){
 		if (win[0] == true && win[1] == true && win[2] == true && end){
-			int score = Settings.getScore() + timeCounter;
-	        Settings.setScore(score);
+	        Settings.addScore(timeCounter);
 	        betweenScreen();
-	        t.cancel();
-	        Sound.removeSound();
 	    	Sound.wonMinigame(getBaseContext());
+	        t.cancel();
 	        end = false;
 		}
 	}
     
-    private void betweenScreen()
-	{
+    private void betweenScreen(){
 		t.cancel();
 		Intent between_page = new Intent(this, ActivityBetween.class);
 		Sound.stopCountDown(getBaseContext());
 		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(between_page != null)
-		{
-			if (active)
-			{
+		if(between_page != null){
+			if (active){
 				startActivity(between_page);
 			}	
 		}
 		this.finish();
 	}
-    //Eventlistener that checks if menu button is pressed
+
   	@Override
-  	public boolean onCreateOptionsMenu(Menu menu) 
-  	{
-  		// adds exit button
+  	public boolean onCreateOptionsMenu(Menu menu){
   	    menu.add("Exit"); 
   	    return super.onCreateOptionsMenu(menu);
   	}
-  	//Eventlistener that checks if user presses exit
+
   	@Override
-  	public boolean onOptionsItemSelected(MenuItem item) 
-  	{
-  	    // If exit    
-  	    if (item.getTitle() == "Exit") //user clicked Exit
+  	public boolean onOptionsItemSelected(MenuItem item){
+  	    if (item.getTitle() == "Exit")
   			t.cancel();
   		    Settings.resetAll();
   			this.finish();
   	    return super.onOptionsItemSelected(item);    
   	}
-  	//listener for config change, so it stays in landscape mode
+
   	@Override 
-  	public void onConfigurationChanged(Configuration newConfig)
-  	{
+  	public void onConfigurationChanged(Configuration newConfig){
   		super.onConfigurationChanged(newConfig);
   	}
   	@Override

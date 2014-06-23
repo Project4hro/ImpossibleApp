@@ -14,36 +14,33 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
-import nl.hr.impossibleapp.activities.ActivityMenu;
 
-public class QuestionGamePicture extends Activity
-{
-	// Font
+public class QuestionGamePicture extends Activity{
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
     
-	static boolean active = false;
+	private boolean active = false;
 	
-
     private TextView timerBox;
 
-    private Timer t;
-    private int TimeCounter = 7;
+    private Timer t = new Timer();
+    private int timeCounter = 7;
     
-	 
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) 
-    {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.layout_question_game_pic);
         tf = Typeface.createFromAsset(getAssets(), fontPath);
-        
+        int difficulty = Settings.getDifficulty();
+        if(difficulty == 3){
+        	timeCounter = 3;
+        }else if(difficulty == 2){
+        	timeCounter = 5; 
+        }
         ImageView heartsField = (ImageView) findViewById(R.id.hearts);
         int lives = Settings.getLives();
         if(lives == 2){
@@ -60,100 +57,74 @@ public class QuestionGamePicture extends Activity
 		scoreText.setTypeface(tf);
 	    scoreText.setText("Score: " + Settings.getScore());
 	    
-		t = new Timer();
-	    t.scheduleAtFixedRate(new TimerTask() 
-	    {
+	    startTimer();
+    }
+    
+    protected void onStart(){
+    	super.onStart();
+        active = true;
+    }
+    
+    public void onStop(){
+        super.onStop();
+        active = false;
+    }
+
+    private void startTimer(){
+    	t.scheduleAtFixedRate(new TimerTask(){
 	        @Override
 	        public void run() {
 	            
-	       	runOnUiThread(new Runnable() 
-	            {
-	                public void run() 
-	                {
-	                	timerBox.setText(getResources().getString(R.string.time) + ": " + String.valueOf(TimeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	                    TimeCounter--;
-	                    
-	                    if(TimeCounter  == 2)
-	                    {
-	                    	Sound.shortCountDown(getBaseContext());
-	                    }
-	                    if (TimeCounter < 0)
-	                    {
-	                    	System.out.println("[QuestionGamePicture] Minus life: out of time, " + Settings.getLives());
-	                    	TimeCounter = 10;
-	                    	betweenScreen();
-	                    	t.cancel();
+	       	runOnUiThread(new Runnable(){
+	                public void run(){
+	                	timerBox.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	                    if(active){
+		                	timeCounter--;
+		                    if(timeCounter  == 2){
+		                    	Sound.shortCountDown(getBaseContext());
+		                    }
+		                    if (timeCounter < 0){
+		                    	betweenScreen();
+		                    	t.cancel();
+		                    }
 	                    }
 	                 }
 	            });
 	        }
 	    }, 0, 1000);
     }
-    
-    protected void onStart()
-    {
-    	super.onStart();
-        active = true;
-    }
-    
-    public void onStop() 
-    {
-        super.onStop();
-        active = false;
-    }
-    
-    protected void onResume() 
-    {
-        super.onResume();
-    }
-    
-    public void betweenScreen()
-	{
+    private void betweenScreen(){
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, QuestionGame.class);
-		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		int score = Settings.getScore() + TimeCounter;
-        Settings.setScore(score);
-		if(between_page != null)
-		{
-			if (active)
-			{
-				startActivity(between_page);
+		Intent questionGame = new Intent(this, QuestionGame.class);
+		questionGame.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if(questionGame != null){
+			if (active){
+				startActivity(questionGame);
+				this.finish();
 			}	
 		}
-		finish();
 	}
 
-    protected void onPause() 
-    {
+    /*protected void onPause(){
         super.onPause();
-    }
+    }*/
 
-	//Eventlistener that checks if menu button is pressed
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
-		// adds exit button
+	public boolean onCreateOptionsMenu(Menu menu){
 	    menu.add("Exit"); 
 	    return super.onCreateOptionsMenu(menu);
 	}
-	//Eventlistener that checks if user presses exit
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-	    // If exit    
-	    if (item.getTitle() == "Exit") //user clicked Exit
+	public boolean onOptionsItemSelected(MenuItem item){   
+	    if (item.getTitle() == "Exit")
 			t.cancel();
-		    Intent menu_page = new Intent(this, ActivityMenu.class);
-			if(menu_page != null){
-  				Settings.resetAll();
-				startActivity(menu_page);
-				this.finish();
-			}
+		    Settings.resetAll();
+			this.finish();
 	    return super.onOptionsItemSelected(item);    
 	}
-	//listener for config change, so it stays in landscape mode
+
 	@Override 
 	public void onConfigurationChanged(Configuration newConfig)
 	{

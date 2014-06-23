@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="nl.hr.impossibleapp.QuestionGamePicture" >
@@ -46,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:contentDescription="@string/descriptionBus"
         android:src="@drawable/bus" />
 
 </RelativeLayout>

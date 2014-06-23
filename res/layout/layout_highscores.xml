@@ -2,10 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
-     >
+    android:id="@+id/highscoresRL" >
 
-    <LinearLayout
+	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -19,20 +18,40 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:stretchColumns="0,1" >
-
         </TableLayout>
-
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/errMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/loading"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/menuBtn"
         style="@style/button_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
         android:layout_marginBottom="10dp"
-        android:text="@string/menu"
-        android:onClick="GotoMenu" />
+        android:layout_marginLeft="10dp"
+        android:onClick="GotoMenu"
+        android:text="@string/menu" />
+
+    <Button
+        android:id="@+id/highscoresBtn"
+        style="@style/button_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:onClick="GotoHighscores"
+        android:text="@string/worldwide" />
 
 </RelativeLayout>

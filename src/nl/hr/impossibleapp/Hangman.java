@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,14 +25,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Hangman extends Activity{
-	private static final String TAG = Hangman.class.toString();
-
-	// Font
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
     
 	private ImageView img_hangman;
-	// Words
+
 	private String[] words;
 	private final String[] four_letter_words_en = { "JAVA", "FAST", "LIFE", "WOOD", "WORK", "BEER" };
 	private final String[] five_letter_words_en = { "CLASS", "PARSE", "LEVER", "JUICE", "EMAIL", "EIGHT" };
@@ -46,22 +42,19 @@ public class Hangman extends Activity{
 	private int guessedCorrect = 0;
 	private ArrayList<String> guessedLetters = new ArrayList<String>();
 	private int guessedWrong = 0;
-	private static boolean active = false;
+	private boolean active = false;
 	
-	//private timerField;
-    private Timer t;
+    private Timer t = new Timer();
     private int timeCounter = 20;
 	
 	@Override
-    public void onStart() 
-    {
+    public void onStart(){
        super.onStart();
        active = true;
     } 
 
     @Override
-    public void onStop() 
-    {
+    public void onStop(){
         super.onStop();
         active = false;
     }
@@ -73,7 +66,7 @@ public class Hangman extends Activity{
 		tf = Typeface.createFromAsset(getAssets(), fontPath);
 		
 		Settings.setLanguage(getResources().getString(R.string.language));
-		// Set lives image
+
 		int lives = Settings.getLives();
 		ImageView heartsField = (ImageView) findViewById(R.id.hearts);		
 	    if(lives == 2){
@@ -84,12 +77,44 @@ public class Hangman extends Activity{
 	    	heartsField.setImageResource(R.drawable.heart3);
 	    }
 	    
-	    // Set Score
 	    TextView scoreText = (TextView) findViewById(R.id.scoreBox);
 	    scoreText.setTypeface(tf);
 	    scoreText.setText("Score: " + Settings.getScore());
 	    
-	    // Get language
+		getWord();
+		
+	    startTimer();
+	}
+	private void startTimer(){
+		t.scheduleAtFixedRate(new TimerTask(){
+	    	@Override
+	    	public void run() {
+	    		runOnUiThread(new Runnable(){
+	    			public void run(){
+	    				TextView timerField = (TextView) findViewById(R.id.timerBox);
+	    				timerField.setTypeface(tf);
+	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
+	    				if(active){
+	    					timeCounter--;
+	    					
+	    					if(timeCounter  == 4 && active){
+		                    	Sound.countDown(getBaseContext());
+		                    }
+		    				
+		    				if (timeCounter < 0){
+		    					Sound.gameOver(getBaseContext());
+		                    	Settings.setLives(Settings.getLives() - 1);
+		                    	System.out.println("[Hangman] Minus life: out of time, " + Settings.getLives());
+		    					betweenScreen();
+		    					t.cancel();
+	                     	}
+	    				}
+                 	}
+	    		});
+	    	}
+	     }, 0, 1000);
+	}
+	private void getWord(){
 		String language = Settings.getLanguage();
 		int difficulty = Settings.getDifficulty();
 		if(difficulty == 1){
@@ -113,9 +138,7 @@ public class Hangman extends Activity{
 		}
 		img_hangman = (ImageView) findViewById(R.id.iv_hangman);
 		currentWordIndex = new Random().nextInt(words.length);
-		System.out.println(words[currentWordIndex]);
 		
-		// Check word length and adapt fields
 		if(words[currentWordIndex].length() == 3){
 			findViewById(R.id.textView4).setVisibility(View.GONE);
 			findViewById(R.id.textView5).setVisibility(View.GONE);
@@ -125,74 +148,34 @@ public class Hangman extends Activity{
 			findViewById(R.id.textView6).setVisibility(View.GONE);
 		}else if(words[currentWordIndex].length() == 5){
 			findViewById(R.id.textView6).setVisibility(View.GONE);
-		}else if(words[currentWordIndex].length() == 5){
-			
-		}
-		// Start timer
-		t = new Timer();
-	    t.scheduleAtFixedRate(new TimerTask() 
-	    {
-	    	@Override
-	    	public void run() {
-	    		runOnUiThread(new Runnable() 
-	    		{
-	    			public void run() 
-	    			{
-	    				TextView timerField = (TextView) findViewById(R.id.timerBox);
-	    				timerField.setTypeface(tf);
-	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
-	    				timeCounter--;
-	    				
-	    				if(timeCounter  == 4){
-	                    	Sound.countDown(getBaseContext());
-	                    }
-	    				
-	    				if (timeCounter < 0)
-	    				{
-	    					Sound.gameOver(getBaseContext());
-	    					timeCounter = 20;
-	                    	Settings.setLives(Settings.getLives() - 1);
-	                    	System.out.println("[Hangman] Minus life: out of time, " + Settings.getLives());
-	                    	Log.d(TAG, "Time " + timeCounter);
-	    					betweenScreen();
-	    					t.cancel();
-                     	}
-                 	}
-	    		});
-
-	    	}
-	     }, 0, 1000); // 1000 means start from 1 sec, and the second 1000 is do the loop each 1 sec.
+		}else if(words[currentWordIndex].length() == 5){}
 	}
 	
-	// Show keyboard
 	public void insertLetter(View v){
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 	}
 	
-	/* pass argument number 0-9 to load picture */ 
 	private void populatePicture(int number){
 		img_hangman.setImageResource(getResources().getIdentifier("drawable/hang"+number, null, getPackageName()));
 	}
 	
-	// check which key is pressed
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		char c = (char) event.getUnicodeChar();
-	    checkLetter(c);
-	    // Hide keyboard
+		if(keyCode != KeyEvent.KEYCODE_BACK && keyCode != KeyEvent.KEYCODE_MENU){
+			char c = (char) event.getUnicodeChar();
+		    checkLetter(c);
+		}
 	    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 	    return super.onKeyDown(keyCode, event);
 	}
 	
-	// check letter against word
 	private void checkLetter(char letter){
 		String[] separated = words[currentWordIndex].split("");
 		String stringLetter = Character.toString(letter).toUpperCase(Locale.ENGLISH);
 		
 		if(!guessedLetters.contains(stringLetter)){
-			// check if word contains letter is yes put it in the view
 			for(int i = 1; i < (words[currentWordIndex].length() + 1); i++){
 				TextView letterBox;
 				if(separated[i].equals(stringLetter)){
@@ -218,7 +201,7 @@ public class Hangman extends Activity{
 				}
 			} 
 		}
-		// if letter not in word add next piece to the picture
+
 		if(!Arrays.asList(separated).contains(stringLetter) && !guessedLetters.contains(stringLetter)){
 			guessedWrong++;
 			Sound.wrong(getBaseContext());
@@ -227,21 +210,18 @@ public class Hangman extends Activity{
 		}
 		checkWin();
 	}
-	// Check if player has won
+
 	private void checkWin(){
 		if(guessedWrong >= 9){
-			Log.d(TAG, "lost");
-			System.out.println("lost");
 			Settings.setLives(Settings.getLives() - 1);
 			Sound.gameOver(getBaseContext());
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 			active = true;
 			t.cancel();
+			timeCounter = 0;
 			betweenScreen();
 		}else if(guessedCorrect == words[currentWordIndex].length()){
-			Log.d(TAG, "won");
-			System.out.println("won");
 			Sound.stopCountDown(getBaseContext());
 	    	Sound.wonMinigame(getBaseContext());
 			active = true;
@@ -252,10 +232,9 @@ public class Hangman extends Activity{
 
 	private void betweenScreen(){
 		t.cancel();
-		Settings.setScore(Settings.getScore() + timeCounter);
+		Settings.addScore(timeCounter);
 		Intent between_page = new Intent(this, ActivityBetween.class);
 		Sound.stopCountDown(getBaseContext());
-		
 		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		if(between_page != null){
 			if (active){
@@ -265,26 +244,21 @@ public class Hangman extends Activity{
 		}
 	}
 	
-	//Eventlistener that checks if menu button is pressed
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
-		// adds exit button
+	public boolean onCreateOptionsMenu(Menu menu){
 	    menu.add("Exit"); 
 	    return super.onCreateOptionsMenu(menu);
 	}
-	//Eventlistener that checks if user presses exit
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-	    // If exit    
-	    if (item.getTitle() == "Exit") //user clicked Exit
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    if (item.getTitle() == "Exit")
 			t.cancel();
 		    Settings.resetAll();
 			this.finish();
 	    return super.onOptionsItemSelected(item);    
 	}
-	//listener for config change, so it stays in landscape mode
+
 	@Override 
 	public void onConfigurationChanged(Configuration newConfig)
 	{

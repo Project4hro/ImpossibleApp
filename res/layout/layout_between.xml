@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
-    tools:context="$nl.hr.impossibleapp.Activity_between"
-    android:background="@color/orange" >
+    tools:context="$nl.hr.impossibleapp.Activity_between" >
  
     <ImageView
         android:id="@+id/shakeImg"
@@ -91,16 +91,27 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="67dp"
         android:text="@string/placeholderTimer1" />
-    
+
     <TextView
         android:id="@+id/ScoreBetween"
-       	style="@style/text_style"
+        style="@style/text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/placeholderScore" />
+
+     <ImageView
+         android:id="@+id/hearts"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentLeft="true"
+         android:layout_marginBottom="10dp"
+         android:layout_marginLeft="10dp"
+         android:contentDescription="@string/descriptionHearts"
+         android:src="@drawable/heart3" />
 	
 </RelativeLayout>
