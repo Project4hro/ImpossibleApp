@@ -39,7 +39,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:onClick="GotoMenu"
+        android:onClick="gotoMenu"
         android:text="@string/menu" />
 
     <Button
@@ -51,7 +51,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        android:onClick="GotoHighscores"
+        android:onClick="gotoHighscores"
         android:text="@string/worldwide" />
 
 </RelativeLayout>

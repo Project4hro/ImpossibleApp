@@ -1,19 +1,15 @@
 package nl.hr.impossibleapp;
 
-import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityTemplate;
 import nl.hr.impossibleapp.data.Sound;
 import nl.hr.impossibleapp.data.Settings;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,39 +17,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Quiz extends Activity{
+public class Quiz extends ActivityTemplate{
 	private static final String TAG = Quiz.class.toString();
 
-    private static final String fontPath = "fonts/mvboli.ttf";
+    private static final String FONTPATH = "fonts/mvboli.ttf";
     private Typeface tf;
     private int questionNumber = 0;
     private boolean good[] = {false,false,false};
-    private String questions[] = {null, null, null};
-    private String buttonA[] = {"B",null,"A"};
-    private String buttonB[] = {"C",null,"B"};
-    private String buttonC[] = {"A",null,"C"};
-    private String answers[] = {"c","a","b"};
+    private String[] questions = {null, null, null};
+    private String[] buttonA = {"B",null,"A"};
+    private String[] buttonB = {"C",null,"B"};
+    private String[] buttonC = {"A",null,"C"};
+    private String[] answers = {"c","a","b"};
     private Button btnA;
     private Button btnB;
     private Button btnC;
     private TextView timerField;
-    private Timer t = new Timer();
+	private TextView question;
     private int timeCounter = 20;
 	
-    private boolean active = false;
     private boolean win = false;
-    
-    @Override
-    public void onStart(){
-       super.onStart();
-       active = true;
-    } 
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        active = false;
-    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -62,7 +45,7 @@ public class Quiz extends Activity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.layout_quiz);
-	    tf = Typeface.createFromAsset(getAssets(), fontPath);
+	    tf = Typeface.createFromAsset(getAssets(), FONTPATH);
 	    timerField = (TextView) findViewById(R.id.timerBox);
 	    timerField.setTypeface(tf);
 	    questions[0] = getResources().getString(R.string.questionOne);
@@ -71,12 +54,24 @@ public class Quiz extends Activity{
 	    buttonA[1] = getResources().getString(R.string.questionTwoAnwerOne);
 	    buttonB[1] = getResources().getString(R.string.questionTwoAnwerTwo);
 	    buttonC[1] = getResources().getString(R.string.questionTwoAnwerThree);
+    	btnA = (Button) findViewById(R.id.buttonA);
+    	btnB = (Button) findViewById(R.id.buttonB);
+    	btnC = (Button) findViewById(R.id.buttonC);
+    	question = (TextView) findViewById(R.id.question);
+    	
+    	btnA.setTypeface(tf);
+    	btnB.setTypeface(tf);
+    	btnC.setTypeface(tf);
+    	question.setTypeface(tf);
 	    int difficulty = Settings.getDifficulty();
 	    if(difficulty == 3){
 	    	timeCounter = 10;
 	    }else if(difficulty == 2){
 	    	timeCounter = 15;
 	    }
+
+	    setHeartsView((ImageView) findViewById(R.id.hearts));
+	    setScoreView((TextView) findViewById(R.id.scoreBox), getAssets());
 	    startTimer();
     }
     private void startTimer(){
@@ -88,7 +83,6 @@ public class Quiz extends Activity{
 	    				timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
 	    				if(active){
 		    				timeCounter--;
-		    				UpdateScreen();
 		    				
 		    				if(timeCounter  == 4){
 		                    	Sound.countDown(getBaseContext());
@@ -138,72 +132,32 @@ public class Quiz extends Activity{
     		gameover();
     	} 	
     }
-    public void ClickA(View v) {
+    public void clickA(View v) {
 		checkAnswer("a");
 	}
-    public void ClickB(View v) {
+    public void clickB(View v) {
 		checkAnswer("b");
 	}
-    public void ClickC(View v) {
+    public void clickC(View v) {
 		checkAnswer("c");
 	}
     private void setquestion(){
-    	TextView question = (TextView) findViewById(R.id.question);
+    	
     	question.setTypeface(tf);
     	question.setText(questions[questionNumber]);
-    	btnA = (Button) findViewById(R.id.buttonA);
     	btnA.setText(buttonA[questionNumber]);
-    	btnB = (Button) findViewById(R.id.buttonB);
     	btnB.setText(buttonB[questionNumber]);
-		btnC = (Button) findViewById(R.id.buttonC);
 		btnC.setText(buttonC[questionNumber]);	
     }
-    public void UpdateScreen(){
-	    int lives = Settings.getLives();
-		ImageView heartsField = (ImageView) findViewById(R.id.hearts);
-	    if(lives == 2){
-	    	heartsField.setImageResource(R.drawable.heart2);
-	    }else if(lives == 1){
-	    	heartsField.setImageResource(R.drawable.heart1);
-	    }else{
-	    	heartsField.setImageResource(R.drawable.heart3);
-	    }
-	    TextView scoreText = (TextView) findViewById(R.id.scoreBox);
-	    scoreText.setTypeface(tf);
-	    scoreText.setText("Score: " + Settings.getScore());
-	    
-	}
+
     public void betweenScreen(){
 		t.cancel();
-		Intent between_page = new Intent(this, ActivityBetween.class);
+		Intent betweenPage = new Intent(this, ActivityBetween.class);
 		Sound.stopCountDown(getBaseContext());
-		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(between_page != null){
-			if (active){
-				startActivity(between_page);
-			}	
+		betweenPage.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if(betweenPage != null && active){
+			startActivity(betweenPage);
 		}
 		this.finish();
 	}
-    @Override
-	public boolean onCreateOptionsMenu(Menu menu){
-	    menu.add("Exit"); 
-	    return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item){   
-	    if (item.getTitle() == "Exit")
-			t.cancel();
-		    Settings.resetAll();
-			this.finish();
-	    return super.onOptionsItemSelected(item);    
-	}
-
-	@Override 
-	public void onConfigurationChanged(Configuration newConfig){
-		super.onConfigurationChanged(newConfig);
-	}
-	@Override
-	public void onBackPressed(){}
 }

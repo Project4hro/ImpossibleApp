@@ -4,82 +4,58 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityTemplate;
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Hangman extends Activity{
-    private static final String fontPath = "fonts/mvboli.ttf";
+public class Hangman extends ActivityTemplate{
+    private static final String FONTPATH = "fonts/mvboli.ttf";
     private Typeface tf;
     
-	private ImageView img_hangman;
+	private ImageView imgHangman;
+	private TextView scoreView;
+	private ImageView heartsView;
 
 	private String[] words;
-	private final String[] four_letter_words_en = { "JAVA", "FAST", "LIFE", "WOOD", "WORK", "BEER" };
-	private final String[] five_letter_words_en = { "CLASS", "PARSE", "LEVER", "JUICE", "EMAIL", "EIGHT" };
-	private final String[] six_letter_words_en = { "SECOND", "MINUTE", "SENSOR", "BOTTOM", "DAMAGE", "ZOMBIE" };
-	private final String[] four_letter_words_nl = { "KLAS", "SNEL", "HOUT", "BIER", "WERK", "BEER" };
-	private final String[] five_letter_words_nl = { "LEVEN", "FRUIT", "LEVER", "NEGEN", "EMAIL", "ADRES" };
-	private final String[] six_letter_words_nl = { "SLAPEN", "MINUUT", "SENSOR", "SCHADE", "SCHOOL", "ZOMBIE" };
+	private static final String[] FOURLETTERWORDSEN = { "JAVA", "FAST", "LIFE", "WOOD", "WORK", "BEER" };
+	private static final String[] FIVELETTERWORDSEN = { "CLASS", "PARSE", "LEVER", "JUICE", "EMAIL", "EIGHT" };
+	private static final String[] SIXLETTERWORDSEN = { "SECOND", "MINUTE", "SENSOR", "BOTTOM", "DAMAGE", "ZOMBIE" };
+	private static final String[] FOURLETTERWORDSNL = { "KLAS", "SNEL", "HOUT", "BIER", "WERK", "BEER" };
+	private static final String[] FIVELETTERWORDSNL = { "LEVEN", "FRUIT", "LEVER", "NEGEN", "EMAIL", "ADRES" };
+	private static final String[] SIXLETTERWORDSNL = { "SLAPEN", "MINUUT", "SENSOR", "SCHADE", "SCHOOL", "ZOMBIE" };
 	
 	private int currentWordIndex = 0;
 	private int guessedCorrect = 0;
 	private ArrayList<String> guessedLetters = new ArrayList<String>();
 	private int guessedWrong = 0;
-	private boolean active = false;
-	
-    private Timer t = new Timer();
+	private TextView letterBox;
     private int timeCounter = 20;
-	
-	@Override
-    public void onStart(){
-       super.onStart();
-       active = true;
-    } 
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        active = false;
-    }
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_hangman);
-		tf = Typeface.createFromAsset(getAssets(), fontPath);
+		tf = Typeface.createFromAsset(getAssets(), FONTPATH);
 		
 		Settings.setLanguage(getResources().getString(R.string.language));
 
-		int lives = Settings.getLives();
-		ImageView heartsField = (ImageView) findViewById(R.id.hearts);		
-	    if(lives == 2){
-	    	heartsField.setImageResource(R.drawable.heart2);
-	    }else if(lives == 1){
-	    	heartsField.setImageResource(R.drawable.heart1);
-	    }else{
-	    	heartsField.setImageResource(R.drawable.heart3);
-	    }
+		heartsView = (ImageView) findViewById(R.id.hearts);		
+	    setHeartsView(heartsView);
 	    
-	    TextView scoreText = (TextView) findViewById(R.id.scoreBox);
-	    scoreText.setTypeface(tf);
-	    scoreText.setText("Score: " + Settings.getScore());
+	    scoreView = (TextView) findViewById(R.id.scoreBox);
+	    setScoreView(scoreView, getAssets());
 	    
 		getWord();
 		
@@ -104,7 +80,6 @@ public class Hangman extends Activity{
 		    				if (timeCounter < 0){
 		    					Sound.gameOver(getBaseContext());
 		                    	Settings.setLives(Settings.getLives() - 1);
-		                    	System.out.println("[Hangman] Minus life: out of time, " + Settings.getLives());
 		    					betweenScreen();
 		    					t.cancel();
 	                     	}
@@ -118,25 +93,25 @@ public class Hangman extends Activity{
 		String language = Settings.getLanguage();
 		int difficulty = Settings.getDifficulty();
 		if(difficulty == 1){
-			if(language.equals("NL")){
-				words = four_letter_words_nl;
+			if("NL".equals(language)){
+				words = FOURLETTERWORDSNL;
 			}else{
-				words = four_letter_words_en;
+				words = FOURLETTERWORDSEN;
 			}
 		}else if(difficulty == 2){
-			if(language.equals("NL")){
-				words = five_letter_words_nl;
+			if("NL".equals(language)){
+				words = FIVELETTERWORDSNL;
 			}else{
-				words = five_letter_words_en;
+				words = FIVELETTERWORDSEN;
 			}
 		}else{
-			if(language.equals("NL")){
-				words = six_letter_words_nl;
+			if("NL".equals(language)){
+				words = SIXLETTERWORDSNL;
 			}else{
-				words = six_letter_words_en;
+				words = SIXLETTERWORDSEN;
 			}
 		}
-		img_hangman = (ImageView) findViewById(R.id.iv_hangman);
+		imgHangman = (ImageView) findViewById(R.id.iv_hangman);
 		currentWordIndex = new Random().nextInt(words.length);
 		
 		if(words[currentWordIndex].length() == 3){
@@ -148,16 +123,17 @@ public class Hangman extends Activity{
 			findViewById(R.id.textView6).setVisibility(View.GONE);
 		}else if(words[currentWordIndex].length() == 5){
 			findViewById(R.id.textView6).setVisibility(View.GONE);
-		}else if(words[currentWordIndex].length() == 5){}
+		}
 	}
 	
 	public void insertLetter(View v){
+		// display keyboard
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 	}
 	
 	private void populatePicture(int number){
-		img_hangman.setImageResource(getResources().getIdentifier("drawable/hang"+number, null, getPackageName()));
+		imgHangman.setImageResource(getResources().getIdentifier("drawable/hang"+number, null, getPackageName()));
 	}
 	
 	@Override
@@ -166,6 +142,7 @@ public class Hangman extends Activity{
 			char c = (char) event.getUnicodeChar();
 		    checkLetter(c);
 		}
+		// hide keyboard
 	    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 	    return super.onKeyDown(keyCode, event);
@@ -177,7 +154,6 @@ public class Hangman extends Activity{
 		
 		if(!guessedLetters.contains(stringLetter)){
 			for(int i = 1; i < (words[currentWordIndex].length() + 1); i++){
-				TextView letterBox;
 				if(separated[i].equals(stringLetter)){
 					if(i == 1){
 						letterBox = (TextView) findViewById(R.id.textView1);
@@ -190,8 +166,6 @@ public class Hangman extends Activity{
 					}else if(i == 5){
 						letterBox = (TextView) findViewById(R.id.textView5);
 					}else if(i == 6){
-						letterBox = (TextView) findViewById(R.id.textView6);
-					}else{
 						letterBox = (TextView) findViewById(R.id.textView6);
 					}
 					guessedLetters.add(stringLetter);
@@ -215,6 +189,7 @@ public class Hangman extends Activity{
 		if(guessedWrong >= 9){
 			Settings.setLives(Settings.getLives() - 1);
 			Sound.gameOver(getBaseContext());
+			// hide keyboard
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 			active = true;
@@ -233,37 +208,12 @@ public class Hangman extends Activity{
 	private void betweenScreen(){
 		t.cancel();
 		Settings.addScore(timeCounter);
-		Intent between_page = new Intent(this, ActivityBetween.class);
+		Intent betweenPage = new Intent(this, ActivityBetween.class);
 		Sound.stopCountDown(getBaseContext());
-		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(between_page != null){
-			if (active){
-				startActivity(between_page);
-				this.finish();
-			}	
+		betweenPage.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if(betweenPage != null && active){
+			startActivity(betweenPage);
+			this.finish();
 		}
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu){
-	    menu.add("Exit"); 
-	    return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    if (item.getTitle() == "Exit")
-			t.cancel();
-		    Settings.resetAll();
-			this.finish();
-	    return super.onOptionsItemSelected(item);    
-	}
-
-	@Override 
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		super.onConfigurationChanged(newConfig);
-	}
-	@Override
-	public void onBackPressed(){}
 }

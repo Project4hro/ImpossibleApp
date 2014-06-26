@@ -1,36 +1,28 @@
 package nl.hr.impossibleapp;
 
-
 import java.util.Random;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityTemplate;
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Accelerometer extends Activity implements SensorEventListener{
-    private static final String fontPath = "fonts/mvboli.ttf";
+public class Accelerometer extends ActivityTemplate implements SensorEventListener{
+    private static final String FONTPATH = "fonts/mvboli.ttf";
     private Typeface tf;
-    
-	private boolean active = false;
 	
 	private float mLastX, mLastY, mLastZ;
 	private int countShakes = 0;
@@ -39,11 +31,12 @@ public class Accelerometer extends Activity implements SensorEventListener{
 	private boolean allowToShake = false;
 	private SensorManager mSensorManager;
     private Sensor mAccelerometer;
-    private final float NOISE = (float) 2.0;
+    private final float noise = (float) 2.0;
     
     private TextView tvTimerInt;
-    private Timer t = new Timer();
-    
+    private TextView scoreView;
+	private ImageView heartsView;
+	
     private TextView readyGo;
     private boolean endedGame = false;
     
@@ -53,32 +46,24 @@ public class Accelerometer extends Activity implements SensorEventListener{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     	setContentView(R.layout.layout_accelerometer);
-	    tf = Typeface.createFromAsset(getAssets(), fontPath);
+	    tf = Typeface.createFromAsset(getAssets(), FONTPATH);
 	    
         mInitialized = false;
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
-        ImageView heartsField = (ImageView) findViewById(R.id.hearts);
-        int lives = Settings.getLives();
-        if(lives == 2){
-        	heartsField.setImageResource(R.drawable.heart2);
-        }else if(lives == 1){
-        	heartsField.setImageResource(R.drawable.heart1);
-        }else{
-        	heartsField.setImageResource(R.drawable.heart3);
-        }
+        heartsView = (ImageView) findViewById(R.id.hearts);
+        setHeartsView(heartsView);
         
         readyGo = (TextView) findViewById(R.id.readyGo);
 		readyGo.setTypeface(tf);
 		
 		tvTimerInt = (TextView)findViewById(R.id.timerBox);
 		tvTimerInt.setTypeface(tf);
-		TextView scoreText = (TextView) findViewById(R.id.scoreBox);
-		scoreText.setTypeface(tf);
-	    scoreText.setText("Score: " + Settings.getScore());
+		scoreView = (TextView) findViewById(R.id.scoreBox);
+		setScoreView(scoreView, getAssets());
 	    
-	    Sound.Ready(getBaseContext());
+	    Sound.ready(getBaseContext());
 	    readyGo.setText("Ready?");
 	    
 	    startTimer();
@@ -99,7 +84,7 @@ public class Accelerometer extends Activity implements SensorEventListener{
 	                    	
 	                    	if(goInt == timeCounter){
 		                    	allowToShake = true;
-		                    	Sound.Go(getBaseContext());
+		                    	Sound.go(getBaseContext());
 		                    	readyGo.setText("GO!");
 		                    }
 		                    
@@ -110,7 +95,7 @@ public class Accelerometer extends Activity implements SensorEventListener{
 		                    if (timeCounter < 0){
 		                    	Sound.gameOver(getBaseContext());
 		                    	Settings.setLives(Settings.getLives() - 1);
-		                    	System.out.println("[Accelerometer] Minus life: out of time, " + Settings.getLives());
+		                    	endedGame = true;
 		                    	betweenScreen();
 		                    	t.cancel();
 		                    }
@@ -120,33 +105,22 @@ public class Accelerometer extends Activity implements SensorEventListener{
 	        }
 	    }, 0, 1000);
     }
-    protected void onStart(){
-    	super.onStart();
-        active = true;
-    }
-    
-    public void onStop(){
-        super.onStop();
-        active = false;
-    }
     
     protected void onResume(){
         super.onResume();
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        active = true;
     }
     
     private void betweenScreen(){
-    	Log.i("accelerometer", "klaar");
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, ActivityBetween.class);
+		Intent betweenPage = new Intent(this, ActivityBetween.class);
         Settings.addScore(timeCounter);
-		if(between_page != null){
-			if (active && endedGame){
-				startActivity(between_page);
-				this.finish();
-				endedGame = false;
-			}	
+		if(betweenPage != null && active && endedGame){
+			startActivity(betweenPage);
+			this.finish();
+			endedGame = false;
 		}
 	}
 
@@ -156,10 +130,13 @@ public class Accelerometer extends Activity implements SensorEventListener{
     }
 
 	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy){}
+	public void onAccuracyChanged(Sensor sensor, int accuracy){
+		// unused
+	}
 
 	@Override
 	public void onSensorChanged(SensorEvent event){
+		// check if shaked
 		float x = event.values[0];
 		float y = event.values[1];
 		float z = event.values[2];
@@ -173,9 +150,15 @@ public class Accelerometer extends Activity implements SensorEventListener{
 			float deltaX = Math.abs(mLastX - x);
 			float deltaY = Math.abs(mLastY - y);
 			float deltaZ = Math.abs(mLastZ - z);
-			if (deltaX < NOISE) deltaX = (float)0.0;
-			if (deltaY < NOISE) deltaY = (float)0.0;
-			if (deltaZ < NOISE) deltaZ = (float)0.0;
+			if (deltaX < noise){
+				deltaX = (float)0.0;
+			}
+			if (deltaY < noise){
+				deltaY = (float)0.0;
+			}
+			if (deltaZ < noise){
+				deltaZ = (float)0.0;
+			}
 			mLastX = x;
 			mLastY = y;
 			mLastZ = z;
@@ -183,7 +166,6 @@ public class Accelerometer extends Activity implements SensorEventListener{
 			
 			if(deltaX > 0 || deltaX <0 || deltaY > 0 || deltaY < 0){
 				countShakes++;
-				System.out.println(countShakes);
 			}
 			if(allowToShake){	
 				if(countShakes > 20){
@@ -195,7 +177,6 @@ public class Accelerometer extends Activity implements SensorEventListener{
 				if(countShakes > 10){
 					Sound.gameOver(getBaseContext());
                 	Settings.setLives(Settings.getLives() - 1);
-                	System.out.println("[Accelerometer] Game over, " + Settings.getLives());
                 	endedGame = true;
                 	betweenScreen();
                 	t.cancel();
@@ -203,26 +184,4 @@ public class Accelerometer extends Activity implements SensorEventListener{
 			}
 		}
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu){
-	    menu.add("Exit"); 
-	    return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-	    if (item.getTitle() == "Exit")
-			t.cancel();
-    		Settings.resetAll();
-		    this.finish();
-	    return super.onOptionsItemSelected(item);    
-	}
-
-	@Override 
-	public void onConfigurationChanged(Configuration newConfig){
-		super.onConfigurationChanged(newConfig);
-	}
-	@Override
-	public void onBackPressed(){}
 }

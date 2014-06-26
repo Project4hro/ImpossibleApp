@@ -13,7 +13,8 @@ public class Sound extends Activity{
 		if(mp != null){
 			mp.release();
 		}
-		return mp = null;
+		mp = null;
+		return mp;
 	}
 	
 	public static MediaPlayer correct(Context context){
@@ -44,8 +45,7 @@ public class Sound extends Activity{
 	}
 	
 	public static MediaPlayer countDown(Context context){
-		if(end != null)
-		{
+		if(end != null){
 			end.release();
 		}
 		end = MediaPlayer.create(context, R.raw.countdown);
@@ -56,16 +56,14 @@ public class Sound extends Activity{
 	}
 	
 	public static MediaPlayer stopCountDown(Context context){
-		if(end != null)
-		{
+		if(end != null){
 			end.release();
 		}
 		return end;
 	}
 	
 	public static MediaPlayer shortCountDown(Context context){
-		if(end!= null)
-		{
+		if(end!= null){
 			end.release();
 		}
 		end = MediaPlayer.create(context, R.raw.shortcountdown);
@@ -75,7 +73,7 @@ public class Sound extends Activity{
 		return end;
 	}
 	
-	public static MediaPlayer Ready(Context context){
+	public static MediaPlayer ready(Context context){
 		removeSound();
 		mp = MediaPlayer.create(context, R.raw.ready);
 		if(Settings.isSoundEnabled()){
@@ -84,7 +82,7 @@ public class Sound extends Activity{
 		return mp;
 	}
 	
-	public static MediaPlayer Go(Context context){
+	public static MediaPlayer go(Context context){
 		removeSound();
 		mp = MediaPlayer.create(context, R.raw.go);
 		if(Settings.isSoundEnabled()){

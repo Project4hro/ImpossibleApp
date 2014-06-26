@@ -67,7 +67,6 @@ public class Settings {
 	}
 	
 	public static void addScore(int score){
-		Log.i("Settings", ""+score);
 		if(score > 0){
 			if(difficulty == 1){
 				Settings.ScoreTotal = ScoreTotal + score;

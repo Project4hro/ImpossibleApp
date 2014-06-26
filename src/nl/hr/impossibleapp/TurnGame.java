@@ -1,18 +1,14 @@
-package nl.hr.impossibleapp;
+	 package nl.hr.impossibleapp;
 
-import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityTemplate;
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,30 +18,18 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class TurnGame extends Activity {
-    private static final String fontPath = "fonts/mvboli.ttf";
+public class TurnGame extends ActivityTemplate {
+    private static final String FONTPATH = "fonts/mvboli.ttf";
     private Typeface tf;
     
-    private float currentRotation[] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    private float[] currentRotation = {0,0,0,0,0,0,0,0,0,0,0,0};
 	private ImageView img;
 	private int win = 3;
-    Timer t = new Timer();
+
     int timeCounter = 12;
     TextView timerField;
-    
-    private boolean active = false; 
-	
-	@Override
-    public void onStart(){
-       super.onStart();
-       active = true;
-    } 
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        active = false;
-    }
+    private TextView scoreView;
+	private ImageView heartsView;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -54,7 +38,7 @@ public class TurnGame extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.layout_turngame);
-	    tf = Typeface.createFromAsset(getAssets(), fontPath);
+	    tf = Typeface.createFromAsset(getAssets(), FONTPATH);
 	    timerField = (TextView) findViewById(R.id.timerBox);
 	    timerField.setTypeface(tf);
 	    int difficulty = Settings.getDifficulty();
@@ -63,8 +47,10 @@ public class TurnGame extends Activity {
 	    }else if(difficulty == 2){
 	    	timeCounter = 9;
 	    }
-	    
-	    UpdateScreen();
+	    heartsView = (ImageView) findViewById(R.id.hearts);
+	    scoreView = (TextView) findViewById(R.id.scoreBox);
+	    setHeartsView(heartsView);
+	    setScoreView(scoreView, getAssets());
 	    
 	    t.scheduleAtFixedRate(new TimerTask(){
 	    	@Override
@@ -82,7 +68,6 @@ public class TurnGame extends Activity {
 		    				if (timeCounter < 0){
 		    					Sound.gameOver(getBaseContext());
 		                    	Settings.setLives(Settings.getLives() - 1);
-		                    	System.out.println("[TurnGame] Minus life: out of time, " + Settings.getLives());
 		    					betweenScreen();
 		    					t.cancel();
 	                     	}
@@ -94,45 +79,45 @@ public class TurnGame extends Activity {
 	     }, 0, 1000);
 	}
 	
-	public void Turn_Img2(View v) {
+	public void turnImg2(View v) {
 		img = (ImageView) findViewById(R.id.imageView2);
-		Make_Turn(2);
+		makeTurn(2);
 	}
-	public void Turn_Img3(View v) {
+	public void turnImg3(View v) {
 		img = (ImageView) findViewById(R.id.imageView3);
-		Make_Turn(3);
+		makeTurn(3);
 	}
-	public void Turn_Img4(View v) {
+	public void turnImg4(View v) {
 		img = (ImageView) findViewById(R.id.imageView4);
-		Make_Turn(4);
+		makeTurn(4);
 	}
-	public void Turn_Img5(View v) {
+	public void turnImg5(View v) {
 		img = (ImageView) findViewById(R.id.imageView5);
-		Make_Turn(5);
+		makeTurn(5);
 	}
-	public void Turn_Img6(View v) {
+	public void turnImg6(View v) {
 		img = (ImageView) findViewById(R.id.imageView6);
-		Make_Turn(6);
+		makeTurn(6);
 	}
-	public void Turn_Img7(View v) {
+	public void turnImg7(View v) {
 		img = (ImageView) findViewById(R.id.imageView7);
-		Make_Turn(7);
+		makeTurn(7);
 	}
-	public void Turn_Img8(View v) {
+	public void turnImg8(View v) {
 		img = (ImageView) findViewById(R.id.imageView8);
-		Make_Turn(8);
+		makeTurn(8);
 	}
-	public void Turn_Img9(View v) {
+	public void turnImg9(View v) {
 		img = (ImageView) findViewById(R.id.imageView9);
-		Make_Turn(9);
+		makeTurn(9);
 	}
-	public void Turn_Img10(View v) {
+	public void turnImg10(View v) {
 		img = (ImageView) findViewById(R.id.imageView10);
-		Make_Turn(10);
+		makeTurn(10);
 	}
-	public void Turn_Img11(View v) {
+	public void turnImg11(View v) {
 		img = (ImageView) findViewById(R.id.imageView11);
-		Make_Turn(11);
+		makeTurn(11);
 	}
 	
 	public void win(){
@@ -142,8 +127,8 @@ public class TurnGame extends Activity {
 			
 		}
 	}
-	
-	private void Make_Turn(int id){
+	// turn image
+	private void makeTurn(int id){
 		RotateAnimation anim = new RotateAnimation(currentRotation[id], currentRotation[id] + 90,
 	            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,0.5f);
 	    currentRotation[id] = (currentRotation[id] + 90) % 360;
@@ -161,19 +146,25 @@ public class TurnGame extends Activity {
 		if(currentRotation2 == 90){
 			if (id == 2 || id == 3 || id == 5 || id == 7 || id == 9 || id == 10 ){
 				win++;
-			}else if(id == 4 || id == 8){}else{
+			}else if(id == 4 || id == 8){
+				// curves, do nothing
+			}else{
 				win--;
 			}
 		}else if (currentRotation2 == 180){
 			if (id == 6 || id == 11){
 				win++;
-			}else if(id == 4 || id == 5 || id == 9){}else{
+			}else if(id == 4 || id == 5 || id == 9){
+				// curves, do nothing
+			}else{
 				win--;
 			}
 		}else if (currentRotation2 == 270){
 			if (id == 2 || id == 3 || id == 4 || id == 7 || id == 10 ){
 				win++;
-			}else if(id == 5 || id == 8 || id == 9){}else{
+			}else if(id == 5 || id == 8 || id == 9){
+				// curves, do nothing
+			}else{
 				win--;
 			}
 		}else if (currentRotation2 == 0){
@@ -185,57 +176,14 @@ public class TurnGame extends Activity {
 		}
 	}
 	
-	private void UpdateScreen(){
-		int lives = Settings.getLives();
-		ImageView heartsField = (ImageView) findViewById(R.id.hearts);
-	    if(lives == 2){
-	    	heartsField.setImageResource(R.drawable.heart2);
-	    }else if(lives == 1){
-	    	heartsField.setImageResource(R.drawable.heart1);
-	    }else{
-	    	heartsField.setImageResource(R.drawable.heart3);
-	    }
-	    TextView scoreText = (TextView) findViewById(R.id.scoreBox);
-	    scoreText.setTypeface(tf);
-	    scoreText.setText("Score: " + Settings.getScore());
-	}
-	
 	private void betweenScreen(){
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, ActivityBetween.class);
+		Intent betweenPage = new Intent(this, ActivityBetween.class);
         Settings.addScore(timeCounter);
-		if(between_page != null){
-			if (active)
-			{
-				startActivity(between_page);
-				this.finish();	
-			}
+		if(betweenPage != null && active){
+			startActivity(betweenPage);
+			this.finish();
 		}
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
-	    menu.add("Exit"); 
-	    return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{ 
-	    if (item.getTitle() == "Exit")
-			t.cancel();
-		    Settings.resetAll();
-			this.finish();
-	    return super.onOptionsItemSelected(item);    
-	}
-	
-	@Override 
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		super.onConfigurationChanged(newConfig);
-	}
-	@Override
-	public void onBackPressed(){}
 }

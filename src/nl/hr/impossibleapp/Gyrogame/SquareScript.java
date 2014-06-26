@@ -1,6 +1,5 @@
 package nl.hr.impossibleapp.gyrogame;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,21 +35,13 @@ public class SquareScript extends View {
     	super.onDraw(canvas);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(0);
-        if (up)
-        {
-            //canvas.drawRect(360, 0, 420, 60, paint);
+        if (up){
             canvas.drawRect((float) (width*0.46), 0, (float)(width*0.54), 60, paint);
-        }
-        else if (down)
-        {
+        }else if (down){
             canvas.drawRect((float) (width*0.46), (float) (width*0.5), (float)(width*0.54), (float)(width*0.59), paint);
-        }
-        else if (left)
-        {
+        }else if (left){
             canvas.drawRect(0, (float) (height*0.48), 50, (float) (height*0.58), paint);
-        }
-        else if (right)
-        {
+        }else if (right){
             canvas.drawRect((float)(width*0.94), (float) (height*0.48), (float)(width*1), (float) (height*0.58), paint);
         }
 

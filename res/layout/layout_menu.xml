@@ -22,7 +22,7 @@
         style="@style/button_style"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:onClick="Goto_Highscores"
+        android:onClick="gotoHighscores"
         android:text="@string/highscore" />
 
     <Button
@@ -31,7 +31,7 @@
         android:layout_alignLeft="@+id/menu_score"
         android:layout_below="@+id/menu_score"
         android:layout_marginTop="20dp"
-        android:onClick="Goto_Settings"
+        android:onClick="gotoSettings"
         android:text="@string/settings" />
 
     <Button
@@ -40,7 +40,7 @@
         android:layout_above="@+id/menu_score"
         android:layout_alignLeft="@+id/menu_score"
         android:layout_marginBottom="20dp"
-        android:onClick="Goto_Game"
+        android:onClick="gotoGame"
         android:text="@string/start" />
 
 </RelativeLayout>

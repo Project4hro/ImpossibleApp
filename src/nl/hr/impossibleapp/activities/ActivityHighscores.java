@@ -28,13 +28,18 @@ import android.widget.TextView;
 public class ActivityHighscores extends Activity{
 	private static final String TAG = ActivityHighscores.class.toString();
 	// Font
-    private static final String fontPath = "fonts/mvboli.ttf";
+    private static final String FONTPATH = "fonts/mvboli.ttf";
     private Typeface tf;
     private TableLayout tl;
     private TextView errMsg;
 	private List<ParseObject> scores;
     private int currentView = 1;
     private Button highscoresBtn;
+    private Button menuBtn;
+    private String name;
+    private int score;
+    private String local;
+    private String worldwide;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -43,12 +48,17 @@ public class ActivityHighscores extends Activity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.layout_highscores);
-	    tf = Typeface.createFromAsset(getAssets(), fontPath);
+	    
+	    tf = Typeface.createFromAsset(getAssets(), FONTPATH);
 	    errMsg = (TextView) findViewById(R.id.errMessage);
 	    errMsg.setTypeface(tf);
-
+	    menuBtn = (Button) findViewById(R.id.menuBtn);
+	    menuBtn.setTypeface(tf);
+	    worldwide = getResources().getString(R.string.worldwide);
+	    local = getResources().getString(R.string.local);
 		highscoresBtn = (Button) findViewById(R.id.highscoresBtn);
-		highscoresBtn.setText("Wereldwijd");
+		highscoresBtn.setTypeface(tf);
+		highscoresBtn.setText(worldwide);
 		
         addLocalHighscores();
 	}
@@ -59,6 +69,7 @@ public class ActivityHighscores extends Activity{
 			tl.removeAllViews();
 			currentView = 1;
 		}
+		// get top 10 scores locally stored
 		addTableHeader();
 		MySQLiteHelper db = new MySQLiteHelper(this);	    
 	    List<Highscores> list = db.getAllHighscores();
@@ -70,163 +81,141 @@ public class ActivityHighscores extends Activity{
 	    	errMsg.setVisibility(View.GONE);
 	    }
 	    for(int i = 0; i < list.size(); i++){
-	    	TableRow tr = new TableRow(this);
-	    	tr.setId(100+i);
-	    	tr.setLayoutParams(new LayoutParams(
-	    	LayoutParams.WRAP_CONTENT,
-	    	LayoutParams.WRAP_CONTENT));
-
-	    	TextView positionLabel = new TextView(this);
-	    	positionLabel.setId(200 + i);
-	    	positionLabel.setText("" + (i + 1));
-	    	positionLabel.setPadding(10, 0, 5, 0);
-	    	positionLabel.setTextColor(Color.WHITE);
-	    	positionLabel.setTypeface(tf);
-	    	positionLabel.setTextAppearance(this, R.style.text_style);
-	    	tr.addView(positionLabel);
-	    	
-	    	TextView labelName = new TextView(this);
-	    	labelName.setId(200 + i);
-	    	labelName.setText(list.get(i).getName());
-	    	labelName.setPadding(10, 0, 5, 0);
-	    	labelName.setTextColor(Color.WHITE);
-	    	labelName.setTypeface(tf);
-	    	labelName.setTextAppearance(this, R.style.text_style);
-	    	tr.addView(labelName);
-	    	
-	    	TextView labelScore = new TextView(this);
-	    	labelScore.setId(200 + i);
-	    	labelScore.setText(Integer.toString(list.get(i).getScore()));
-	    	labelScore.setPadding(2, 0, 5, 0);
-	    	labelScore.setTextColor(Color.WHITE);
-	    	labelScore.setTypeface(tf);
-	    	labelScore.setTextAppearance(this, R.style.text_style);
-	    	tr.addView(labelScore);
-	    	tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+	    	name = list.get(i).getName();
+			score = list.get(i).getScore();
+			addRow(i);
 	    }
 	}
 	
 	private void getOnlineHighscores(){
 		errMsg.setVisibility(View.VISIBLE);
 		tl.removeAllViews();
+		// get top 10 scores stored online
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("highscores");
 		query.orderByDescending("Score");
 		query.setLimit(10);
 		query.findInBackground(new FindCallback<ParseObject>() {
 		    public void done(List<ParseObject> scoreList, ParseException e) {
 		        if (e == null) {
-		            Log.i("score", "Retrieved " + scoreList.size() + " scores");
+		            Log.i(TAG, "Retrieved " + scoreList.size() + " scores");
 		            scores = scoreList;
-		            if(scoreList.size() == 0){
+		            if(scoreList.isEmpty()){
 		            	displayErrorMessage();
 		            }else{
 		            	errMsg.setVisibility(View.GONE);
 		            	displayOnlineScores();
 		            }
 		        } else {
-		            Log.i("score", "Error: " + e.getMessage());
+		            Log.i(TAG, "Error: " + e.getMessage());
 		            displayErrorMessage();
 		        }
+				currentView = 2;
 		    }
 		});
 	}
 	
 	public void displayErrorMessage(){
-		errMsg.setText("Er kunnen geen resultaten worden weergegeven");
+		errMsg.setText(getResources().getString(R.string.noResults));
 		errMsg.setTypeface(tf);
 	}
 	
 	private void displayOnlineScores(){
 		addTableHeader();
 		for(int i = 0; i < scores.size(); i++){
-			TableRow tr = new TableRow(this);
-	    	tr.setId(100+i);
-	    	tr.setLayoutParams(new LayoutParams(
-	    	LayoutParams.WRAP_CONTENT,
-	    	LayoutParams.WRAP_CONTENT));
-	    	
-	    	TextView positionLabel = new TextView(this);
-	    	positionLabel.setId(200 + i);
-	    	positionLabel.setText("" + (i + 1));
-	    	positionLabel.setPadding(10, 0, 5, 0);
-	    	positionLabel.setTextColor(Color.WHITE);
-	    	positionLabel.setTypeface(tf);
-	    	positionLabel.setTextAppearance(this, R.style.text_style);
-	    	tr.addView(positionLabel);
-	    	
-	    	TextView labelName = new TextView(this);
-	    	labelName.setId(200 + i);
-	    	labelName.setText(scores.get(i).getString("Name"));
-	    	labelName.setPadding(2, 0, 5, 0);
-	    	labelName.setTextColor(Color.WHITE);
-	    	labelName.setTypeface(tf);
-	    	labelName.setTextAppearance(this, R.style.text_style);
-	    	tr.addView(labelName);
-	    	
-	    	TextView labelScore = new TextView(this);
-	    	labelScore.setId(200 + i);
-	    	labelScore.setText(Integer.toString(scores.get(i).getInt("Score")));
-	    	labelScore.setPadding(2, 0, 5, 0);
-	    	labelScore.setTextColor(Color.WHITE);
-	    	labelScore.setTypeface(tf);
-	    	labelScore.setTextAppearance(this, R.style.text_style);
-	    	tr.addView(labelScore);
-	    	
-	    	tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			name = scores.get(i).getString("Name");
+			score = scores.get(i).getInt("Score");
+			addRow(i);
 		}
-		currentView = 2;
 	}
 	
 	private void addTableHeader(){
 		tl = (TableLayout) findViewById(R.id.main_table);
-	    TableRow tr_head = new TableRow(this);
-	    tr_head.setId(10);
-	    tr_head.setBackgroundColor(Color.GRAY);
-	    tr_head.setLayoutParams(new LayoutParams(
+	    TableRow trHead = new TableRow(this);
+	    trHead.setId(10);
+	    trHead.setBackgroundColor(Color.GRAY);
+	    trHead.setLayoutParams(new LayoutParams(
 	    LayoutParams.WRAP_CONTENT,
 	    LayoutParams.WRAP_CONTENT));
 	    
-	    TextView label_position = new TextView(this);
-	    label_position.setId(20);
-	    label_position.setText("#");
-	    label_position.setTextColor(Color.WHITE);
-	    label_position.setPadding(10, 5, 5, 5);
-	    label_position.setTypeface(tf);
-	    label_position.setTextAppearance(this, R.style.text_style);
-        tr_head.addView(label_position);
+	    TextView labelPosition = new TextView(this);
+	    labelPosition.setId(20);
+	    labelPosition.setText("#");
+	    labelPosition.setTextColor(Color.WHITE);
+	    labelPosition.setPadding(10, 5, 5, 5);
+	    labelPosition.setTypeface(tf);
+	    labelPosition.setTextAppearance(this, R.style.text_style);
+        trHead.addView(labelPosition);
         
-	    TextView label_name = new TextView(this);
-	    label_name.setId(20);
-	    label_name.setText("Name");
-	    label_name.setTextColor(Color.WHITE);
-	    label_name.setPadding(2, 5, 5, 5);
-	    label_name.setTypeface(tf);
-	    label_name.setTextAppearance(this, R.style.text_style);
-        tr_head.addView(label_name);
+	    TextView labelName = new TextView(this);
+	    labelName.setId(20);
+	    labelName.setText("Name");
+	    labelName.setTextColor(Color.WHITE);
+	    labelName.setPadding(2, 5, 5, 5);
+	    labelName.setTypeface(tf);
+	    labelName.setTextAppearance(this, R.style.text_style);
+        trHead.addView(labelName);
         
-        TextView label_score = new TextView(this);
-        label_score.setId(21);
-        label_score.setText("Score"); 
-        label_score.setTextColor(Color.WHITE);
-        label_score.setPadding(2, 5, 5, 5);
-        label_score.setTypeface(tf);
-        label_score.setTextAppearance(this, R.style.text_style);
-        tr_head.addView(label_score);
+        TextView labelScore = new TextView(this);
+        labelScore.setId(21);
+        labelScore.setText("Score"); 
+        labelScore.setTextColor(Color.WHITE);
+        labelScore.setPadding(2, 5, 5, 5);
+        labelScore.setTypeface(tf);
+        labelScore.setTextAppearance(this, R.style.text_style);
+        trHead.addView(labelScore);
 	    
-        tl.addView(tr_head, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        tl.addView(trHead, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 	
-	public void GotoMenu(View v){
+	private void addRow(int i){
+		TableRow tr = new TableRow(this);
+    	tr.setId(100+i);
+    	tr.setLayoutParams(new LayoutParams(
+    	LayoutParams.WRAP_CONTENT,
+    	LayoutParams.WRAP_CONTENT));
+    	
+    	TextView positionLabel = new TextView(this);
+    	positionLabel.setId(200 + i);
+    	positionLabel.setText("" + (i + 1));
+    	positionLabel.setPadding(10, 0, 5, 0);
+    	positionLabel.setTextColor(Color.WHITE);
+    	positionLabel.setTypeface(tf);
+    	positionLabel.setTextAppearance(this, R.style.text_style);
+    	tr.addView(positionLabel);
+    	
+    	TextView labelName = new TextView(this);
+    	labelName.setId(200 + i);
+    	labelName.setText(name);
+    	labelName.setPadding(2, 0, 5, 0);
+    	labelName.setTextColor(Color.WHITE);
+    	labelName.setTypeface(tf);
+    	labelName.setTextAppearance(this, R.style.text_style);
+    	tr.addView(labelName);
+    	
+    	TextView labelScore = new TextView(this);
+    	labelScore.setId(200 + i);
+    	labelScore.setText(Integer.toString(score));
+    	labelScore.setPadding(2, 0, 5, 0);
+    	labelScore.setTextColor(Color.WHITE);
+    	labelScore.setTypeface(tf);
+    	labelScore.setTextAppearance(this, R.style.text_style);
+    	tr.addView(labelScore);
+    	
+    	tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+	}
+	
+	public void gotoMenu(View v){
 		this.finish();
 	}
 	
-	public void GotoHighscores(View v){
+	public void gotoHighscores(View v){
+		Log.i(TAG, ""+currentView);
 		if(currentView == 1){
 			getOnlineHighscores();
-			highscoresBtn.setText("Lokaal");
+			highscoresBtn.setText(local);
 		}else{
 			addLocalHighscores();
-			highscoresBtn.setText("Wereldwijd");
+			highscoresBtn.setText(worldwide);
 		}
 	}
 }

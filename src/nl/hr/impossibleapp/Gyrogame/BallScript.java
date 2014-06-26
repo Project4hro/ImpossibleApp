@@ -5,8 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
 
-public class BallScript extends View 
-{
+public class BallScript extends View{
 
     public float x;
     public float y;
@@ -25,8 +24,7 @@ public class BallScript extends View
     }      
     
     //get R
-    int getR()
-    {
+    int getR(){
     	return r;
     }
         

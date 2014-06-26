@@ -5,7 +5,8 @@ public class Highscores{
 	private String name;
 	private int score;
 	
-	public Highscores(){}
+	public Highscores(){
+	}
 	
 	public Highscores(String name, int score){
 		super();

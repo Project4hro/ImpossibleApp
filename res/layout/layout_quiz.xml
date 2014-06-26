@@ -51,7 +51,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignRight="@+id/timerBox"
 	    android:layout_below="@+id/question"
-	    android:onClick="ClickA"
+	    android:onClick="clickA"
 	    android:text="@string/A" />
 
 	<Button
@@ -60,7 +60,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@+id/buttonA"
 	    android:layout_below="@+id/buttonA"
-	    android:onClick="ClickB"
+	    android:onClick="clickB"
 	    android:text="@string/B" />
 
 	<Button
@@ -69,7 +69,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@+id/buttonB"
 	    android:layout_below="@+id/buttonB"
-	    android:onClick="ClickC"
+	    android:onClick="clickC"
 	    android:text="@string/C" />
 
 	<TextView

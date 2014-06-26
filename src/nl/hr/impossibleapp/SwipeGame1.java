@@ -2,37 +2,36 @@ package nl.hr.impossibleapp;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityTemplate;
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SwipeGame1 extends Activity{
+public class SwipeGame1 extends ActivityTemplate{
 	
 	private static final String TAG = SwipeGame1.class.toString(); 
 
-    private static final String fontPath = "fonts/mvboli.ttf";
+    private static final String FONTPATH = "fonts/mvboli.ttf";
     private Typeface tf;
     
 	private int randInt;
 	private float x1, x2;
 	private float y1, y2;
 
+	private TextView scoreView;
+	private ImageView heartsView;
+	
 	private int x = 0;
 	private int arraylistKey = 0;
 	private int amountAssignments = 4;
@@ -45,25 +44,12 @@ public class SwipeGame1 extends Activity{
 	private TextView message2;
 	
 	private String swipeDirection;
+	private String correct;
+	private String wrong;
 	private ArrayList<Integer> assignments = new ArrayList<Integer>();
     
     private TextView timerField;
-    private Timer t = new Timer();
     private int timeCounter = 20;
-    
-    private boolean active = false; 
-	
-	@Override
-    public void onStart(){
-       super.onStart();
-       active = true;
-    } 
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        active = false;
-    }
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -72,7 +58,7 @@ public class SwipeGame1 extends Activity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	    setContentView(R.layout.layout_swipegame1);
-	    tf = Typeface.createFromAsset(getAssets(), fontPath);
+	    tf = Typeface.createFromAsset(getAssets(), FONTPATH);
 	    
 	    if(Settings.getDifficulty() == 1){
 	    	amountAssignments = 4;
@@ -81,6 +67,10 @@ public class SwipeGame1 extends Activity{
 	    }else if(Settings.getDifficulty() == 3){
 	    	amountAssignments = 8;
 	    }
+	    
+	    wrong = getResources().getString(R.string.wrongAnswer);
+		correct = getResources().getString(R.string.rightAnswer);
+		
 	    assignments.clear();
 	    assignment1 = (TextView) findViewById(R.id.messageAssignment1);
 	    assignment2 = (TextView) findViewById(R.id.messageAssignment2);
@@ -95,24 +85,18 @@ public class SwipeGame1 extends Activity{
 		message2.setTypeface(tf);
 		timerField.setTypeface(tf);
 
-		ImageView heartsField = (ImageView) findViewById(R.id.hearts);		
-	    randInt = new Random().nextInt(4) + 1;
-	    int lives = Settings.getLives();
-	    if(lives == 2){
-	    	heartsField.setImageResource(R.drawable.heart2);
-	    }else if(lives == 1){
-	    	heartsField.setImageResource(R.drawable.heart1);
-	    }else{
-	    	heartsField.setImageResource(R.drawable.heart3);
-	    }
+		heartsView = (ImageView) findViewById(R.id.hearts);	
+		setHeartsView(heartsView);
 	    
-	    TextView scoreText = (TextView) findViewById(R.id.scoreBox);
-	    scoreText.setTypeface(tf);
-	    scoreText.setText("Score: " + Settings.getScore());
+		scoreView = (TextView) findViewById(R.id.scoreBox);
+	    setScoreView(scoreView, getAssets());
+	    
+		randInt = new Random().nextInt(4) + 1;
+	    
 	    changeAssignment();
 	    startTimer();
 	}
-	
+	// change assigment
 	private void changeAssignment(){
 		if(assignment1.getText().toString().isEmpty() || assignment1.getText().toString() == null){
 			assignment = assignment1;
@@ -192,10 +176,8 @@ public class SwipeGame1 extends Activity{
 	    	}
 	     }, 0, 1000);
 	}
-	
+	// check swipedirection
 	public boolean onTouchEvent(MotionEvent touchevent){
-		String wrong = getResources().getString(R.string.wrongAnswer);
-		String correct = getResources().getString(R.string.rightAnswer);
 		switch(touchevent.getAction()){
 			case MotionEvent.ACTION_DOWN:
 				
@@ -222,154 +204,82 @@ public class SwipeGame1 extends Activity{
 				
 				if(randInt == 1){
 					if((x1 - x2) > 180){
-						message.setText(correct);
-						Sound.correct(getBaseContext());
-						if(x < amountAssignments){
-							randInt = new Random().nextInt(4) + 1;
-							changeAssignment();
-							x++;
-						}else{
-							message.setText(correct);
-							arraylistKey++;
-							won(true);
-						}
+						swipeCorrect();
 						break;
 					}else{
-						if(x == amountAssignments){
-							message.setText("Game over!");
-							Sound.gameOver(getBaseContext());
-							won(false);
-						}else{
-							message.setText(wrong);
-							Sound.wrong(getBaseContext());
-						}
+						swipeWrong();
 						break;
 					}
 				}
 				if(randInt == 2){
 					if((x1 - x2) < -180){
-						message.setText(correct);
-						Sound.correct(getBaseContext());
-						if(x < amountAssignments){
-							randInt = new Random().nextInt(4) + 1;
-							changeAssignment();
-							x++;
-						}else{
-							message.setText(correct);
-							arraylistKey++;
-							won(true);
-						}
+						swipeCorrect();
 						break;
 					}else{
-						if(x == amountAssignments){
-							message.setText("Game over!");
-							Sound.gameOver(getBaseContext());
-							won(false);
-						}else{
-							message.setText(wrong);
-							Sound.wrong(getBaseContext());
-						}
+						swipeWrong();
 						break;
 					}
 				}
 			
 				if(randInt == 3){
 					if((y1 - y2) > 150){
-						message.setText(correct);
-						Sound.correct(getBaseContext());
-						if(x < amountAssignments){
-							randInt = new Random().nextInt(4) + 1;
-							changeAssignment();
-							x++;
-						}else{
-							message.setText(correct);
-							arraylistKey++;
-							won(true);
-						}
+						swipeCorrect();
 						break;
 					}else{
-						if(x == amountAssignments)
-						{
-							message.setText("Game over!");
-							Sound.gameOver(getBaseContext());
-							won(false);
-						}else{
-							message.setText(wrong);
-							Sound.wrong(getBaseContext());
-						}
+						swipeWrong();
 						break;
 					}			
 				}
 				if(randInt == 4){
 					if((y1 - y2) < -150){
-						message.setText(correct);
-						Sound.correct(getBaseContext());
-						if(x < amountAssignments)
-						{
-							randInt = new Random().nextInt(4) + 1;
-							changeAssignment();
-							x++;
-						}else{
-							message.setText(correct);
-							arraylistKey++;
-							won(true);
-						}
+						swipeCorrect();
 						break;
 					}else{
-						if(x == amountAssignments){
-							message.setText("Game over!");
-							Sound.gameOver(getBaseContext());
-							won(false);
-						}else{
-							message.setText(wrong);
-							Sound.wrong(getBaseContext());
-						}
+						swipeWrong();
 						break;
 					}
 				}
 				break;
 			}
-		
 		return false;
+	}
+	
+	private void swipeCorrect(){
+		message.setText(correct);
+		Sound.correct(getBaseContext());
+		if(x < amountAssignments){
+			randInt = new Random().nextInt(4) + 1;
+			changeAssignment();
+			x++;
+		}else{
+			message.setText(correct);
+			arraylistKey++;
+			won(true);
+		}
+	}
+	
+	private void swipeWrong(){
+		if(x == amountAssignments){
+			message.setText("Game over!");
+			Sound.gameOver(getBaseContext());
+			won(false);
+		}else{
+			message.setText(wrong);
+			Sound.wrong(getBaseContext());
+		}
 	}
 	
 	private void betweenScreen(){
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, ActivityBetween.class);
+		Intent betweenPage = new Intent(this, ActivityBetween.class);
 		
-		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(between_page != null){
+		betweenPage.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if(betweenPage != null){
 			if (active){
-				startActivity(between_page);
+				startActivity(betweenPage);
 			}	
 			this.finish();
 		}
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
-	    menu.add("Exit"); 
-	    return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-	    // If exit    
-	    if (item.getTitle() == "Exit")
-			t.cancel();
-	    	Settings.resetAll();
-			this.finish();
-	    return super.onOptionsItemSelected(item);    
-	}
-	
-	@Override 
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		super.onConfigurationChanged(newConfig);
-	}
-	@Override
-	public void onBackPressed(){}
 }

@@ -15,8 +15,8 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/heart3"
-        android:contentDescription="@string/descriptionHearts" />
+        android:contentDescription="@string/descriptionHearts"
+        android:src="@drawable/heart3" />
 
     <TextView
         android:id="@+id/scoreBox"
@@ -41,6 +41,8 @@
 
     <TextView
         android:id="@+id/textQuestion"
+        style="@style/text_style"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/timerBox"
@@ -48,28 +50,30 @@
         android:text="@string/placeholderQuestion" />
 
     <Button
-        android:id="@+id/questionAnswer2"
-        style="@style/button_style"
-        android:layout_above="@+id/questionAnswer3"
-        android:layout_alignLeft="@+id/questionAnswer1"
-        android:onClick="Answer2"
-        android:text="@string/placeholderAnswer2" />
-
-    <Button
         android:id="@+id/questionAnswer1"
         style="@style/button_style"
-        android:layout_above="@+id/questionAnswer2"
+        android:layout_below="@+id/textQuestion"
         android:layout_centerHorizontal="true"
-        android:onClick="Answer1"
+        android:layout_marginTop="16dp"
+        android:onClick="answer1"
         android:text="@string/placeholderAnswer1" />
+
+    <Button
+        android:id="@+id/questionAnswer2"
+        style="@style/button_style"
+        android:layout_below="@+id/questionAnswer1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:onClick="answer2"
+        android:text="@string/placeholderAnswer2" />
 
     <Button
         android:id="@+id/questionAnswer3"
         style="@style/button_style"
-        android:layout_above="@+id/hearts"
-        android:layout_alignLeft="@+id/questionAnswer2"
-        android:onClick="Answer3"
+        android:layout_below="@+id/questionAnswer2"
+        android:layout_centerHorizontal="true"
+        android:onClick="answer3"
         android:text="@string/placeholderAnswer3" />
 
 </RelativeLayout>
-

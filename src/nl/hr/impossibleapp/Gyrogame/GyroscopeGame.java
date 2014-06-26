@@ -1,6 +1,5 @@
 package nl.hr.impossibleapp.gyrogame;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,23 +13,20 @@ import java.util.TimerTask;
 
 import nl.hr.impossibleapp.R;
 import nl.hr.impossibleapp.activities.ActivityBetween;
+import nl.hr.impossibleapp.activities.ActivityTemplate;
 import nl.hr.impossibleapp.data.Settings;
 import nl.hr.impossibleapp.data.Sound;
 import android.os.Handler;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.hardware.SensorEventListener;
 
-public class GyroscopeGame extends Activity 
-{
+public class GyroscopeGame extends ActivityTemplate {
     private static final String fontPath = "fonts/mvboli.ttf";
     private Typeface tf;
     
@@ -41,11 +37,9 @@ public class GyroscopeGame extends Activity
 	private boolean left = false;
 	private boolean right = false;
 	private int countdown = 1;
-	
-	boolean active = false;
 
 	BallScript myBall = null;
-    Handler RedrawHandler = new Handler(); 
+    Handler redrawHandler = new Handler(); 
     Timer ballTimer = null;
     TimerTask ballTask = null;
     int screenWidth, screenHeight;
@@ -58,25 +52,10 @@ public class GyroscopeGame extends Activity
     long millisUntilFinished = 12000;
     
     private TextView timerField;
-	private Timer t = new Timer();
 	private int timeCounter = 12;
-	
-    @Override
-    public void onStart() {
-       super.onStart();
-       active = true;
-    } 
-
-    @Override
-    public void onStop() 
-    {
-        super.onStop();
-        active = false;
-    }
     
     @Override
-    public void onPause()
-    {
+    public void onPause(){
         ballTimer.cancel(); 
         ballTimer = null;
         ballTask = null;
@@ -159,7 +138,9 @@ public class GyroscopeGame extends Activity
 		        	}
 		        }
 		        @Override  
-		        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+		        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		        	// unused
+		        }
 		    },
 
 		    ((SensorManager)getSystemService(Context.SENSOR_SERVICE))
@@ -169,8 +150,7 @@ public class GyroscopeGame extends Activity
 	}
 	
 	@Override
-	protected void onResume()
-	{ 	
+	protected void onResume(){ 	
 	    ballTimer = new Timer(); 
 	    ballTask = new TimerTask() {
 	    public void run() {
@@ -183,53 +163,49 @@ public class GyroscopeGame extends Activity
 	    ballPos.y += ballSpeed.y;
 
 
-	    if (ballPos.x > screenWidth) ballPos.x=screenWidth;
-	    if (ballPos.y > screenHeight) ballPos.y=screenHeight;
-	    if (ballPos.x < 0) ballPos.x=(screenWidth-screenWidth);
-	    if (ballPos.y < 0) ballPos.y=screenHeight-screenHeight;
-	    
-	    if (ballPos.x > (screenWidth/2 - 10) && ballPos.x < (screenWidth/2 + 10) && ballPos.y < 60 && up)
-	    {
-	    	if(!addedOnce){
-		    	updateScore();
-		    	Sound.wonMinigame(getBaseContext());
-		    	betweenScreen();
-		    	addedOnce = true;
-	    	}
+	    if (ballPos.x > screenWidth){ 
+	    	ballPos.x=screenWidth;
 	    }
-	    if (ballPos.x > (screenWidth/2 - 10) && ballPos.x < (screenWidth/2 + 10) && ballPos.y > 420 &&  down)
-	    {
-	    	if(!addedOnce){
-		    	updateScore();
-		    	Sound.wonMinigame(getBaseContext());
-		    	betweenScreen();
-		    	addedOnce = true;
-	    	}
+	    if (ballPos.y > screenHeight){
+	    	ballPos.y=screenHeight;
 	    }
-	    if (ballPos.x < 60 && ballPos.y < (screenHeight/2 + 5) && ballPos.y > (screenHeight/2 -5) && left)
-	    {
-	    	if(!addedOnce){
-		    	updateScore();
-		    	Sound.wonMinigame(getBaseContext());
-		    	betweenScreen();
-		    	addedOnce = true;
-	    	}
+	    if (ballPos.x < 0){
+	    	ballPos.x=(screenWidth-screenWidth);
 	    }
-	    if (ballPos.x > 790 && ballPos.y < (screenHeight/2 + 5) && ballPos.y > (screenHeight/2 -5) && right)
-	    {
-	    	if(!addedOnce){
-		    	updateScore();
-		    	Sound.wonMinigame(getBaseContext());
-		    	betweenScreen();
-		    	addedOnce = true;
-	    	}
+	    if (ballPos.y < 0){
+	    	ballPos.y=screenHeight-screenHeight;
+	    }
+	    // check if ball hit block
+	    if (ballPos.x > (screenWidth/2 - 10) && ballPos.x < (screenWidth/2 + 10) && ballPos.y < 60 && up && !addedOnce){
+	    	updateScore();
+	    	Sound.wonMinigame(getBaseContext());
+	    	betweenScreen();
+	    	addedOnce = true;
+	    }
+	    if (ballPos.x > (screenWidth/2 - 10) && ballPos.x < (screenWidth/2 + 10) && ballPos.y > 420 && down && !addedOnce){
+	    	updateScore();
+	    	Sound.wonMinigame(getBaseContext());
+	    	betweenScreen();
+	    	addedOnce = true;
+	    }
+	    if (ballPos.x < 60 && ballPos.y < (screenHeight/2 + 5) && ballPos.y > (screenHeight/2 -5) && left && !addedOnce){
+	    	updateScore();
+	    	Sound.wonMinigame(getBaseContext());
+	    	betweenScreen();
+	    	addedOnce = true;
+	    }
+	    if (ballPos.x > 790 && ballPos.y < (screenHeight/2 + 5) && ballPos.y > (screenHeight/2 -5) && right && !addedOnce){
+	    	updateScore();
+	    	Sound.wonMinigame(getBaseContext());
+	    	betweenScreen();
+	    	addedOnce = true;
 	    }
 	    if(active){
 		    myBall.x = ballPos.x;
 		    myBall.y = ballPos.y;
 	    }
 
-	    RedrawHandler.post(new Runnable() {
+	    redrawHandler.post(new Runnable() {
 	        public void run() {    
 	        myBall.invalidate();
 	        }});
@@ -239,14 +215,11 @@ public class GyroscopeGame extends Activity
 	    super.onResume();
 	}
 	private void startTimer(){
-		t.scheduleAtFixedRate(new TimerTask() 
-	    {
+		t.scheduleAtFixedRate(new TimerTask(){
 	        @Override
 	        public void run() {
-	            runOnUiThread(new Runnable() 
-	            {
-	                public void run() 
-	                {
+	            runOnUiThread(new Runnable(){
+	                public void run(){
 	                    timerField.setText(getResources().getString(R.string.time) + ": " + String.valueOf(timeCounter) + "s"); // you can set it to a textView to show it to the user to see the time passing while he is writing.
 	                    if(active){
 		                    timeCounter--;
@@ -281,8 +254,6 @@ public class GyroscopeGame extends Activity
 		                    }
 		                    if (timeCounter < 0){
 		                    	Sound.gameOver(getBaseContext());
-		            	    	System.out.println("timelowerthen1");
-		                    	Settings.setLives(Settings.getLives() - 1);
 		                    	betweenScreen();
 		                    	t.cancel();
 		                    }
@@ -292,51 +263,20 @@ public class GyroscopeGame extends Activity
 	        }
 	    }, 0, 1000);
 	}
-	public void betweenScreen()
-	{
+	public void betweenScreen(){
 		t.cancel();
 		Sound.stopCountDown(getBaseContext());
-		Intent between_page = new Intent(this, ActivityBetween.class);
-		between_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		Intent betweenPage = new Intent(this, ActivityBetween.class);
+		betweenPage.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		
-		if(between_page != null)
-		{
-			if (active)
-			{
-				startActivity(between_page);
-				this.finish();
-			}	
+		if(betweenPage != null && active){
+			startActivity(betweenPage);
+			this.finish();
 		}
 	}
 	public void updateScore(){
-		int score = Settings.getScore() + timeCounter;
-        Settings.setScore(score);
+        Settings.addScore(timeCounter);
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
-	    menu.add("Exit"); 
-	    return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{  
-	    if (item.getTitle() == "Exit")
-			t.cancel();
-	    	Settings.resetAll();
-	    	this.finish();
-	    return super.onOptionsItemSelected(item);    
-	}
-	@Override
-	public void onBackPressed() {}
-	
-    @Override 
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-       super.onConfigurationChanged(newConfig);
-    }
 }
 
 

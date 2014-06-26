@@ -21,12 +21,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 	
 	@Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_HIGHSCORES_TABLE = "CREATE TABLE highscores ( " +
+        String createHighscoresTable = "CREATE TABLE highscores ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
                 "name TEXT, "+
                 "score INTEGER )";
- 
-        db.execSQL(CREATE_HIGHSCORES_TABLE);
+        db.execSQL(createHighscoresTable);
     }
 	
 	@Override

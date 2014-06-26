@@ -17,9 +17,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class ActivityMenu extends Activity
-{
-	private static final String fontPath = "fonts/mvboli.ttf";
+public class ActivityMenu extends Activity{
+	private static final String FONTPATH = "fonts/mvboli.ttf";
 	private static final String TAG = ActivityMenu.class.toString();
 	private SharedPreferences prefs;
 	
@@ -31,23 +30,23 @@ public class ActivityMenu extends Activity
 		setContentView(R.layout.layout_menu);
 		
 		// Loading Font Face
-		Typeface tf = Typeface.createFromAsset(getAssets(), fontPath);
+		Typeface tf = Typeface.createFromAsset(getAssets(), FONTPATH);
 
-        Button start_button = (Button) findViewById(R.id.menu_start);
-        Button highscores_button = (Button) findViewById(R.id.menu_score);
-        Button settings_button = (Button) findViewById(R.id.menu_settings);
-        if(start_button != null){
-        	start_button.setTypeface(tf);
+        Button startButton = (Button) findViewById(R.id.menu_start);
+        Button highscoresButton = (Button) findViewById(R.id.menu_score);
+        Button settingsButton = (Button) findViewById(R.id.menu_settings);
+        if(startButton != null){
+        	startButton.setTypeface(tf);
         }
-        if(highscores_button != null){
-        	highscores_button.setTypeface(tf);
+        if(highscoresButton != null){
+        	highscoresButton.setTypeface(tf);
         }
-        if(settings_button != null){
-        	settings_button.setTypeface(tf);
+        if(settingsButton != null){
+        	settingsButton.setTypeface(tf);
         }
         
 		Log.i(TAG, "inLayout - finished"); // werkt
-
+		// get sharedpreferences
         prefs = this.getSharedPreferences("nl.hr.impossibleapp", Context.MODE_PRIVATE);
         Settings.setSoundEnabled(prefs.getBoolean("Sound", true));
         Settings.setName(prefs.getString("Username", null));
@@ -57,27 +56,27 @@ public class ActivityMenu extends Activity
         
 	}
 	
-	public void Goto_Settings(View v){
-		Intent settings_page = new Intent(this, ActivitySettings.class);
-		settings_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(settings_page != null){
-			startActivity(settings_page);
+	public void gotoSettings(View v){
+		Intent settingsPage = new Intent(this, ActivitySettings.class);
+		settingsPage.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if(settingsPage != null){
+			startActivity(settingsPage);
 		}
 	}
 	
-	public void Goto_Highscores(View v){
-		Intent highscores_page = new Intent(this, ActivityHighscores.class);
-		highscores_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(highscores_page != null){
-			startActivity(highscores_page);
+	public void gotoHighscores(View v){
+		Intent highscoresPage = new Intent(this, ActivityHighscores.class);
+		highscoresPage.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if(highscoresPage != null){
+			startActivity(highscoresPage);
 		}
 	}
 	
-	public void Goto_Game(View v){
-		Intent game_page = new Intent(this, ActivityBetween.class);
-		game_page.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		if(game_page != null){
-			startActivity(game_page);
+	public void gotoGame(View v){
+		Intent betweenPage = new Intent(this, ActivityBetween.class);
+		betweenPage.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		if(betweenPage != null){
+			startActivity(betweenPage);
 		}
 	}
 	private void showPopup(){

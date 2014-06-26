@@ -13,6 +13,8 @@
     	<string name="previouspage">Back</string>
 		<string name="loading">Loading&#8230;</string>
 		<string name="worldwide">Worldwide</string>
+		<string name="local">Local</string>
+		<string name="noResults">There are no results to be displayed</string>
 		<!-- set name -->
 			<string name="name">Name</string>
 		    <string name="username">Username</string>
@@ -48,6 +50,19 @@
 		<string name="Adot">A.</string>
 		<string name="Bdot">B.</string>
 		<string name="Cdot">C.</string>
+		<!-- QuestionGame -->
+			<string name="black">Black</string>
+			<string name="orange">Orange</string>
+			<string name="white">White</string>
+			<string name="slingshot">Slingshot</string>
+			<string name="gameboy">Game boy</string>
+			<string name="teddybear">Teddy Bear</string>
+			<string name="questionBorderColor">What was the color of the border of the picture?</string>
+			<string name="questionRedHair">How many people had red hair?</string>
+			<string name="questionBlondHair">How many people had blond hair?</string>
+			<string name="questionFlowers">How many flowers where there?</string>
+			<string name="questionGirlRedHair">What object was the girl with red hair holding?</string>
+		<!-- end QuestionGame -->
 	<!-- end Minigames -->
 	
     <!-- placeholders -->
@@ -57,9 +72,9 @@
 	    <string name="placeholderCountShakes">Count shakes: 0</string>
 	    <string name="placeholderReadyGo">Ready?</string>
 	    <string name="placeholderHits">Hit: 5</string>
-	    <string name="placeholderAnswer1">Anwer 1</string>
-	    <string name="placeholderAnswer2">Anwer 2</string>
-	    <string name="placeholderAnswer3">Anwer 3</string>
+	    <string name="placeholderAnswer1">Answer 1</string>
+	    <string name="placeholderAnswer2">Answer 2</string>
+	    <string name="placeholderAnswer3">Answer 3</string>
 	    <string name="placeholderQuestion">Here comes the question</string>
     <!-- end placeholder -->
     

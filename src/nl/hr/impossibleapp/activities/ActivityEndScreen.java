@@ -17,7 +17,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 public class ActivityEndScreen extends Activity{
-	private static final String fontPath = "fonts/mvboli.ttf";
+	private static final String FONTPATH = "fonts/mvboli.ttf";
     private Typeface tf;
     
 	@Override
@@ -28,7 +28,7 @@ public class ActivityEndScreen extends Activity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	    setContentView(R.layout.layout_endscreen);
-	    tf = Typeface.createFromAsset(getAssets(), fontPath);
+	    tf = Typeface.createFromAsset(getAssets(), FONTPATH);
 	    
 	    TextView scoreView = (TextView) findViewById(R.id.textView1);
 	    scoreView.setTypeface(tf);
@@ -53,7 +53,7 @@ public class ActivityEndScreen extends Activity{
 	    Settings.resetAll();
 	}
 	
-	public void Goto_Menu(View v){
+	public void gotoMenu(View v){
 		this.finish();
 	}
 }

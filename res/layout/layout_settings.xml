@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:background="@drawable/buttonshape"
-        android:onClick="Goto_Menu"
+        android:onClick="gotoMenu"
         android:text="@string/previouspage"
         android:textColor="#000000"
         android:textSize="30sp"
@@ -33,6 +33,7 @@
 
     <Switch
         android:id="@+id/settings_switch1"
+        style="@style/text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/editName"

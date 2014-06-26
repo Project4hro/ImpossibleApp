@@ -13,6 +13,8 @@
     	<string name="previouspage">Terug</string>
 		<string name="loading">Laden&#8230;</string>
 		<string name="worldwide">Wereldwijd</string>
+		<string name="local">Lokaal</string>
+		<string name="noResults">Er kunnen geen resultaten worden weergegeven</string>
 		<!-- set name -->
 			<string name="name">Naam</string>
 		    <string name="username">Gebruikersnaam</string>
@@ -48,6 +50,19 @@
 		<string name="Adot">A.</string>
 		<string name="Bdot">B.</string>
 		<string name="Cdot">C.</string>
+		<!-- QuestionGame -->
+			<string name="black">Zwart</string>
+			<string name="orange">Oranje</string>
+			<string name="white">Wit</string>
+			<string name="slingshot">Katapult</string>
+			<string name="gameboy">Game boy</string>
+			<string name="teddybear">Teddy Beer</string>
+			<string name="questionBorderColor">Wat is de kleur van de rand van het plaatje?</string>
+			<string name="questionRedHair">Hoeveel mensen hebben rood haar?</string>
+			<string name="questionBlondHair">Hoeveel mensen hebben blond haar?</string>
+			<string name="questionFlowers">Hoeveel bloemen waren er?</string>
+			<string name="questionGirlRedHair">Wat had het meisje met het rode haar vast?</string>
+		<!-- end QuestionGame -->
 	<!-- end Minigames -->
 	
     <!-- placeholders -->
